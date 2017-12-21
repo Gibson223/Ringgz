@@ -1,7 +1,4 @@
 
-
-import ss.week5.Mark;
-
 public class Board {
     public static final int DIM = 5;
     private static final String[] NUMBERING = {"0 | 1 | 2 | 3 | 4", "5 | 6 | 7 | 8 | 9", "10 | 11 | 12 | 13 | 14", "15 | 16 | 17 | 18 | 19", "20 | 21 | 22 | 23 | 24"};
@@ -13,28 +10,24 @@ public class Board {
      * coding of the fields.
      */
     //@ private invariant fields.length == DIM*DIM;
-    /*@ invariant (\forall int i; 0 <= i & i < DIM*DIM;
-        getField(i) == Mark.EMPTY || getField(i) == Mark.XX || getField(i) == Mark.OO); */
-    private Color[] fields;
+    private Field[] fields;
 
     // -- Constructors -----------------------------------------------
 
     /**
-     * Creates an empty student.
+     * Creates an empty Board.
      */
-    //@ ensures (\forall int i; 0 <= i & i < DIM * DIM; this.getField(i) == Mark.EMPTY);
+    //@ ensures TODO;
     public Board() {
-    	fields = new Color[DIM * DIM];
+    	fields = new Field[DIM * DIM];
     	reset();
     }
 
     /**
-     * Creates a deep copy of this field.
+     * Creates a deep copy of the board.
      */
-    /*@ ensures \result != this;
-        ensures (\forall int i; 0 <= i & i < DIM * DIM;
-                                \result.getField(i) == this.getField(i));
-      @*/
+    //@ ensures \result != this;
+    //TODO: Adapt this to copy all the rings from each field
     public Board deepCopy() {
         Board clone = new Board();
         for(int i = 0; i < fields.length; i++) {
@@ -86,7 +79,7 @@ public class Board {
     //@ requires this.isField(i);
     //@ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
     /*@pure*/
-    public Mark getField(int i) {
+    public Field getField(int i) {
         return fields[i];
     }
 
@@ -102,46 +95,28 @@ public class Board {
     //@ requires this.isField(row,col);
     //@ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
     /*@pure*/
-    public Color getField(int row, int col) {
+    public Field getField(int row, int col) {
         return getField(index(row, col));
     }
 
-    /**
-     * Returns true if the field i is empty.
-     *
-     * @param i
-     *            the index of the field (see NUMBERING)
-     * @return true if the field is empty
-     */
+    //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
     //@ requires this.isField(i);
-    //@ ensures \result == (this.getField(i) == Mark.EMPTY);
+    //@ ensures TODO;
     /*@pure*/
     public boolean isAvailableField(int i) {
-        return (getField(i) == Color.AVAILABLE);
+        return true; //TODO
     }
 
-    /**
-     * Returns true if the field referred to by the (row,col) pair it empty.
-     *
-     * @param row
-     *            the row of the field
-     * @param col
-     *            the column of the field
-     * @return true if the field is empty
-     */
+    //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
     //@ requires this.isField(row,col);
-    //@ ensures \result == (this.getField(row,col) == Mark.EMPTY);
+    //@ ensures TODO;
     /*@pure*/
-    public boolean isAvailableField(int row, int col) {
+    public boolean isAvailableField(int row, int col, Ring.RingType choice) {
         return isAvailableField(index(row, col));
     }
 
-    /**
-     * Tests if the whole student is full.
-     *
-     * @return true if all fields are occupied
-     */
-    //@ ensures \result == (\forall int i; i <= 0 & i < DIM * DIM; this.getField(i) != Mark.EMPTY);
+    //CHECKS IF BOARD IS FULL
+    //@ ensures TODO (hint: for loop);
     /*@pure*/
     public boolean isFull() {
         for(int i = 0; i < fields.length; i++) {
@@ -152,26 +127,14 @@ public class Board {
         return true;
     }
 
-    /**
-     * Returns true if the game is over. The game is over when there is a winner
-     * or the whole student is full.
-     *
-     * @return true if the game is over
-     */
-    //@ ensures \result == this.isFull() || this.hasWinner();
+    //RETURNS TRUE WHEN THE GAME ENDS (I.E. WHEN THE BOARD IS FULL)
+    //@ ensures \result == this.isFull();
     /*@pure*/
     public boolean gameOver() {
-        return (isFull() || hasWinner());
+        return (isFull());
     }
 
-    /**
-     * Checks whether there is a row which is full and only contains the mark
-     * m.
-     *
-     * @param m
-     *            the mark of interest
-     * @return true if there is a row controlled by m
-     */
+    //I THOUGHT ABOUT USING THIS A GUIDE FOR MAKING A CHECKER FOR A COMPLETE FIELD
     /*@ pure */
     public boolean hasRow(Mark m) {
     	for(int r = 0; r < DIM; r++) {
@@ -199,31 +162,14 @@ public class Board {
      *            the mark of interest
      * @return true if the mark has won
      */
-    //@requires m == Mark.XX | m == Mark.OO;
-    //@ ensures \result == this.hasRow(m) || this.hasColumn(m) | this.hasDiagonal(m);
+    //@requires TODO;
+    //@ ensures TODO;
     /*@ pure */
     public boolean isWinner(Mark m) {
-        return (this.hasRow(m) || this.hasColumn(m) || this.hasDiagonal(m));
+        //TODO: conditions for winning
     }
-
-    /**
-     * Returns true if the game has a winner. This is the case when one of the
-     * marks controls at least one row, column or diagonal.
-     *
-     * @return true if the student has a winner.
-     */
-    //@ ensures \result == isWinner(Mark.XX) | \result == isWinner(Mark.OO);
-    /*@pure*/
-    public boolean hasWinner() {
-        return (isWinner(Mark.XX) || isWinner(Mark.OO));
-    }
-
-    /**
-     * Returns a String representation of this student. In addition to the current
-     * situation, the String also shows the numbering of the fields.
-     *
-     * @return the game situation as String
-     */
+    
+    //TODO: this is the original form TTT, must be adapted
     public String toString() {
         String s = "";
         for (int i = 0; i < DIM; i++) {
@@ -242,46 +188,24 @@ public class Board {
         return s;
     }
 
-    /**
-     * Empties all fields of this student (i.e., let them refer to the value
-     * Mark.EMPTY).
-     */
-    /*@ ensures (\forall int i; 0 <= i & i < DIM * DIM;
-                                this.getField(i) == Mark.EMPTY); @*/
+    //RESETS THE BOARD
+    //@ ensures TODO
     public void reset() {
     	for(int i = 0; i < fields.length; i++) {
-    		fields[i] = Color.AVAILABLE;
+    		//TODO: reset board
     	}
     }
 
-    /**
-     * Sets the content of field i to the mark m.
-     *
-     * @param i
-     *            the field number (see NUMBERING)
-     * @param m
-     *            the mark to be placed
-     */
     //@ requires this.isField(i);
-    //@ ensures this.getField(i) == m;
-    public void setField(int i, Color c) {
-    	fields[i] = c;
+    //@ ensures TODO;
+    //PUTS THE DESIRED RING IN THE DESIRED FIELD
+    public void setField(int i, Color c, Ring r) {
+    	//TODO
     }
-
-    /**
-     * Sets the content of the field represented by the (row,col) pair to the
-     * mark m.
-     *
-     * @param row
-     *            the field's row
-     * @param col
-     *            the field's column
-     * @param m
-     *            the mark to be placed
-     */
+    
     //@ requires this.isField(row,col);
     //@ ensures this.getField(row,col) == m;
-    public void setField(int row, int col, Color c) {
-    	setField(index(row, col), c);
+    public void setField(int row, int col, Color c, Ring r) {
+    	setField(index(row, col), c, r);
     }
 }
