@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +10,7 @@ public class SmartStrategy implements Strategy{
 	}
 
 	@Override
-	public int determineMove(Board b, Mark m) {
+	public int determineMove(Board b, Color c) {
 		List<Integer> emptyList = new ArrayList<>();
 		for (int i = 0; i < 9; i++) {
 			if (b.isEmptyField(i)) {

@@ -11,14 +11,14 @@ public class NaiveStrategy implements Strategy {
 	}
 
 	@Override
-	public int determineMove(Board b, Mark m) {
-		List<Integer> emptyList = new ArrayList<>();
-		for (int i = 0; i < 9; i++) {
-			if (b.isEmptyField(i)) {
-				emptyList.add(i);
+	public int determineMove(Board b, Color c) {
+		List<Integer> availableList = new ArrayList<>();
+		for (int i = 0; i < Board.DIM*Board.DIM; i++) {
+			if (b.proximityCheck(i,c)) {
+				availableList.add(i);
 			}
 		}
-		Collections.shuffle(emptyList);
-		return emptyList.get(0);
+		Collections.shuffle(availableList);
+		return availableList.get(0);
 	}
 }

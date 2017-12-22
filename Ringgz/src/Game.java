@@ -40,11 +40,13 @@ public class Game {
      * @param s0 the first player
      * @param s1 the second player
      */
-    public Game(Player s0, Player s1) {
+    public Game(Player s0, Player s1, Player s2, Player s3) {
         board = new Board();
         players = new Player[NUMBER_PLAYERS];
         players[0] = s0;
         players[1] = s1;
+        players[2] = s2;
+        players[3] = s3;
         current = 0;
     }
 
@@ -110,7 +112,8 @@ public class Game {
         	int i = 0;
         	do {
         		i = players[current].determineMove(board);
-        	} while(!board.isField(i) || !board.isEmptyField(i));
+        	} 
+        	while(!board.isField(i) || !board.isAvailableField(i)); //WE MAY HAVE TO CHANGE THE ISAVAILABLE
         	board.setField(i, players[current].getColor(), players[current].getRing());
         	current += 1;
         	current %= 3;
@@ -139,8 +142,6 @@ public class Game {
         if (board.isFull()) {
             Player winner = board.isWinner(players[0].getMark()) ? players[0] : players[1];
             System.out.println("Player " + winner.getName() + " (" + winner.getMark().toString() + ") has won!");
-        } else {
-            System.out.println("Draw. There is no winner!");
         }
     }
 }

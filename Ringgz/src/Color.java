@@ -9,8 +9,7 @@
  */
 public enum Color {
     
-    RED ("R"), YELLOW ("Y"), GREEN ("G"), BLUE ("B");
-
+    RED ("R"), YELLOW ("Y"), GREEN ("G"), BLUE ("B"), NULL ("-");
 
 	private final String str;
 	

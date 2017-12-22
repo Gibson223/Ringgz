@@ -1,7 +1,7 @@
 
 public class Board {
     public static final int DIM = 5;
-    private static final String[] NUMBERING = {"0 | 1 | 2 | 3 | 4", "5 | 6 | 7 | 8 | 9", "10 | 11 | 12 | 13 | 14", "15 | 16 | 17 | 18 | 19", "20 | 21 | 22 | 23 | 24"};
+    private static final String[] NUMBERING = {"1 | 2 | 3 | 4 | 5", "6 | 7 | 8 | 9 | 10", "11 | 12 | 13 | 14 | 15", "16 | 17 | 18 | 19 | 20", "21 | 22 | 23 | 24 | 25"};
     private static final String LINE = NUMBERING[1];
     private static final String DELIM = "     ";
 
@@ -103,8 +103,8 @@ public class Board {
     //@ requires this.isField(i);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isAvailableField(int i) {
-        return true; //TODO
+    public boolean isAvailableField(int field, Ring RingType) {
+        return true; //TODO (VERY IMPORTANT)
     }
 
     //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
@@ -114,6 +114,23 @@ public class Board {
     public boolean isAvailableField(int row, int col, Ring.RingType choice) {
         return isAvailableField(index(row, col));
     }
+    
+    //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY
+    //@ requires this.isField(i);
+    //@ ensures TODO;
+    /*@pure*/
+    public boolean isEmptyField(int i) {
+        return i.FieldState == FieldState.EMPTY;
+    }
+
+    //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY
+    //@ requires this.isField(row,col);
+    //@ ensures TODO;
+    /*@pure*/
+    public boolean isEmptyField(int row, int col, Ring.RingType choice) {
+        return isEmptyField(index(row, col));
+    }
+
 
     //CHECKS IF BOARD IS FULL
     //@ ensures TODO (hint: for loop);
@@ -126,6 +143,11 @@ public class Board {
         }
         return true;
     }
+    
+    //RETURN WHETHER OR NOT THE SELECTED FIELD IS ADJACENT TO A FIELD WITH A CERTAIN COLOR RING IN IT
+  	public boolean proximityCheck(int field, Color color) {
+  		return (FieldHas((field - 4),color)) == true || FieldHas((field - 1),color)) == true || FieldHas((field + 1),color)) == true || FieldHas((field + 4),color)) == true); 	
+  	    }
 
     //RETURNS TRUE WHEN THE GAME ENDS (I.E. WHEN THE BOARD IS FULL)
     //@ ensures \result == this.isFull();
@@ -136,23 +158,21 @@ public class Board {
 
     //I THOUGHT ABOUT USING THIS A GUIDE FOR MAKING A CHECKER FOR A COMPLETE FIELD
     /*@ pure */
-    public boolean hasRow(Mark m) {
+    public boolean hasWonField(int field, Color color) {
     	for(int r = 0; r < DIM; r++) {
-    		boolean hasRow = true;
-    		for(int c = 0; c < DIM; c++) {
-    			if(getField(c + r*DIM) != m) {
-    				hasRow = false;
-    				break;
-    			}
-        	}
-    		if(hasRow) {
-    			return true;
-    		}
-    	}
-        return false;
-    }
-
-
+//			boolean hasRow = true;
+//			for(int c = 0; c < DIM; c++) {
+//				if(getField(c + r*DIM) != m) {
+//					hasRow = false;
+//					break;
+//				}
+//	    	}
+//			if(hasRow) {
+//				return true;
+//			}
+//		}
+//	    return false;
+//	}
 
     /**
      * Checks if the mark m has won. A mark wins if it controls at
@@ -165,7 +185,7 @@ public class Board {
     //@requires TODO;
     //@ ensures TODO;
     /*@ pure */
-    public boolean isWinner(Mark m) {
+    public boolean isWinner(Player player) {
         //TODO: conditions for winning
     }
     
@@ -192,20 +212,20 @@ public class Board {
     //@ ensures TODO
     public void reset() {
     	for(int i = 0; i < fields.length; i++) {
-    		//TODO: reset board
+    		setField(i,Color.NULL,Ring.RingType.NULL);
     	}
     }
 
     //@ requires this.isField(i);
     //@ ensures TODO;
     //PUTS THE DESIRED RING IN THE DESIRED FIELD
-    public void setField(int i, Color c, Ring r) {
+    public void setField(int i, Color c, Ring.RingType r) {
     	//TODO
     }
     
     //@ requires this.isField(row,col);
     //@ ensures this.getField(row,col) == m;
-    public void setField(int row, int col, Color c, Ring r) {
+    public void setField(int row, int col, Color c, Ring.RingType r) {
     	setField(index(row, col), c, r);
     }
 }

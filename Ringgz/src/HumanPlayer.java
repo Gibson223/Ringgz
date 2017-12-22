@@ -48,14 +48,14 @@ public class HumanPlayer extends Player {
         }
         String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
         int choiceRing = readInt(promptRing);
-        boolean valid = board.isField(choiceRing) && board.isAvailableField(choiceRing);
-        while (!valid) {
+        boolean validRing = board.isField(choiceRing) && board.isAvailableField(choiceRing);
+        while (!validRing) {
             System.out.println("ERROR: Ring " + choiceRing + " is no valid choice.");
             choiceRing = readInt(promptRing);
-            valid = board.isField(choice) && board.isAvailableField(choice);
+            validRing = board.isField(choiceRing) && board.isAvailableField(choiceRing);
         }
         return choiceRing;
-        return choiceField;
+        return choiceField; //WTF
     }
 
     /**
