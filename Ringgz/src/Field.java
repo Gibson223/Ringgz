@@ -21,8 +21,8 @@ public class Field {
 	private Ring Tier3 ;
 	private Ring Tier4 ;
 	List<String> FieldsState = Arrays.asList(Tier1,Tier2,Tier3,Tier4);
-	
-	public List<> getFieldState(int field) {
+	public testing conflict resolution{};
+	public List<> getFieldState() {
 		return FieldState;
 	}
 	
