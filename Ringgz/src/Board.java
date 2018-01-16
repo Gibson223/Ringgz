@@ -109,7 +109,7 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isAvailableField(int field, Ring RingType) {
-        return true; //TODO (VERY IMPORTANT)
+        return (field.getFieldState[] == EMPTY); //TODO (VERY IMPORTANT)
     }
 
     //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
