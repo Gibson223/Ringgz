@@ -10,6 +10,7 @@ public class SmartStrategy implements Strategy{
 	}
 
 	@Override
+	//TODO
 	public int determineMove(Board b, Color c) {
 		List<Integer> emptyList = new ArrayList<>();
 		for (int i = 0; i < 9; i++) {

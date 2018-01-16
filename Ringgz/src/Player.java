@@ -60,7 +60,7 @@ public abstract class Player {
      */
     public void makeMove(Board board) {
         int choice = determineMove(board);
-        board.setField(choice, getColor(), Ring.RingType//TODO);
+        board.setField(choice, getColor(), Ring.RingType.getRing()//TODO);
     }
 
 }

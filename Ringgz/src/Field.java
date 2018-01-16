@@ -16,8 +16,14 @@ public class Field {
 	public String getFieldState (int row, int col) {
 		return getFieldState(Board.index(row,col)); //WHY DOESNT THIS WORK?
 	}
+	
+	//RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING
+	public boolean FieldHas(int field, Color color) {
+		return (field.FieldTier[0] == color || field.FieldTier[1] == color || field.FieldTier[2] == color || field.FieldTier[3] == color);
+	}
+}
 
-	//WE NEED AN ARRAY LIST FOR EACH FIELD WITH 4 SLOTS
+	//WE NEED AN ARRAY LIST FOR EACH FIELD WITH 4 SLOTS (FieldTier)
 	//EACH SLOT REPRESENTS ONE SIZE RING
 	//WE NEED TO HAVE THE POWER TO MODIFY A CERTAIN SLOT OF THE ARRAY WHEN A PLAYER PLACES A RING
 	//GETTERS AND SETTERS (getSlot(field,slot) and setSlot(field,slot))

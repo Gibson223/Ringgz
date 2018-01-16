@@ -148,6 +148,10 @@ public class Board {
   	public boolean proximityCheck(int field, Color color) {
   		return (FieldHas((field - 4),color)) == true || FieldHas((field - 1),color)) == true || FieldHas((field + 1),color)) == true || FieldHas((field + 4),color)) == true); 	
   	    }
+  	
+  	public boolean FieldHas(int field, Color color) {
+  		return; //THIS HAS TO RETURN IF A FIELD HAS A CERTAIN COLOR RING IN IT
+  	}
 
     //RETURNS TRUE WHEN THE GAME ENDS (I.E. WHEN THE BOARD IS FULL)
     //@ ensures \result == this.isFull();
@@ -175,12 +179,11 @@ public class Board {
 //	}
 
     /**
-     * Checks if the mark m has won. A mark wins if it controls at
-     * least one row, column or diagonal.
+     * Checks if a player has won.
      *
-     * @param m
-     *            the mark of interest
-     * @return true if the mark has won
+     * @param player
+     *            the player of interest
+     * @return true if the player has won
      */
     //@requires TODO;
     //@ ensures TODO;
