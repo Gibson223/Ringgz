@@ -38,7 +38,7 @@ public class HumanPlayer extends Player {
      * @return the player's chosen field
      */
     public int determineMove(Board board) {
-        String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where do you place it? ";
+        String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring? ";
         int choiceField = readInt(promptField);
         boolean validField = board.isField(choiceField) && board.isAvailableField(choiceField);
         while (!validField) {
@@ -55,7 +55,7 @@ public class HumanPlayer extends Player {
             validRing = board.isField(choiceRing) && board.isAvailableField(choiceRing);
         }
         return choiceRing;
-        return choiceField; //WTF
+        return choiceField;
     }
 
     /**

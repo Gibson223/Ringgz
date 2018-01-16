@@ -7,7 +7,7 @@ import java.util.Scanner;
  * @author Inigo Artolozaga and Gibson Vredeveld
  */
 public class Game {
-    public static final int NUMBER_PLAYERS = 4;
+    public static final int NUMBER_PLAYERS = 4; //TODO make this modifiable;
 
     /*@ private invariant board != null; */
     /**
@@ -20,7 +20,7 @@ public class Game {
        	                           players[i] != null); 
      */
     /**
-     * The 2 players of the game.
+     * The players of the game.
      */
     private Player[] players;
 
@@ -40,7 +40,7 @@ public class Game {
      * @param s0 the first player
      * @param s1 the second player
      */
-    public Game(Player s0, Player s1, Player s2, Player s3) {
+    public Game(Player s0, Player s1, Player s2, Player s3) { // TODO make this not hardcoded for 4 players;
         board = new Board();
         players = new Player[NUMBER_PLAYERS];
         players[0] = s0;

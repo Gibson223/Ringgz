@@ -10,6 +10,7 @@
 	public enum Color {
     RED , YELLOW , GREEN , BLUE , NULL;
 	
+	
 	private final String str;
 	
 	Color(String str) {
