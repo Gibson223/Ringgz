@@ -7,16 +7,12 @@
  * 
  * @author Inigo Artolozaga & Gibson Vredeveld
  */
-	public enum Color {
-    RED , YELLOW , GREEN , BLUE , NULL;
 	
-	
-	private final String str;
-	
+	public class Color{
 	Color(String str) {
 		this.str = str;
 	}
-	
+	private final String str;
 	@Override
 	public String toString() {
 		return str;
@@ -29,8 +25,9 @@
        ensures this == Color.G ==> \result == Color.B;
        ensures this == Color.B ==> \result == Color.R;
      */
+	
     public Color next() {
-        if (this == RED) {
+        if (this == Coloroptions.RED) {
             return YELLOW;
         } else if (this == YELLOW) {
             return GREEN;
@@ -40,4 +37,7 @@
             return RED;
         }
     }
+    public enum Coloroptions {
+	    RED , YELLOW , GREEN , BLUE , NULL;
+		}
 }
