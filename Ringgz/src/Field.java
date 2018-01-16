@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class Field {
 	private static int count = 1;
@@ -6,6 +7,8 @@ public class Field {
 	Field(){
 		FieldNumber = count;
 		count++;
+		FieldState[0] = Tier;
+		
 	}
 	
 	//small to large; 
@@ -15,7 +18,7 @@ public class Field {
 	private Ring Tier2 ;
 	private Ring Tier3 ;
 	private Ring Tier4 ;
-	public List<String> FieldState =  ;
+	publListist<String> FieldState = new List<>();
 	
 	//RETURNS THE STATE OF THE FIELD (SEE STATES IN ENUM ABOVE)
 	public List<> getFieldState(int field) {
@@ -23,10 +26,8 @@ public class Field {
 //		return; RETURNS THE STATE OF A CERTAIN FIELD
 	}
 	
+	
 	//ROW-COLUMN ADAPTATION FOR getFieldState ABOVE
-	public String getFieldState (int row, int col) {
-		return getFieldState(Board.index(row,col)); //WHY DOESNT THIS WORK?
-	}
 	
 	//RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING
 	public boolean FieldHas(int field, Color color) {
