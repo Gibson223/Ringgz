@@ -8,8 +8,7 @@
  * @author Inigo Artolozaga & Gibson Vredeveld
  */
 	public enum Color {
-    
-    RED ("R"), YELLOW ("Y"), GREEN ("G"), BLUE ("B"), NULL ("-");
+    RED , YELLOW , GREEN , BLUE , NULL;
 	
 	private final String str;
 	
