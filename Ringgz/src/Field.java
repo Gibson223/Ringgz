@@ -1,15 +1,26 @@
 
 public class Field {
-
+	private static int count = 1;
 	public int FieldNumber;
 	
-	public enum FieldState {
-		EMPTY, INBATTLE, RED, YELLOW, BLUE, GREEN, 
+	Field(){
+		FieldNumber = count;
+		count++;
 	}
 	
+	//small to large; 
+	//1 = small 
+	//4 = large;
+	private Ring Tier1 ;
+	private Ring Tier2 ;
+	private Ring Tier3 ;
+	private Ring Tier4 ;
+	public List<String> FieldState =  ;
+	
 	//RETURNS THE STATE OF THE FIELD (SEE STATES IN ENUM ABOVE)
-	public String getFieldState(int field) {
-		return; //RETURNS THE STATE OF A CERTAIN FIELD
+	public List<> getFieldState(int field) {
+		return list<>String
+//		return; RETURNS THE STATE OF A CERTAIN FIELD
 	}
 	
 	//ROW-COLUMN ADAPTATION FOR getFieldState ABOVE
@@ -22,8 +33,8 @@ public class Field {
 		return (field.FieldTier[0] == color || field.FieldTier[1] == color || field.FieldTier[2] == color || field.FieldTier[3] == color);
 	}
 }
-
-	//WE NEED AN ARRAY LIST FOR EACH FIELD WITH 4 SLOTS (FieldTier)
+	//getfield should have array
+	//WE NEED AN ARRAY LIST FOR EACH FIELD WITH 4 SLOTS (FieldTier) 
 	//EACH SLOT REPRESENTS ONE SIZE RING
 	//WE NEED TO HAVE THE POWER TO MODIFY A CERTAIN SLOT OF THE ARRAY WHEN A PLAYER PLACES A RING
 	//GETTERS AND SETTERS (getSlot(field,slot) and setSlot(field,slot))

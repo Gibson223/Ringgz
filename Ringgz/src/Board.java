@@ -2,7 +2,12 @@
 public class Board {
     public static final int DIM = 5;
     private static final String[] NUMBERING = {"1 | 2 | 3 | 4 | 5", "6 | 7 | 8 | 9 | 10", "11 | 12 | 13 | 14 | 15", "16 | 17 | 18 | 19 | 20", "21 | 22 | 23 | 24 | 25"};
+    private static final String LINE = NUMBERING[0];
     private static final String LINE = NUMBERING[1];
+    private static final String LINE = NUMBERING[2];
+    private static final String LINE = NUMBERING[3];
+    private static final String LINE = NUMBERING[4];
+//    private static final String[] LINES = NUMBERING[];
     private static final String DELIM = "     ";
 
     /**
