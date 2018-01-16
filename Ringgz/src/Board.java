@@ -26,6 +26,7 @@ public class Board {
     public Board() {
     	fields = new Field[DIM * DIM];
     	reset();
+    	//a
     }
 
     /**
