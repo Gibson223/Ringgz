@@ -23,7 +23,7 @@ public class Field {
 	List<String> FieldsState = Arrays.asList(Tier1,Tier2,Tier3,Tier4);
 	
 	public List<> getFieldState(int field) {
-		return FieldStae;
+		return FieldState;
 	}
 	
 	
