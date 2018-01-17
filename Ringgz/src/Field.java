@@ -72,9 +72,6 @@ public class Field {
 		System.out.println(b.fieldState);
 		System.out.println(b.FieldNumber);
 	}
-	public Color HasWon() {
-		
-	}
 }
 	//getfield should have array
 	//WE NEED AN ARRAY LIST FOR EACH FIELD WITH 4 SLOTS (FieldTier) 
