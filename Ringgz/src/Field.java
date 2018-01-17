@@ -7,7 +7,7 @@ public class Field {
 	Field(){
 		FieldNumber = count;
 		count++;
-		FieldState[0] = Tier;
+		FieldState[0] = Tier; //WTF IS ALL THIS I DO NOT UNDERSTAND LOL
 		
 	}
 	
@@ -18,9 +18,9 @@ public class Field {
 	private Ring Tier2 ;
 	private Ring Tier3 ;
 	private Ring Tier4 ;
-	publListist<String> FieldState = new List<>();
+	private List<String> FieldState = new List<String>();
 	
-	//RETURNS THE STATE OF THE FIELD (SEE STATES IN ENUM ABOVE)
+	//RETURNS THE STATE OF THE FIELD
 	public List<> getFieldState(int field) {
 		return list<>String
 //		return; RETURNS THE STATE OF A CERTAIN FIELD
