@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Board {
     public static final int DIM = 5;
@@ -9,6 +13,9 @@ public class Board {
     private static final String LINE4 = NUMBERING[4];
 //    private static final String[] LINES = NUMBERING[];
     private static final String DELIM = "     ";
+    public static void main(String[] args) {
+		Board board = new Board();
+	}
 
     /**
      * The DIM by DIM fields of the Ringgz student. See NUMBERING for the
@@ -16,6 +23,7 @@ public class Board {
      */
     //@ private invariant fields.length == DIM*DIM;
     private Field[] fields;
+    Map<Field, List<Ring>> allFields = new HashMap<Field, List<Ring>>();
 
     // -- Constructors -----------------------------------------------
 
@@ -25,6 +33,9 @@ public class Board {
     //@ ensures TODO;
     public Board() {
     	fields = new Field[DIM * DIM];
+    	for (Field field : fields) {
+    	allFields.put(field, field.getFieldState());
+    	}
     	reset();
     	//a
     }
@@ -36,9 +47,7 @@ public class Board {
     //TODO: Adapt this to copy all the rings from each field
     public Board deepCopy() {
         Board clone = new Board();
-        for(int i = 0; i < fields.length; i++) {
-        	clone.setField(i, fields[i]);
-        }
+        clone = (Board) this.clone();
         return clone;
     }
 
@@ -49,9 +58,16 @@ public class Board {
      */
     //@ requires 0 <= row & row < DIM;
     //@ requires 0 <= col & col < DIM;
+    //this.isField(row, col) && (allFields.containsKey(this.getField(index(row,col)).FieldNumber == index(row, col))
     /*@pure*/
     public int index(int row, int col) {
+    	if (this.isField(row, col)) {
         return row*DIM + col;
+    	}
+    	else {
+    		System.out.println("this is not a valid index...");
+    		return -1;
+    	}
     }
 
     /**
@@ -110,6 +126,7 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isAvailableField(int field, Ring RingType) {
+    	allFields[field] ;
         return true; //TODO (VERY IMPORTANT)
     }
 

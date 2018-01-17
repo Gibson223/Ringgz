@@ -15,8 +15,14 @@
        ensures this == Color.B ==> \result == Color.R;
      */
 public enum Color {
-	    RED , YELLOW , GREEN , BLUE , NULL;
-		
+	    RED , YELLOW , GREEN , BLUE;
+	public boolean others() {
+		if (this == RED || this == YELLOW || this == GREEN || this == BLUE) {
+			return true;
+		} else {
+		return false;
+		}
+	}
 	public Color next() {
         if (this == Color.RED) {
             return YELLOW;

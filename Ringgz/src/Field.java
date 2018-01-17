@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class Field {
@@ -7,31 +8,72 @@ public class Field {
 	Field(){
 		FieldNumber = count;
 		count++;
-		FieldState[0] = Tier; //WTF IS ALL THIS I DO NOT UNDERSTAND LOL
-		
 	}
 	
 	//small to large; 
 	//1 = small 
 	//4 = large;
-	private Ring Tier1 ;
-	private Ring Tier2 ;
-	private Ring Tier3 ;
-	private Ring Tier4 ;
-	private List<String> FieldState = new List<String>();
-	
-	//RETURNS THE STATE OF THE FIELD
-	public List<> getFieldState(int field) {
-		return list<>String
-//		return; RETURNS THE STATE OF A CERTAIN FIELD
+	private Ring ring1 ;
+	private Ring ring2 ;
+	private Ring ring3 ;
+	private Ring ring4 ;
+	private List<Ring> fieldState = Arrays.asList(ring1,ring2,ring3,ring4);
+	public List<Ring> getFieldState() {
+		return fieldState ;
 	}
-	
 	
 	//ROW-COLUMN ADAPTATION FOR getFieldState ABOVE
 	
 	//RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING
-	public boolean FieldHas(int field, Color color) {
-		return (field.FieldTier[0] == color || field.FieldTier[1] == color || field.FieldTier[2] == color || field.FieldTier[3] == color);
+	public boolean HasColor(Color color) {
+		for (Ring ring : fieldState ) {
+			if (ring.getColor() == color) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean HasBase() {
+		for (Ring ring: fieldState)
+			if (ring.getTier() == Tier.BASE) {
+				return true;
+			}
+		return false;
+	}
+	public boolean isFull() {
+		if (this.HasBase()) {
+			return true;
+		}
+		for (Ring ring: fieldState) {
+			if (!ring.getTier().occupied()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean isAllowed(Ring r) {
+		if (this.HasBase()) {
+			return false;
+		}
+		for (Ring ring : fieldState){
+			if (ring.getTier() == r.getTier()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	public static void main(String[] args) {
+		Field a = new Field();    
+		System.out.println(a.FieldNumber);
+		System.out.println(a.fieldState);
+		System.out.println(a.FieldNumber);
+		Field b = new Field();
+		System.out.println(b.FieldNumber);
+		System.out.println(b.fieldState);
+		System.out.println(b.FieldNumber);
+	}
+	public Color HasWon() {
+		
 	}
 }
 	//getfield should have array

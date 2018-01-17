@@ -1,15 +1,23 @@
 
 public class Ring {
 	private Color color;
-	private int size;
-	Ring(Color colors, int sizes){
-		color = colors;
-		size = sizes;
+	private Tier tier;
+	Ring(Color c, Tier t){
+		color = c;
+		tier = t;
 	}
-//	public enum RingType {
-//		TIER1, TIER2, TIER3, TIER4, BASE, NULL
-//	}
-//	
+	public void setTier(Tier tier) {
+		this.tier = tier;
+	}
+	public Tier getTier() {
+		return tier;
+	}
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
+	}
 //	//CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
 //	//@ensures TODO
 //	//TODO: SOMETHING TO TURN THE INPUT STRING INTO A (RingType choice)
@@ -22,8 +30,4 @@ public class Ring {
 //		   return false;
 //		}
 //	
-	//TODO
-	public Ring getRing() {
-		return this.RingType;
-	}
 }
