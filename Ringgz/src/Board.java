@@ -62,14 +62,20 @@ public class Board {
     /*@pure*/
     public int index(int row, int col) {
     	if (this.isField(row, col)) {
-        return row*DIM + col;
-    	}
+    		return (row-1)*DIM + col;}
     	else {
     		System.out.println("this is not a valid index...");
     		return -1;
     	}
     }
-
+    public int index(int i) {
+    	if (this.isField(i)) {
+    		return i;}
+    	else {
+    		System.out.println("this is not a valid index...");
+    		return -1;
+    	}
+    }
     /**
      * Returns true if ix is a valid index of a field on the student.
      * @return true if 0 <= index < DIM*DIM
@@ -77,7 +83,7 @@ public class Board {
     //@ ensures \result == (0 <= index && index < DIM * DIM);
     /*@pure*/
     public boolean isField(int index) {
-        return (index >= 0 && index < DIM * DIM);
+        return (index >= 1 && index <= DIM * DIM);
     }
 
     /**
@@ -88,7 +94,7 @@ public class Board {
     //@ ensures \result == (0 <= row && row < DIM && 0 <= col && col < DIM);
     /*@pure*/
     public boolean isField(int row, int col) {
-        return (0 <= row && row < DIM && 0 <= col && col < DIM);
+        return (1 <= row && row < DIM && 0 <= col && col < DIM);
     }
     
     /**
@@ -125,17 +131,16 @@ public class Board {
     //@ requires this.isField(i);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isAvailableField(int field, Ring RingType) {
-    	allFields[field] ;
-        return true; //TODO (VERY IMPORTANT)
+    public boolean isAllowed(int field, Ring ring) {
+    	fields[field].isAllowed(ring);
     }
 
     //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
     //@ requires this.isField(row,col);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isAvailableField(int row, int col, Tier choice) {
-        return isAvailableField(index(row, col));
+    public boolean isAllowed(int row, int col, Ring ring) {
+        return fields[index(row,col)].isAllowed(ring);
     }
     
     //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY - IMPORTANT TO CHECK IF A PLAYER CAN PLACE A BASE
@@ -143,14 +148,14 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isEmptyField(int i) {
-        return i.FieldState == FieldState.EMPTY;
+    	return fields[i].isFull();
     }
 
     //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY
     //@ requires this.isField(row,col);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isEmptyField(int row, int col, Ring.RingType choice) {
+    public boolean isEmptyField(int row, int col, Tier choice) {
         return isEmptyField(index(row, col));
     }
 
@@ -158,7 +163,7 @@ public class Board {
     //CHECKS IF BOARD IS FULL
     //@ ensures TODO (hint: for loop);
     /*@pure*/
-    public boolean isFull() {
+    public boolean boardIsFull() {
     	for (Field field : fields) {
     		if (!field.isFull()) {
     			return false;
@@ -173,6 +178,7 @@ public class Board {
   	    }
   	
   	public boolean FieldHas(int field, Color color) {
+  		this.getField(field);
   		return; //THIS HAS TO RETURN IF A FIELD HAS A CERTAIN COLOR RING IN IT
   	}
 
