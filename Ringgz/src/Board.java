@@ -134,7 +134,7 @@ public class Board {
     //@ requires this.isField(row,col);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isAvailableField(int row, int col, Ring.RingType choice) {
+    public boolean isAvailableField(int row, int col, Tier choice) {
         return isAvailableField(index(row, col));
     }
     
