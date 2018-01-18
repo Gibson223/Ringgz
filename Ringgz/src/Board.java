@@ -148,8 +148,9 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isEmptyField(int i) {
-    	return fields[i].isFull();
+    	return !fields[i].isFull();
     }
+    
 
     //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY
     //@ requires this.isField(row,col);
