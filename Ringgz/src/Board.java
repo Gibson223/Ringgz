@@ -138,7 +138,7 @@ public class Board {
         return isAvailableField(index(row, col));
     }
     
-    //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY
+    //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY - IMPORTANT TO CHECK IF A PLAYER CAN PLACE A BASE
     //@ requires this.isField(i);
     //@ ensures TODO;
     /*@pure*/

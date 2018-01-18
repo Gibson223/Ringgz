@@ -15,7 +15,7 @@ public abstract class Player {
      * Creates a new Player object.
      * 
      */
-    public Player(String name, Color color) {
+    public Player(String name, Color color) { //TODO: make it possible to assign more than one color to a single player
         this.name = name;
         this.color = color;
     }
@@ -24,13 +24,15 @@ public abstract class Player {
 
     
      //Returns the name of the player.	     
-    /*@ pure */ public String getName() {
+    /*@ pure */
+    public String getName() {
         return name;
     }
 
   
      //Returns the color of the player.	   
-    /*@ pure */ public Color getColor() {
+    /*@ pure */
+    public Color getColor() {
         return color;
     }
 
@@ -58,9 +60,9 @@ public abstract class Player {
      * @param board
      *            the current board
      */
-    public void makeMove(Board board) {
-        int choice = determineMove(board);
-        board.setField(choice, getColor(), Ring.RingType.getRing()//TODO);
-    }
+//    public void makeMove(Board board) {
+//        int choice = determineMove(board);
+//        board.setField(choice, getColor(), Ring.RingType.getRing()//TODO);
+//    }
 
 }

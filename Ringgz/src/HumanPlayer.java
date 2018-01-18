@@ -30,14 +30,14 @@ public class HumanPlayer extends Player {
 
      */
     /**
-     * Asks the user to input the field where to place the next mark. This is
-     * done using the standard input/output. \
+     * Asks the user to input the field where to place the next ring, as well as what size of ring.
+     * This is done using the standard input/output.
      * 
      * @param board
      *            the game board
      * @return the player's chosen field
      */
-    public int determineMove(Board board) {
+    public int determineMove(Board board) { //TODO: ADAPT THIS TO THE NEW RING SYSTEM
         String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring? ";
         int choiceField = readInt(promptField);
         boolean validField = board.isField(choiceField) && board.isAvailableField(choiceField);
