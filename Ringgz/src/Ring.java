@@ -6,6 +6,8 @@ public class Ring {
 		color = c;
 		tier = t;
 	}
+	public Ring() {
+	}
 	public void setTier(Tier tier) {
 		this.tier = tier;
 	}

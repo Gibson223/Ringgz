@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Field {
@@ -8,16 +8,16 @@ public class Field {
 	Field(){
 		FieldNumber = count;
 		count++;
+		fieldState.add(new Ring());
+		fieldState.add(new Ring());
+		fieldState.add(new Ring());
+		fieldState.add(new Ring());
 	}
 	
 	//small to large; 
 	//1 = small 
 	//4 = large;
-	private Ring ring1 ;
-	private Ring ring2 ;
-	private Ring ring3 ;
-	private Ring ring4 ;
-	private List<Ring> fieldState = Arrays.asList(ring1,ring2,ring3,ring4);
+	private List<Ring> fieldState = new ArrayList<>();
 	public List<Ring> getFieldState() {
 		return fieldState ;
 	}
@@ -57,20 +57,30 @@ public class Field {
 		}
 		for (Ring ring : fieldState){
 			if (ring.getTier() == r.getTier()) {
+				System.out.println("Tier already present..");
 				return false;
 			}
 		}
 		return true;
 	}
+	public void setRing(Ring ring) {
+		if(this.isAllowed(ring)) {
+			fieldState.remove(0);
+			fieldState.add(ring);
+		}
+	}
 	public static void main(String[] args) {
-		Field a = new Field();    
+		Field a = new Field();
+		Ring ring = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring2 = new Ring(Color.GREEN, Tier.SMALL);
+		System.out.println(ring);
 		System.out.println(a.FieldNumber);
 		System.out.println(a.fieldState);
-		System.out.println(a.FieldNumber);
-		Field b = new Field();
-		System.out.println(b.FieldNumber);
-		System.out.println(b.fieldState);
-		System.out.println(b.FieldNumber);
+		a.setRing(ring);
+		System.out.println(a.fieldState);
+		a.setRing(ring);
+		a.setRing(ring2);
+		System.out.println(a.fieldState);
 	}
 }
 	//getfield should have array
