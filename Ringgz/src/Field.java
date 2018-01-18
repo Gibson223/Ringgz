@@ -1,6 +1,4 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Field {
@@ -73,8 +71,8 @@ public class Field {
 	}
 	public static void main(String[] args) {
 		Field a = new Field();
-		Ring ring = new Ring(Color.BLUE, Tier.BASE);
-		Ring ring2 = new Ring(Color.GREEN, Tier.BASE);
+		Ring ring = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring2 = new Ring(Color.GREEN, Tier.SMALL);
 		System.out.println(ring);
 		System.out.println(a.FieldNumber);
 		System.out.println(a.fieldState);
