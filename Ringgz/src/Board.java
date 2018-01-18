@@ -140,7 +140,10 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isAllowed(int row, int col, Ring ring) {
-        return fields[index(row,col)].isAllowed(ring);
+        return getField(row, col).isAllowed(ring);
+    }
+    public void setRing(int i, Ring ring) {
+    	getField(i).setRing(ring);
     }
     
     //RETURNS TRUE IF A CERTAIN FIELD IS EMPTY - IMPORTANT TO CHECK IF A PLAYER CAN PLACE A BASE
