@@ -159,12 +159,12 @@ public class Board {
     //@ ensures TODO (hint: for loop);
     /*@pure*/
     public boolean isFull() {
-        for(int i = 0; i < fields.length; i++) {
-        	if((!i.fieldState.getFieldState[0] == null) || (!i.fieldState.getFieldState[1] == null) || (!i.fieldState.getFieldState[2] == null) || (!i.fieldState.getFieldState[0] == null)){
-        		return false;
-        	}
-        }
-        return true;
+    	for (Field field : fields) {
+    		if (!field.isFull()) {
+    			return false;
+    		}
+    	}
+    	return true;
     }
     
     //RETURN WHETHER OR NOT THE SELECTED FIELD IS ADJACENT TO A FIELD WITH A CERTAIN COLOR RING IN IT
