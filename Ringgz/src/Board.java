@@ -94,7 +94,7 @@ public class Board {
     //@ ensures \result == (0 <= row && row < DIM && 0 <= col && col < DIM);
     /*@pure*/
     public boolean isField(int row, int col) {
-        return (1 <= row && row < DIM && 0 <= col && col < DIM);
+        return (1 <= row && row <= DIM && 1 <= col && col <= DIM);
     }
     
     /**
