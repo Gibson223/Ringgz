@@ -26,7 +26,7 @@ public class Field {
 	
 	//RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING
 	public boolean HasColor(Color color) {
-		for (Ring ring : fieldState ) {
+		for (Ring ring : fieldState) {
 			if (ring.getColor() == color) {
 				return true;
 			}

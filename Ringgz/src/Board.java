@@ -160,7 +160,7 @@ public class Board {
     /*@pure*/
     public boolean isFull() {
         for(int i = 0; i < fields.length; i++) {
-        	if(getField(i) == Color.AVAILABLE) {
+        	if((!i.fieldState.getFieldState[0] == null) || (!i.fieldState.getFieldState[1] == null) || (!i.fieldState.getFieldState[2] == null) || (!i.fieldState.getFieldState[0] == null)){
         		return false;
         	}
         }
