@@ -30,5 +30,12 @@ public class Ring {
 		   }
 		   return false;
 		}
+	// return string of letter and 
+	public String toString() {
+		String result = "";
+		if (this.getColor() == Color) {
+			
+		}
+	}
 	
 }
