@@ -5,9 +5,12 @@ public class Field {
 	private static int count = 1;
 	public int FieldNumber;
 	
-	Field(){
+	public Field(){
 		FieldNumber = count;
 		count++;
+		this.initfieldState();
+	}
+	public void initfieldState() {
 		fieldState.add(new Ring());
 		fieldState.add(new Ring());
 		fieldState.add(new Ring());
@@ -24,7 +27,8 @@ public class Field {
 	
 	//ROW-COLUMN ADAPTATION FOR getFieldState ABOVE
 	
-	//RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING
+	//RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING 
+	// for proximity check
 	public boolean HasColor(Color color) {
 		for (Ring ring : fieldState) {
 			if (ring.getColor() == color) {
@@ -81,6 +85,10 @@ public class Field {
 		a.setRing(ring);
 		a.setRing(ring2);
 		System.out.println(a.fieldState);
+	}
+	public void clear() {
+		this.initfieldState();
+		}
 	}
 }
 	//getfield should have array

@@ -33,10 +33,10 @@ public class Board {
     //@ ensures TODO;
     public Board() {
     	fields = new Field[DIM * DIM];
-    	for (Field field : fields) {
-    	allFields.put(field, field.getFieldState());
-    	}
-    	reset();
+//    	for (Field field : fields) {
+//    	allFields.put(field, field.getFieldState());
+//    	}
+//    	reset();
     	//a
     }
 
@@ -47,7 +47,7 @@ public class Board {
     //TODO: Adapt this to copy all the rings from each field
     public Board deepCopy() {
         Board clone = new Board();
-        clone = (Board) this.clone();
+        clone.fields = this.fields;
         return clone;
     }
 
@@ -132,7 +132,7 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isAllowed(int field, Ring ring) {
-    	fields[field].isAllowed(ring);
+    	return getField(field).isAllowed(ring);
     }
 
     //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
@@ -177,14 +177,13 @@ public class Board {
     }
     
     //RETURN WHETHER OR NOT THE SELECTED FIELD IS ADJACENT TO A FIELD WITH A CERTAIN COLOR RING IN IT
-  	public boolean proximityCheck(int field, Color color) {
-  		return (FieldHas((field - 4),color)) == true || FieldHas((field - 1),color)) == true || FieldHas((field + 1),color)) == true || FieldHas((field + 4),color)) == true); 	
-  	    }
-  	
-  	public boolean FieldHas(int field, Color color) {
-  		this.getField(field);
-  		return; //THIS HAS TO RETURN IF A FIELD HAS A CERTAIN COLOR RING IN IT
-  	}
+//  	public boolean proximityCheck(int field, Color color) {
+//  		return (FieldHas((field - 4),color)) == true || FieldHas((field - 1),color)) == true || FieldHas((field + 1),color)) == true || FieldHas((field + 4),color)) == true); 	
+//  	    }
+//  	
+  	public boolean FieldHasColor(int field, Color color) {
+  		return getField(field).HasColor(color);
+    	}
 
     //RETURNS TRUE WHEN THE GAME ENDS (I.E. WHEN THE BOARD IS FULL)
     //@ ensures \result == this.isFull();
@@ -221,47 +220,34 @@ public class Board {
     //@requires TODO;
     //@ ensures TODO;
     /*@ pure */
-    public boolean isWinner(Player player) {
-        //TODO: conditions for winning
-    }
+//    public boolean isWinner(Player player) {
+//        //TODO: conditions for winning
+//    }
     
     //TODO: this is the original form TTT, must be adapted
-    public String toString() {
-        String s = "";
-        for (int i = 0; i < DIM; i++) {
-            String row = "";
-            for (int j = 0; j < DIM; j++) {
-                row = row + " " + getField(i, j).toString() + " ";
-                if (j < DIM - 1) {
-                    row = row + "|";
-                }
-            }
-            s = s + row + DELIM + NUMBERING[i * 2];
-            if (i < DIM - 1) {
-                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
-            }
-        }
-        return s;
-    }
+//    public String toString() {
+//        String s = "";
+//        for (int i = 0; i < DIM; i++) {
+//            String row = "";
+//            for (int j = 0; j < DIM; j++) {
+//                row = row + " " + getField(i, j).toString() + " ";
+//                if (j < DIM - 1) {
+//                    row = row + "|";
+//                }
+//            }
+//            s = s + row + DELIM + NUMBERING[i * 2];
+//            if (i < DIM - 1) {
+//                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
+//            }
+//        }
+//        return s;
+//    }
 
     //RESETS THE BOARD
     //@ ensures TODO
     public void reset() {
-    	for(int i = 0; i < fields.length; i++) {
-    		setField(i,Color.NULL,Ring.RingType.NULL);
+    	for( Field field : fields) {
+    		field.clear();
     	}
-    }
-
-    //@ requires this.isField(i);
-    //@ ensures TODO;
-    //PUTS THE DESIRED RING IN THE DESIRED FIELD
-    public void setField(int i, Color c, Ring.RingType r) {
-    	//TODO
-    }
-    
-    //@ requires this.isField(row,col);
-    //@ ensures this.getField(row,col) == m;
-    public void setField(int row, int col, Color c, Ring.RingType r) {
-    	setField(index(row, col), c, r);
     }
 }
