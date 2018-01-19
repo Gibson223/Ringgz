@@ -17,7 +17,7 @@
 public enum Color {
 	    RED , YELLOW , GREEN , BLUE;
 	//from char to colors
-	public Color toColor(char a) {
+	public Color toColor(char a) throws Exception{
 		if (a == 'y') {
 			return Color.YELLOW;
 		}else if (a == 'b') {
@@ -27,7 +27,20 @@ public enum Color {
 		} else if (a == 'r') {
 			return Color.RED;
 		} else {
-		return null;
+			throw new Exception("InvalidCharException");
+		}
+	}
+	public char toChar(Color a) throws Exception {
+		if (a == Color.YELLOW) {
+			return 'y';
+		}else if (a == Color.BLUE) {
+			return 'b';
+		} else if (a == Color.GREEN) {
+			return 'g';
+		} else if (a == Color.RED) {
+			return 'r';
+		} else {
+			throw new Exception("InvalidColorException");
 		}
 	}
 	public Color next() {
