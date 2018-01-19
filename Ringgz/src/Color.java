@@ -16,7 +16,7 @@
      */
 public enum Color {
 	    RED , YELLOW , GREEN , BLUE;
-	//from char to color
+	//from char to colors
 	public Color toColor(char a) {
 		if (a == 'y') {
 			return Color.YELLOW;
