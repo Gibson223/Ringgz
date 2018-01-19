@@ -37,26 +37,39 @@ public class HumanPlayer extends Player {
      *            the game board
      * @return the player's chosen field
      */
-    public int determineMove(Board board) { //TODO: ADAPT THIS TO THE NEW RING SYSTEM
-        String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring? ";
-        int choiceField = readInt(promptField);
-        boolean validField = board.isField(choiceField) && board.isAvailableField(choiceField);
-        while (!validField) {
-            System.out.println("ERROR: field " + choiceField + " is no valid choice.");
-            choiceField = readInt(promptField);
-            validField = board.isField(choiceField) && board.isAvailableField(choiceField);
-        }
-        String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
-        int choiceRing = readInt(promptRing);
-        boolean validRing = board.isField(choiceRing) && board.isAvailableField(choiceRing);
-        while (!validRing) {
-            System.out.println("ERROR: Ring " + choiceRing + " is no valid choice.");
-            choiceRing = readInt(promptRing);
-            validRing = board.isField(choiceRing) && board.isAvailableField(choiceRing);
-        }
-        return choiceRing;
-        return choiceField;
+//    public int determineMove(Board board) { //TODO: ADAPT THIS TO THE NEW RING SYSTEM
+//        String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring? ";
+//        int choiceField = readInt(promptField);
+//        boolean validField = board.isField(choiceField) && board.isAvailableField(choiceField);
+//        while (!validField) {
+//            System.out.println("ERROR: field " + choiceField + " is no valid choice.");
+//            choiceField = readInt(promptField);
+//            validField = board.isField(choiceField) && board.isAvailableField(choiceField);
+//        }
+//        String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
+//        int choiceRing = readInt(promptRing);
+//        boolean validRing = board.isField(choiceRing) && board.isAvailableField(choiceRing);
+//        while (!validRing) {
+//            System.out.println("ERROR: Ring " + choiceRing + " is no valid choice.");
+//            choiceRing = readInt(promptRing);
+//            validRing = board.isField(choiceRing) && board.isAvailableField(choiceRing);
+//        }
+//        return choiceRing;
+//        return choiceField;
     }
+    
+    public int determineMove(Board board) {
+    	String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring? ";
+    	String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
+    	int choiceField = readInt(promptField);
+    	int choiceRing = readInt(promptRing);
+
+    	if (isAllowed(choiceField, choiceRing)) {
+    		return choiceField;
+    		return choiceRing;
+    	}
+    }
+
 
     /**
      * Writes a prompt to standard out and tries to read an int value from

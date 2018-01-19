@@ -20,16 +20,15 @@ public class Ring {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-//	//CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
-//	//@ensures TODO
-//	//TODO: SOMETHING TO TURN THE INPUT STRING INTO A (RingType choice)
-//	public static boolean isRing(RingType choice) {
-//		   for(RingType aType : RingType.values()) {
-//		      if(aType == choice) {
-//		         return true;
-//		      }
-//		   }
-//		   return false;
-//		}
-//	
+	//CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
+	//@ensures TODO
+	public static boolean isRing(Tier choice) {
+		   for(Tier aType : Tier.values()) {
+		      if(aType == choice) {
+		         return true;
+		      }
+		   }
+		   return false;
+		}
+	
 }

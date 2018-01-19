@@ -190,13 +190,13 @@ public class Board {
     //@ ensures \result == this.isFull();
     /*@pure*/
     public boolean gameOver() {
-        return (isFull());
+        return (boardIsFull());
     }
 
     //I THOUGHT ABOUT USING THIS A GUIDE FOR MAKING A CHECKER FOR A COMPLETE FIELD
     /*@ pure */
-    public boolean hasWonField(int field, Color color) {
-    	for(int r = 0; r < DIM; r++) {
+//    public boolean hasWonField(int field, Color color) {
+//    	for(int r = 0; r < DIM; r++) {
 //			boolean hasRow = true;
 //			for(int c = 0; c < DIM; c++) {
 //				if(getField(c + r*DIM) != m) {

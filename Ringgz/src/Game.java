@@ -108,12 +108,12 @@ public class Game {
      */
     private void play() {
         System.out.println(board.toString());
-        while(!board.isFull()) {
+        while(!board.boardIsFull()) {
         	int i = 0;
         	do {
         		i = players[current].determineMove(board);
         	} 
-        	while(!board.isField(i) || !board.isAvailableField(i)); //WE MAY HAVE TO CHANGE THE ISAVAILABLE
+        	while(!board.isField(i)); //Not done
         	board.setField(i, players[current].getColor(), players[current].getRing());
         	current += 1;
         	current %= 3;
@@ -137,11 +137,9 @@ public class Game {
      * Prints the result of the last game. <br>
      */
     private void printResult() {
-    	//TODO: This has to count the number of won fields by each player
-    	//		The winner is the one with most won fields
-        if (board.isFull()) {
-            Player winner = board.isWinner(players[0].getMark()) ? players[0] : players[1];
-            System.out.println("Player " + winner.getName() + " (" + winner.getMark().toString() + ") has won!");
+        if (board.boardIsFull()) {
+            Player winner = board.isWinner(players[0]) ? players[0] : players[1];
+            System.out.println("Player " + winner.getName() + " has won!");
         }
     }
 }
