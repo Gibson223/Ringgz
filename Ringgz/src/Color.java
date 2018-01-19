@@ -16,11 +16,17 @@
      */
 public enum Color {
 	    RED , YELLOW , GREEN , BLUE;
-	public boolean others() {
-		if (this == RED || this == YELLOW || this == GREEN || this == BLUE) {
-			return true;
+	public Color toColor(char a) {
+		if (a == 'y') {
+			return Color.YELLOW;
+		}else if (a == 'b') {
+			return Color.BLUE;
+		} else if (a == 'g') {
+			return Color.GREEN;
+		} else if (a == 'r') {
+			return Color.RED;
 		} else {
-		return false;
+		return null;
 		}
 	}
 	public Color next() {
