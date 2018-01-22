@@ -43,7 +43,7 @@ public class HumanPlayer extends Player {
      * @return the player's chosen field
      */
  
-    public static int determineMove(Board board) {
+    public int determineMove(Board board) {
     	String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring?";
     	int choiceField = readInt(promptField);
     	String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
@@ -52,15 +52,15 @@ public class HumanPlayer extends Player {
     	System.out.println("> " + getName() + " (" + getColor().toString() + ")" + ", what color do you want to play with?");
     	String choiceColor = scan.nextLine();
 
-    	if (board.isAllowed(choiceField, Tier.toTier(choiceRing))) {
+    	if (board.isAllowed(choiceField, choiceRing)) {
     		return choiceField;
     		return choiceRing;
     	} else {
     		System.out.println("Invalid move, try another one.");
     		determineMove(board);
     	}
-    	
     }
+
 
     /**
      * Writes a prompt to standard out and tries to read an int value from

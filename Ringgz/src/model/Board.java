@@ -6,16 +6,11 @@ import java.util.Map;
 
 public class Board {
     public static final int DIM = 5;
-    private static final String[] NUMBERING = {"1 | 2 | 3 | 4 | 5", "6 | 7 | 8 | 9 | 10", "11 | 12 | 13 | 14 | 15", "16 | 17 | 18 | 19 | 20", "21 | 22 | 23 | 24 | 25"};
-    private static final String LINE0 = NUMBERING[0];
-    private static final String LINE1 = NUMBERING[1];
-    private static final String LINE2 = NUMBERING[2];
-    private static final String LINE3 = NUMBERING[3];
-    private static final String LINE4 = NUMBERING[4];
 //    private static final String[] LINES = NUMBERING[];
     private static final String DELIM = "     ";
     public static void main(String[] args) {
 		Board board = new Board();
+		board.setRing(1, new Ring(Color.BLUE, Tier.BASE));
 	}
 
     /**
@@ -32,13 +27,14 @@ public class Board {
      * Creates an empty Board.
      */
     //@ ensures TODO;
+    //fields are being created according to debug
     public Board() {
     	fields = new Field[DIM * DIM];
+    	for (int i = 0; i < 25; i++) {
+    		fields[i] = new Field();
+    	}
 //    	for (Field field : fields) {
-//    	allFields.put(field, field.getFieldState());
-//    	}
-//    	reset();
-    	//a
+//    	allFields.put(field, field.getFieldState());}
     }
 
     /**
@@ -144,6 +140,7 @@ public class Board {
         return getField(row, col).isAllowed(ring);
     }
     public void setRing(int i, Ring ring) {
+    	movecheck(ring.getColor());
     	getField(i).setRing(ring);
     }
     
@@ -163,7 +160,10 @@ public class Board {
     public boolean isEmptyField(int row, int col, Tier choice) {
         return isEmptyField(index(row, col));
     }
-
+    //do while loop in player which makes it easy to register first move
+    public List<Field> moveCheck(Color color){
+    	return;//TODO
+    }
 
     //CHECKS IF BOARD IS FULL
     //@ ensures TODO (hint: for loop);
@@ -190,7 +190,7 @@ public class Board {
     //@ ensures \result == this.isFull();
     /*@pure*/
     public boolean gameOver() {
-        return (boardIsFull());
+        return (this.boardIsFull());
     }
 
     //I THOUGHT ABOUT USING THIS A GUIDE FOR MAKING A CHECKER FOR A COMPLETE FIELD

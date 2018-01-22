@@ -1,5 +1,5 @@
 package model;
-
+import controller.RinggzException;
 
 /**
  * Represents a color in the Ringgz game. There four possible values:
@@ -18,19 +18,35 @@ package model;
 public enum Color {
 	    RED , YELLOW , GREEN , BLUE;
 	//from char to colors
-	public Color toColor(char a) {
-		if (a == 'y') {
+	public static Color toColor(String a){
+		if (a == "y") {
 			return Color.YELLOW;
-		}else if (a == 'b') {
+		}else if (a == "b") {
 			return Color.BLUE;
-		} else if (a == 'g') {
+		} else if (a == "g") {
 			return Color.GREEN;
-		} else if (a == 'r') {
+		} else if (a == "r") {
 			return Color.RED;
 		} else {
-		return null;
+			return null;
+//			throw new Exception("InvalidCharException");
 		}
 	}
+	public String toString() {
+		if (this == Color.YELLOW) {
+			return "y";
+		}else if (this == Color.BLUE) {
+			return "b";
+		} else if (this == Color.GREEN) {
+			return "g";
+		} else if (this == Color.RED) {
+			return "r";
+		}else {
+			return null;
+		}
+	}
+		// if this exception is given to client :redo 
+//		throw new RinggzException("InvalidColorException");
 	public Color next() {
         if (this == Color.RED) {
             return YELLOW;

@@ -1,4 +1,5 @@
 package model;
+
 public class Ring {
 	private Color color;
 	private Tier tier;
@@ -30,5 +31,17 @@ public class Ring {
 		   }
 		   return false;
 		}
+	public String toString() {
+		return this.getColor().toString();
+	}
 	
+	public Color toColor(int i) {
+		
+	}
 }
+	// return string of letter
+//	public String toString(){
+//		return this.getColor().toChar();
+//		}
+//	
+//}
