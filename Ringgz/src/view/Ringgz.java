@@ -1,3 +1,11 @@
+package view;
+import controller.ComputerPlayer;
+import controller.HumanPlayer;
+import controller.NaiveStrategy;
+import controller.Player;
+import controller.SmartStrategy;
+import model.Color;
+
 /**
  * Executable class for the game Ringgz.
  * 

@@ -1,4 +1,6 @@
-
+package controller;
+import model.Board;
+import model.Color;
 
 public class ComputerPlayer extends Player {
 	

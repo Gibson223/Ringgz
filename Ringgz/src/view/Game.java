@@ -1,6 +1,10 @@
+package view;
 
 
 import java.util.Scanner;
+
+import controller.Player;
+import model.Board;
 
 /**
  * Class for maintaining the Ringgz game.

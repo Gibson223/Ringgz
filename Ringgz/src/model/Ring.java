@@ -1,4 +1,4 @@
-
+package model;
 public class Ring {
 	private Color color;
 	private Tier tier;

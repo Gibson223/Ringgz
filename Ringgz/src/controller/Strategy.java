@@ -1,4 +1,6 @@
-
+package controller;
+import model.Board;
+import model.Color;
 
 public interface Strategy {
 	

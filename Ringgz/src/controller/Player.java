@@ -1,3 +1,7 @@
+package controller;
+import model.Board;
+import model.Color;
+
 public abstract class Player {
     // -- Instance variables -----------------------------------------
 

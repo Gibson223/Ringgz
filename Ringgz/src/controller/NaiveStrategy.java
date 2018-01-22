@@ -1,8 +1,12 @@
+package controller;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import model.Board;
+import model.Color;
 public class NaiveStrategy implements Strategy {
 
 	@Override

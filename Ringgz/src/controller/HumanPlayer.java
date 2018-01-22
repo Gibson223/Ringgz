@@ -1,4 +1,9 @@
+package controller;
 import java.util.Scanner;
+
+import model.Board;
+import model.Color;
+import model.Tier;
 
 
 /**
@@ -38,11 +43,14 @@ public class HumanPlayer extends Player {
      * @return the player's chosen field
      */
  
-    public int determineMove(Board board) {
+    public static int determineMove(Board board) {
     	String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring?";
-    	String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
     	int choiceField = readInt(promptField);
+    	String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
     	int choiceRing = readInt(promptRing);
+    	Scanner scan = new Scanner(System.in);
+    	System.out.println("> " + getName() + " (" + getColor().toString() + ")" + ", what color do you want to play with?");
+    	String choiceColor = scan.nextLine();
 
     	if (board.isAllowed(choiceField, Tier.toTier(choiceRing))) {
     		return choiceField;
@@ -53,7 +61,6 @@ public class HumanPlayer extends Player {
     	}
     	
     }
-
 
     /**
      * Writes a prompt to standard out and tries to read an int value from
