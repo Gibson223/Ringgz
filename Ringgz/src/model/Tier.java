@@ -1,3 +1,4 @@
+package model;
 public enum Tier{
 	SMALL, MEDIUM, LARGE, LARGEST, BASE;
 	public boolean occupied() {

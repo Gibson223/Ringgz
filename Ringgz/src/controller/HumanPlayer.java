@@ -1,4 +1,9 @@
+package controller;
 import java.util.Scanner;
+
+import model.Board;
+import model.Color;
+import model.Tier;
 
 
 /**

@@ -1,3 +1,4 @@
+package model;
 
 public class Ring {
 	private Color color;
@@ -30,12 +31,13 @@ public class Ring {
 		   }
 		   return false;
 		}
-	// return string of letter and 
 	public String toString() {
-		String result = "";
-		if (this.getColor() == Color) {
-			
-		}
+		return this.getColor().toString();
 	}
-	
 }
+	// return string of letter
+//	public String toString(){
+//		return this.getColor().toChar();
+//		}
+//	
+//}

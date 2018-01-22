@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+package model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +139,7 @@ public class Board {
         return getField(row, col).isAllowed(ring);
     }
     public void setRing(int i, Ring ring) {
+    	movecheck(ring.getColor());
     	getField(i).setRing(ring);
     }
     
@@ -158,7 +159,12 @@ public class Board {
     public boolean isEmptyField(int row, int col, Tier choice) {
         return isEmptyField(index(row, col));
     }
-
+    //do while loop in player which makes it easy to register first move
+    public List<Field> moveCheck(Color color){
+    	if  {
+    		
+    	}
+    }
 
     //CHECKS IF BOARD IS FULL
     //@ ensures TODO (hint: for loop);
@@ -185,7 +191,7 @@ public class Board {
     //@ ensures \result == this.isFull();
     /*@pure*/
     public boolean gameOver() {
-        return (boardIsFull());
+        return (this.boardIsFull());
     }
 
     //I THOUGHT ABOUT USING THIS A GUIDE FOR MAKING A CHECKER FOR A COMPLETE FIELD
