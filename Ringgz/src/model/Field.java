@@ -91,7 +91,6 @@ public class Field {
 		this.initfieldState();
 		}
 	}
-}
 	//getfield should have array
 	//WE NEED AN ARRAY LIST FOR EACH FIELD WITH 4 SLOTS (FieldTier) 
 	//EACH SLOT REPRESENTS ONE SIZE RING
