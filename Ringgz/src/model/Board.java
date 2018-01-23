@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.org.apache.xalan.internal.xsltc.dom.AbsoluteIterator;
+
 public class Board {
     public static final int DIM = 5;
 //    private static final String[] LINES = NUMBERING[];
@@ -136,7 +138,6 @@ public class Board {
         return getField(row, col).isAllowed(ring);
     }
     public void setRing(int i, Ring ring) {
-//    	movecheck(ring.getColor());
     	getField(i).setRing(ring);
     }
     
@@ -145,7 +146,7 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isEmptyField(int i) {
-    	return !fields[i].isFull();
+    	return !this.getField((i)).isFull();
     }
     
 
@@ -170,6 +171,7 @@ public class Board {
     	}
     	return true;
     }
+    //@returns List<Field> 
     private List<Integer> left = Arrays.asList(1,6,11,16,21);
     private List<Integer> right = Arrays.asList(5,10,15,20,25);
     public List<Field> adjacentFields(int field){
@@ -179,6 +181,16 @@ public class Board {
     	if (!left.contains(field)) {result.add( this.getField((field - 1)));};
     	if (!right.contains(field)) {result.add( this.getField((field + 1)));};
     return result;
+    }
+    public boolean proximityCheck(int i, Color c) {
+    	for( Field field : this.adjacentFields(i)) {
+    		for (Ring ring : field.getFieldState()){
+    			if (ring.getColor() == c) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
     public static void main(String[] args) {
 		Board b = new Board();
@@ -231,26 +243,6 @@ public class Board {
 //    public boolean isWinner(Player player) {
 //        //TODO: conditions for winning
 //    }
-    
-    //TODO: this is the original form TTT, must be adapted
-//    public String toString() {
-//        String s = "";
-//        for (int i = 0; i < DIM; i++) {
-//            String row = "";
-//            for (int j = 0; j < DIM; j++) {
-//                row = row + " " + getField(i, j).toString() + " ";
-//                if (j < DIM - 1) {
-//                    row = row + "|";
-//                }
-//            }
-//            s = s + row + DELIM + NUMBERING[i * 2];
-//            if (i < DIM - 1) {
-//                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
-//            }
-//        }
-//        return s;
-//    }
-
     //RESETS THE BOARD
     //@ ensures TODO
     public void reset() {
