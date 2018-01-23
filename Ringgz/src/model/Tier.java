@@ -8,7 +8,7 @@ public enum Tier{
 			return false;
 		}
 	}
-	public Tier toTier(int i) {
+	public static Tier toTier(int i) {
 		if (i == 1) {
 			return Tier.SMALL;
 		} else if(i == 2) {

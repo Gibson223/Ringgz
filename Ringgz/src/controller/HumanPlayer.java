@@ -52,7 +52,7 @@ public class HumanPlayer extends Player {
     	System.out.println("> " + getName() + " (" + getColor().toString() + ")" + ", what color do you want to play with?");
     	String choiceColor = scan.nextLine();
 
-    	if (board.isAllowed(choiceField, choiceRing)) {
+    	if (board.isAllowed(choiceField, Tier.toTier(choiceRing))) {
     		return choiceField;
     		return choiceRing;
     	} else {
