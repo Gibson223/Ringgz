@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.sun.org.apache.xalan.internal.xsltc.dom.AbsoluteIterator;
 
@@ -211,6 +212,26 @@ public class Board {
     public boolean gameOver() {
         return (this.boardIsFull());
     }
+    public Color isWinner() {
+    	Map<Color, Integer> result = new HashMap<>();
+    	for(Color c: Color.values()) {
+    		result.put(c, 0);
+    	}
+    	for( Field field: fields) {
+    		result.put(field.isWinner(), result.get(field) + 1);
+    	}
+    	result.remove(null);
+		System.out.println(result);
+		Integer highest = java.util.Collections.max(result.values());
+		if (java.util.Collections.frequency(result.values(), highest) == 1) {
+		for (Map.Entry<Color, Integer> c: result.entrySet()) {
+				if (c.getValue() == highest) {
+					return c.getKey();
+				}
+			}
+		}
+		return null;
+	}
 
     //I THOUGHT ABOUT USING THIS A GUIDE FOR MAKING A CHECKER FOR A COMPLETE FIELD
     /*@ pure */
