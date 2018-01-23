@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+<<<<<<< HEAD
+=======
 
 import com.sun.org.apache.xalan.internal.xsltc.dom.AbsoluteIterator;
+>>>>>>> branch 'master' of https://git.snt.utwente.nl/s2025914/Ringgz.git
 
 public class Board {
     public static final int DIM = 5;

@@ -18,7 +18,7 @@ public class NaiveStrategy implements Strategy {
 	public int determineMove(Board b, Color c) {
 		List<Integer> availableList = new ArrayList<>();
 		for (int i = 0; i < Board.DIM*Board.DIM; i++) {
-			if (b.proximityCheck(i,c)) {
+			if (b.isAllowed(i,c)) {
 				availableList.add(i);
 			}
 		}

@@ -118,7 +118,7 @@ public class Game {
         		i = players[current].determineMove(board);
         	} 
         	while(!board.isField(i)); //Not done
-        	board.setField(i, players[current].getColor(), players[current].getRing());
+        	board.setField(i, players[current].getColor(), players[current].RingChoice); //TODO get the Ring Choice in here
         	current += 1;
         	current %= 3;
         	update();
@@ -142,7 +142,11 @@ public class Game {
      */
     private void printResult() {
         if (board.boardIsFull()) {
-            Player winner = board.isWinner(players[0]) ? players[0] : players[1];
+            for (int j = 0, j <= 4, j++) {
+            	if players[j].getColor().(board.isWinner()) {
+            		Player winner = players[j];
+            	}
+            }
             System.out.println("Player " + winner.getName() + " has won!");
         }
     }

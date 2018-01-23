@@ -18,6 +18,7 @@ public class Field {
 		fieldState.add(new Ring());
 		fieldState.add(new Ring());
 		fieldState.add(new Ring());
+		
 	}
 	
 	//small to large; 
