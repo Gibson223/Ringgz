@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,6 @@ public class Board {
     public static final int DIM = 5;
 //    private static final String[] LINES = NUMBERING[];
     private static final String DELIM = "     ";
-    public static void main(String[] args) {
-		Board board = new Board();
-		board.setRing(1, new Ring(Color.BLUE, Tier.BASE));
-	}
-
     /**
      * The DIM by DIM fields of the Ringgz student. See NUMBERING for the
      * coding of the fields.
@@ -105,7 +101,7 @@ public class Board {
     //@ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
     /*@pure*/
     public Field getField(int i) {
-        return fields[i];
+        return fields[i-1];
     }
 
     /**
@@ -140,7 +136,7 @@ public class Board {
         return getField(row, col).isAllowed(ring);
     }
     public void setRing(int i, Ring ring) {
-    	movecheck(ring.getColor());
+//    	movecheck(ring.getColor());
     	getField(i).setRing(ring);
     }
     
@@ -161,9 +157,7 @@ public class Board {
         return isEmptyField(index(row, col));
     }
     //do while loop in player which makes it easy to register first move
-    public List<Field> moveCheck(Color color){
-    	return;//TODO
-    }
+   
 
     //CHECKS IF BOARD IS FULL
     //@ ensures TODO (hint: for loop);
@@ -176,7 +170,20 @@ public class Board {
     	}
     	return true;
     }
-    
+    private List<Integer> left = Arrays.asList(1,6,11,16,21);
+    private List<Integer> right = Arrays.asList(5,10,15,20,25);
+    public List<Field> adjacentFields(int field){
+    	List<Field> result = new ArrayList<>();
+    	if (this.isField(field + DIM)) {result.add((this.getField(field + DIM)));};
+    	if (this.isField(field - DIM)) {result.add((this.getField(field - DIM)));};
+    	if (!left.contains(field)) {result.add( this.getField((field - 1)));};
+    	if (!right.contains(field)) {result.add( this.getField((field + 1)));};
+    return result;
+    }
+    public static void main(String[] args) {
+		Board b = new Board();
+		b.adjacentFields(21).stream().forEach(a -> System.out.println(a.FieldNumber));
+	}
     //RETURN WHETHER OR NOT THE SELECTED FIELD IS ADJACENT TO A FIELD WITH A CERTAIN COLOR RING IN IT
 //  	public boolean proximityCheck(int field, Color color) {
 //  		return (FieldHas((field - 4),color)) == true || FieldHas((field - 1),color)) == true || FieldHas((field + 1),color)) == true || FieldHas((field + 4),color)) == true); 	

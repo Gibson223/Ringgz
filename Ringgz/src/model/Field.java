@@ -1,6 +1,14 @@
 package model;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import com.sun.accessibility.internal.resources.accessibility;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 public class Field {
 	private static int count = 1;
@@ -74,10 +82,32 @@ public class Field {
 			fieldState.add(ring);
 		}
 	}
+	public Color isWinner() {
+		Map<Color, Integer> map = new HashMap<>();
+		for (Ring f : fieldState){
+		    if (map.containsKey(f.getColor())) { 
+		        map.put(f.getColor(),map.get(f.getColor())+1);
+		    } else {
+		        map.put(f.getColor(), new Integer(1));
+		    }
+		}
+		map.remove(null);
+		System.out.println(map);
+		Integer highest = java.util.Collections.max(map.values());
+		if (java.util.Collections.frequency(map.values(), highest) == 1) {
+		for (Map.Entry<Color, Integer> c: map.entrySet()) {
+				if (c.getValue() == highest) {
+					return c.getKey();
+				}
+			}
+		}
+		return null;
+	}
 	public static void main(String[] args) {
 		Field a = new Field();
 		Ring ring = new Ring(Color.BLUE, Tier.MEDIUM);
 		Ring ring2 = new Ring(Color.GREEN, Tier.SMALL);
+		Ring ring3 = new Ring(Color.GREEN, Tier.LARGE);
 		System.out.println(ring);
 		System.out.println(a.FieldNumber);
 		System.out.println(a.fieldState);
@@ -85,7 +115,9 @@ public class Field {
 		System.out.println(a.fieldState);
 		a.setRing(ring);
 		a.setRing(ring2);
+		a.setRing(ring3);
 		System.out.println(a.fieldState);
+		System.out.println(a.isWinner());
 	}
 	public void clear() {
 		this.initfieldState();
