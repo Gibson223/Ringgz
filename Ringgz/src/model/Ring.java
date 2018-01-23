@@ -24,20 +24,16 @@ public class Ring {
 	//CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
 	//@ensures TODO
 	public static boolean isRing(Tier choice) {
-		   for(Tier aType : Tier.values()) {
-		      if(aType == choice) {
-		         return true;
-		      }
-		   }
-		   return false;
-		}
+	   for(Tier aType : Tier.values()) {
+	      if(aType == choice) {
+	         return true;
+	      }
+	   }
+	   return false;
+	}
+	//returns the color of the ring
+	@Override
 	public String toString() {
 		return this.getColor().toString();
 	}
 }
-	// return string of letter
-//	public String toString(){
-//		return this.getColor().toChar();
-//		}
-//	
-//}
