@@ -34,10 +34,6 @@ public class Ring {
 	public String toString() {
 		return this.getColor().toString();
 	}
-	
-	public Color toColor(int i) {
-		
-	}
 }
 	// return string of letter
 //	public String toString(){

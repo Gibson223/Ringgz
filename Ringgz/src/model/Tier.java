@@ -21,7 +21,6 @@ public enum Tier{
 			return Tier.BASE;
 		} else {
 			return null;
-		}
-		
+		}		
 	}
 }
