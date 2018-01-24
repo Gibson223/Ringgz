@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class RingList {
-	private List<Ring>  availableRings= new LinkedList<>();
+	public List<Ring>  availableRings= new LinkedList<>();
 	public RingList(){
 		for (Color c: Color.values()) {
 			for (int i = 0; i < 3; i++) {
