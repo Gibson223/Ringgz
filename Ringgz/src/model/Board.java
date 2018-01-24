@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import controller.RinggzException;
+
 public class Board {
     public static final int DIM = 5;
     private static final String DELIM = "     ";
@@ -95,12 +97,15 @@ public class Board {
      * @param i
      *            the number of the field (see NUMBERING)
      * @return the mark on the field
+     * @throws RinggzException 
      */
     //@ requires this.isField(i);
     //@ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
     /*@pure*/
-    public Field getField(int i) {
+    public Field getField(int i) throws RinggzException {
+    	if (this.isField(i)) {
         return fields[i-1];
+    	} else {throw new RinggzException("Not a valid field, so cannot get it....");}
     }
 
     /**
@@ -168,7 +173,7 @@ public class Board {
     	}
     	return true;
     }
-    //@returns List<Field> 
+    //@returns List<Field> of adjacent fields
     private List<Integer> left = Arrays.asList(1,6,11,16,21);
     private List<Integer> right = Arrays.asList(5,10,15,20,25);
     public List<Field> adjacentFields(int field){
@@ -179,6 +184,7 @@ public class Board {
     	if (!right.contains(field)) {result.add( this.getField((field + 1)));};
     return result;
     }
+    
     public boolean proximityCheck(int f, Color c) {
     	for (Field field : this.adjacentFields(f)) {
     		for (Ring ring : field.getFieldState()) {
@@ -210,7 +216,7 @@ public class Board {
     		result.put(c, 0);
     	}
     	for( Field field: fields) {
-    		result.put(field.isWinner(), result.get(field) + 1);
+    		result.put(field.isWinner(), result.get(field.isWinner()) + 1);
     	}
     	result.remove(null);
 		System.out.println(result);
