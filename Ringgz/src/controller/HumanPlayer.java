@@ -1,9 +1,7 @@
 package controller;
 import java.util.Scanner;
 
-import model.Board;
-import model.Color;
-import model.Tier;
+import model.*;
 
 
 /**
@@ -43,24 +41,22 @@ public class HumanPlayer extends Player {
      * @return the player's chosen field
      */
  
-    public int determineMove(Board board) {
-    	String promptField = "> " + getName() + " (" + getColor().toString() + ")" + ", where will you place your ring?";
+    public void makeMove(Board board) {
+    	String promptField = "> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring?";
     	int choiceField = readInt(promptField);
-    	String promptRing = "> " + getName() + " (" + getColor().toString() + ")" + ", what kind of ring will you place?";
+    	String promptRing = "> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place (1,2,3,4,5(BASE))?";
     	int choiceRing = readInt(promptRing);
     	Scanner scan = new Scanner(System.in);
-    	System.out.println("> " + getName() + " (" + getColor().toString() + ")" + ", what color do you want to play with?");
+    	System.out.println("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with?");
     	String choiceColor = scan.nextLine();
-
-    	if (board.isAllowed(choiceField, Tier.toTier(choiceRing))) {
-    		return choiceField;
-    		return choiceRing;
+    	if (board.isAllowed(choiceField, new Ring (Color.toColor(choiceColor),Tier.toTier(choiceRing)))) {
+    		board.setRing(choiceField, new Ring (Color.toColor(choiceColor),Tier.toTier(choiceRing)));
     	} else {
     		System.out.println("Invalid move, try another one.");
-    		determineMove(board);
+    		makeMove(board);
     	}
+    	scan.close();
     }
-
 
     /**
      * Writes a prompt to standard out and tries to read an int value from

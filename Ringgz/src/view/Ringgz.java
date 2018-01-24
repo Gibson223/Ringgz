@@ -29,7 +29,7 @@ public class Ringgz {
     		}
     		color.next(); //THIS IS WHAT ROTATES THE COLOR
     	}
-        Game g = new Game(player[0], player[1],player[2],player[3]); //MAKE THIS NOT HARDCODED FOR 4 PLAYERS;
+        Game g = new Game(player[0], player[1],player[2],player[3]); //TODO: MAKE THIS NOT HARDCODED FOR 4 PLAYERS;
         g.start();
     }
 }

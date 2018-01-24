@@ -1,18 +1,18 @@
 package view;
 
-
+import model.*;
 import java.util.Scanner;
 
 import controller.Player;
 import model.Board;
-import model.RingList;
-import controller.Player;
 
 /**
  * Class for maintaining the Ringgz game.
  * @author Inigo Artolozaga and Gibson Vredeveld
  */
 public class Game {
+    public static final int NUMBER_PLAYERS = 4; //TODO make this modifiable;
+
     /*@ private invariant board != null; */
     /**
      * The board.
@@ -46,19 +46,18 @@ public class Game {
      */
     public Game(Player s0, Player s1, Player s2, Player s3) { // TODO make this not hardcoded for 4 players;
         board = new Board();
-        RingList ringlist = new RingList();
-        players = new Player[3];
-        players[0] = new Player(s0);
-        players[1] = new Player(s1);
-        players[2] = new Player(s2);
-        players[3] = new Player(s3);
-        
+        players = new Player[NUMBER_PLAYERS];
+        players[0] = s0;
+        players[1] = s1;
+        players[2] = s2;
+        players[3] = s3;
+        current = 0;
     }
 
     // -- Commands ---------------------------------------------------
 
     /**
-     * Starts the Ringgz game. <br>
+     * Starts the Tic Tac Toe game. <br>
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
      */
@@ -114,12 +113,8 @@ public class Game {
     private void play() {
         System.out.println(board.toString());
         while(!board.boardIsFull()) {
-        	int i = 0;
-        	do {
-        		i = players[current].determineMove(board);
-        	} 
-        	while(!board.isField(i)); //Not done
-        	board.setField(i, players[current].getColor(), players[current].getColor()); //TODO get the Ring Choice in here
+        	players[current].makeMove(board);
+        	while(!board.boardIsFull()); //Not done
         	current += 1;
         	current %= 3;
         	update();
@@ -143,12 +138,8 @@ public class Game {
      */
     private void printResult() {
         if (board.boardIsFull()) {
-            for (int j = 0; j < 5; j++) {
-            	if (board.isWinner(players[j].getColor())) {
-            		Player winner = players[j];
-            	}
-            }
-            System.out.println("Player " + winner.getName() + " has won!");
+            Color winner = board.isWinner();
+            System.out.println("Player with color " + winner.toString() + " has won!");
         }
     }
 }
