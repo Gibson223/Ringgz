@@ -3,7 +3,7 @@ package model;
 public class Ring {
 	private Color color;
 	private Tier tier;
-	Ring(Color c, Tier t){
+	public Ring(Color c, Tier t){
 		color = c;
 		tier = t;
 	}
