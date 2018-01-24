@@ -118,7 +118,7 @@ public class Game {
         		i = players[current].determineMove(board);
         	} 
         	while(!board.isField(i)); //Not done
-        	board.setField(i, players[current].getColor(), players[current].RingChoice); //TODO get the Ring Choice in here
+        	board.setField(i, players[current].getColor(), players[current].getColor()); //TODO get the Ring Choice in here
         	current += 1;
         	current %= 3;
         	update();

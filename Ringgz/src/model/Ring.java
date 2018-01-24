@@ -22,7 +22,7 @@ public class Ring {
 		this.color = color;
 	}
 	//CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
-	//@ensures TODO
+	//@ensures //TODO
 	public static boolean isRing(Tier choice) {
 	   for(Tier aType : Tier.values()) {
 	      if(aType == choice) {

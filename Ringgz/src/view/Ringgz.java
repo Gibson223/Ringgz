@@ -1,6 +1,5 @@
 package view;
 import controller.ComputerPlayer;
-import controller.Game;
 import controller.HumanPlayer;
 import controller.NaiveStrategy;
 import controller.Player;

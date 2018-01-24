@@ -4,11 +4,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class Board {
     public static final int DIM = 5;
-//    private static final String[] LINES = NUMBERING[];
     private static final String DELIM = "     ";
     /**
      * The DIM by DIM fields of the Ringgz student. See NUMBERING for the
@@ -181,9 +179,9 @@ public class Board {
     	if (!right.contains(field)) {result.add( this.getField((field + 1)));};
     return result;
     }
-    public boolean proximityCheck(int i, Color c) {
-    	for( Field field : this.adjacentFields(i)) {
-    		for (Ring ring : field.getFieldState()){
+    public boolean proximityCheck(int f, Color c) {
+    	for (Field field : this.adjacentFields(f)) {
+    		for (Ring ring : field.getFieldState()) {
     			if (ring.getColor() == c) {
     				return true;
     			}
@@ -195,11 +193,7 @@ public class Board {
 		Board b = new Board();
 		b.adjacentFields(21).stream().forEach(a -> System.out.println(a.FieldNumber));
 	}
-    //RETURN WHETHER OR NOT THE SELECTED FIELD IS ADJACENT TO A FIELD WITH A CERTAIN COLOR RING IN IT
-//  	public boolean proximityCheck(int field, Color color) {
-//  		return (FieldHas((field - 4),color)) == true || FieldHas((field - 1),color)) == true || FieldHas((field + 1),color)) == true || FieldHas((field + 4),color)) == true); 	
-//  	    }
-//  	
+
   	public boolean FieldHasColor(int field, Color color) {
   		return getField(field).HasColor(color);
     	}
