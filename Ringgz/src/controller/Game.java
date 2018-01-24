@@ -2,6 +2,8 @@
 
 import java.util.Scanner;
 
+import model.Board;
+
 /**
  * Class for maintaining the Ringgz game.
  * @author Inigo Artolozaga and Gibson Vredeveld
