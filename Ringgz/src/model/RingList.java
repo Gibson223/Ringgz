@@ -1,7 +1,10 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class RingList {
 	public List<Ring>  availableRings= new LinkedList<>();
@@ -13,6 +16,8 @@ public class RingList {
 				}
 			}
 		}
+		availableRings = availableRings.stream().filter(a -> a.getColor() != Color.INIT).collect(Collectors.toList());
+		availableRings = availableRings.stream().filter(a ->  a.getTier() !=Tier.INIT).collect(Collectors.toList());
 	}
 	public static void main(String[] args) {
 		RingList a = new RingList();
