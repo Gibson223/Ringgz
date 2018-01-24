@@ -116,11 +116,12 @@ public class Board {
      * @param col
      *            the column of the field
      * @return the mark on the field
+     * @throws RinggzException 
      */
     //@ requires this.isField(row,col);
     //@ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
     /*@pure*/
-    public Field getField(int row, int col) {
+    public Field getField(int row, int col) throws RinggzException {
         return getField(index(row, col));
     }
 
@@ -128,7 +129,7 @@ public class Board {
     //@ requires this.isField(i);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isAllowed(int field, Ring ring) {
+    public boolean isAllowed(int field, Ring ring) throws RinggzException {
     	return getField(field).isAllowed(ring);
     }
 
@@ -136,10 +137,10 @@ public class Board {
     //@ requires this.isField(row,col);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isAllowed(int row, int col, Ring ring) {
+    public boolean isAllowed(int row, int col, Ring ring) throws RinggzException {
         return getField(row, col).isAllowed(ring);
     }
-    public void setRing(int i, Ring ring) {
+    public void setRing(int i, Ring ring) throws RinggzException {
     	getField(i).setRing(ring);
     }
     
@@ -147,7 +148,7 @@ public class Board {
     //@ requires this.isField(i);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isEmptyField(int i) {
+    public boolean isEmptyField(int i) throws RinggzException {
     	return !this.getField((i)).isFull();
     }
     
@@ -156,7 +157,7 @@ public class Board {
     //@ requires this.isField(row,col);
     //@ ensures TODO;
     /*@pure*/
-    public boolean isEmptyField(int row, int col, Tier choice) {
+    public boolean isEmptyField(int row, int col, Tier choice) throws RinggzException {
         return isEmptyField(index(row, col));
     }
     //do while loop in player which makes it easy to register first move
@@ -178,10 +179,18 @@ public class Board {
     private List<Integer> right = Arrays.asList(5,10,15,20,25);
     public List<Field> adjacentFields(int field){
     	List<Field> result = new ArrayList<>();
-    	if (this.isField(field + DIM)) {result.add((this.getField(field + DIM)));};
-    	if (this.isField(field - DIM)) {result.add((this.getField(field - DIM)));};
-    	if (!left.contains(field)) {result.add( this.getField((field - 1)));};
-    	if (!right.contains(field)) {result.add( this.getField((field + 1)));};
+    	if (this.isField(field + DIM)) {try {
+			result.add((this.getField(field + DIM)));
+    	} catch (RinggzException e) {/*do nothing*/}};
+    	if (this.isField(field - DIM)) {try {
+			result.add((this.getField(field - DIM)));
+    	} catch (RinggzException f) {/*do nothing*/}};
+    	if (!left.contains(field)) {try {
+			result.add( this.getField((field - 1)));
+		} catch (RinggzException g) {/*do nothing*/}};
+    	if (!right.contains(field)) {try {
+			result.add( this.getField((field + 1)));
+		} catch (RinggzException h) {/*do nothing*/}};
     return result;
     }
     
@@ -200,7 +209,7 @@ public class Board {
 		b.adjacentFields(21).stream().forEach(a -> System.out.println(a.FieldNumber));
 	}
 
-  	public boolean FieldHasColor(int field, Color color) {
+  	public boolean FieldHasColor(int field, Color color) throws RinggzException {
   		return getField(field).HasColor(color);
     	}
 
@@ -230,24 +239,6 @@ public class Board {
 		}
 		return null;
 	}
-
-    //I THOUGHT ABOUT USING THIS A GUIDE FOR MAKING A CHECKER FOR A COMPLETE FIELD
-    /*@ pure */
-//    public boolean hasWonField(int field, Color color) {
-//    	for(int r = 0; r < DIM; r++) {
-//			boolean hasRow = true;
-//			for(int c = 0; c < DIM; c++) {
-//				if(getField(c + r*DIM) != m) {
-//					hasRow = false;
-//					break;
-//				}
-//	    	}
-//			if(hasRow) {
-//				return true;
-//			}
-//		}
-//	    return false;
-//	}
 
     /**
      * Checks if a player has won.
