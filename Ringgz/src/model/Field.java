@@ -1,13 +1,11 @@
 package model;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Observable;
 
-public class Field {
+public class Field  extends Observable{
 	private static int count = 1;
 	public int FieldNumber;
 	
@@ -88,7 +86,7 @@ public class Field {
 		        map.put(f.getColor(), new Integer(1));
 		    }
 		}
-		map.remove(null);
+		map.remove(Color.INIT);
 		System.out.println(map);
 		Integer highest = java.util.Collections.max(map.values());
 		if (java.util.Collections.frequency(map.values(), highest) == 1) {
