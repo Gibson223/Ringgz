@@ -4,6 +4,7 @@ import model.*;
 import java.util.Scanner;
 
 import controller.Player;
+import controller.RinggzException;
 import model.Board;
 
 /**
@@ -60,8 +61,9 @@ public class Game {
      * Starts the Tic Tac Toe game. <br>
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
+     * @throws RinggzException 
      */
-    public void start() {
+    public void start() throws RinggzException {
         boolean again = true;
         while (again) {
             play();
@@ -109,8 +111,9 @@ public class Game {
      * First the (still empty) board is shown. Then the game is played
      * until it is over. Players can make a move one after the other. 
      * After each move, the changed game situation is printed.
+     * @throws RinggzException 
      */
-    private void play() {
+    private void play() throws RinggzException {
         System.out.println(board.toString());
         while(!board.boardIsFull()) {
         	players[current].makeMove(board);

@@ -21,8 +21,8 @@ public class HumanPlayer extends Player {
      * Creates a new human player object.
      * 
      */
-    public HumanPlayer(String name, Color color) {
-        super(name, color);
+    public HumanPlayer(String name, Color color, RingList ringList) {
+        super(name, color, ringList);
     }
 
     // -- Commands ---------------------------------------------------
@@ -39,9 +39,10 @@ public class HumanPlayer extends Player {
      * @param board
      *            the game board
      * @return the player's chosen field
+     * @throws RinggzException 
      */
  
-    public void makeMove(Board board) {
+    public void makeMove(Board board) throws RinggzException {
     	String promptField = "> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring?";
     	int choiceField = readInt(promptField);
     	String promptRing = "> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place (1,2,3,4,5(BASE))?";

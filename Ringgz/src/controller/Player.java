@@ -1,7 +1,5 @@
 package controller;
-import model.Board;
-import model.Color;
-import model.RingList;
+import model.*;
 
 import java.util.*;
 
@@ -11,7 +9,7 @@ public abstract class Player {
     public String name;
     private Color primary;
     private Color secondary;
-	private RingList ringList;
+	public RingList ringList;
     // -- Constructors -----------------------------------------------
 
     /*@
@@ -55,6 +53,7 @@ public abstract class Player {
         return secondary;
     }
 
+
     // -- Commands ---------------------------------------------------
 
     /*@
@@ -65,6 +64,7 @@ public abstract class Player {
      * 
      * @param board
      *            the current board
+     * @throws RinggzException 
      */
-    public abstract void makeMove(Board board);
+    public abstract void makeMove(Board board) throws RinggzException;
 }
