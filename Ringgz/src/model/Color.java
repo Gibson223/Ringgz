@@ -35,8 +35,6 @@ public enum Color {
 		}
 	}
 	
-	public List <Field> potentialFields = new LinkedList<>();
-	
 	public String toString() {
 		if (this == Color.YELLOW) {
 			return "y";

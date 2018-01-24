@@ -10,6 +10,7 @@ public abstract class Player {
     private Color primary;
     private Color secondary;
 	public RingList ringList;
+	public List<Field> potentialFields = new LinkedList<>();
     // -- Constructors -----------------------------------------------
 
     /*@

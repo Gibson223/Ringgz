@@ -16,7 +16,7 @@ public class TUI implements Observer {
 	public void view () { 
 		for (Field field: board.fields) {
 			if (((field.FieldNumber-1) % 5) == 0) {
-					System.out.print("\n|");				
+					System.out.print("\n\n" + "|");				
 				}
 			System.out.print( field.toString() + "|");
 		}
