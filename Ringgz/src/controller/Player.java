@@ -1,6 +1,8 @@
 package controller;
 import model.Board;
 import model.Color;
+import model.RingList;
+
 import java.util.*;
 
 public abstract class Player {
@@ -9,6 +11,7 @@ public abstract class Player {
     public String name;
     private Color primary;
     private Color secondary;
+	private RingList ringList;
     // -- Constructors -----------------------------------------------
 
     /*@
@@ -20,14 +23,15 @@ public abstract class Player {
      * Creates a new Player object.
      * 
      */
-    public Player(String name, Color color) { //TODO: make it possible to assign more than one color to a single player
+    public Player(String name, Color color, RingList ringList) { //TODO: make it possible to assign more than one color to a single player
         this.name = name;
         this.primary = color;
     }
-    public Player(String name, Color primary, Color secondary) { //TODO: make it possible to assign more than one color to a single player
+    public Player(String name, Color primary, Color secondary, RingList ringList) { //TODO: make it possible to assign more than one color to a single player
         this.name = name;
         this.primary = primary;
         this.secondary = secondary;
+        this.ringList = ringList;
     }
 
     // -- Queries ----------------------------------------------------
