@@ -5,14 +5,14 @@ import java.util.Scanner;
 
 import controller.Player;
 import model.Board;
+import model.RingList;
+import controller.Player;
 
 /**
  * Class for maintaining the Ringgz game.
  * @author Inigo Artolozaga and Gibson Vredeveld
  */
 public class Game {
-    public static final int NUMBER_PLAYERS = 4; //TODO make this modifiable;
-
     /*@ private invariant board != null; */
     /**
      * The board.
@@ -46,12 +46,13 @@ public class Game {
      */
     public Game(Player s0, Player s1, Player s2, Player s3) { // TODO make this not hardcoded for 4 players;
         board = new Board();
-        players = new Player[NUMBER_PLAYERS];
-        players[0] = s0;
-        players[1] = s1;
-        players[2] = s2;
-        players[3] = s3;
-        current = 0;
+        RingList ringlist = new RingList();
+        players = new Player[3];
+        players[0] = new Player(s0);
+        players[1] = new Player(s1);
+        players[2] = new Player(s2);
+        players[3] = new Player(s3);
+        
     }
 
     // -- Commands ---------------------------------------------------
