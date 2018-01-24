@@ -1,5 +1,6 @@
 package controller;
-import model.*;
+import model.Board;
+import model.Color;
 import java.util.*;
 
 public abstract class Player {
@@ -8,7 +9,6 @@ public abstract class Player {
     public String name;
     private Color primary;
     private Color secondary;
-    
     // -- Constructors -----------------------------------------------
 
     /*@
@@ -26,9 +26,9 @@ public abstract class Player {
     }
     public Player(String name, Color primary, Color secondary) { //TODO: make it possible to assign more than one color to a single player
         this.name = name;
-        this.primary = color;
+        this.primary = primary;
+        this.secondary = secondary;
     }
-
 
     // -- Queries ----------------------------------------------------
 
@@ -40,10 +40,16 @@ public abstract class Player {
     }
 
   
-     //Returns the color of the player.	   
+     //Returns the primary color of the player.	   
     /*@ pure */
-    public Color getColor() {
-        return color;
+    public Color getPrimaryColor() {
+        return primary;
+    }
+    
+  //Returns the secondary color of the player.	   
+    /*@ pure */
+    public Color getSecondaryColor() {
+        return secondary;
     }
 
     /*@
@@ -57,7 +63,7 @@ public abstract class Player {
      *            the current game board
      * @return the player's choice
      */
-    public abstract int determineMove(Board board);
+    public abstract List<Integer> determineMove(Board board);
 
     // -- Commands ---------------------------------------------------
 
@@ -70,9 +76,9 @@ public abstract class Player {
      * @param board
      *            the current board
      */
-//    public void makeMove(Board board) {
-//        int choice = determineMove(board);
-//        board.setField(choice, getColor(), Ring.RingType.getRing()//TODO);
-//    }
+    public void makeMove(Board board) {
+        int choice = determineMove(board);
+        board.setField(choice, getColor(), Ring.RingType.getRing()//TODO);
+    }
 
 }
