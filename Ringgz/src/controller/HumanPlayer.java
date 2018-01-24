@@ -50,6 +50,7 @@ public class HumanPlayer extends Player {
     	Scanner scan = new Scanner(System.in);
     	System.out.println("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with?");
     	String choiceColor = scan.nextLine();
+    	// would be nice if catch the exception and then reinvoke makeMove. That way we solve wrong input immediately
     	if (board.isAllowed(choiceField, new Ring (Color.toColor(choiceColor),Tier.toTier(choiceRing)))) {
     		board.setRing(choiceField, new Ring (Color.toColor(choiceColor),Tier.toTier(choiceRing)));
     	} else {

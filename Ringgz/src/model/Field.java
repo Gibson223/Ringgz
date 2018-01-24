@@ -75,6 +75,8 @@ public class Field  extends Observable{
 		if(this.isAllowed(ring)) {
 			fieldState.remove(0);
 			fieldState.add(ring);
+			setChanged();
+			notifyObservers("ring placed");
 		}
 	}
 	public Color isWinner() {

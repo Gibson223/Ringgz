@@ -42,7 +42,9 @@ public class TUI implements Observer {
 	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		
+		if (arg0 instanceof Field && arg1 instanceof String && ("ring placed".equals(((String)arg1)))) {
+			this.view();
+		}
 	}
 
 
