@@ -58,7 +58,7 @@ public class Game {
     // -- Commands ---------------------------------------------------
 
     /**
-     * Starts the Tic Tac Toe game. <br>
+     * Starts the Ringgz game. <br>
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
      */

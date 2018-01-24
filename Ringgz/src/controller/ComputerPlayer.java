@@ -1,8 +1,7 @@
 package controller;
 import java.util.*;
 
-import model.Board;
-import model.Color;
+import model.*;
 
 public class ComputerPlayer extends Player {
 	
@@ -18,10 +17,9 @@ public class ComputerPlayer extends Player {
     }
 
 	@Override
-	public List<Integer> determineMove(Board board) {
-		List <Integer> result = new LinkedList<>();
-		result.add((strategy.determineField(super.getPrimaryColor())).FieldNumber);
-		result.add((strategy.determineTier(strategy.determineField(super.getPrimaryColor())).FieldNumber));
-
+	public void makeMove(Board board) {
+		int field = strategy.determineField(super.getPrimaryColor()).FieldNumber;
+		Ring ring = new Ring(super.getPrimaryColor(),strategy.determineTier(strategy.determineField(super.getPrimaryColor()))); //CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
+		board.setRing(field, ring);
 	}
 }

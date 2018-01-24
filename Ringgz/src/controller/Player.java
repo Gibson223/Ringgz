@@ -39,7 +39,6 @@ public abstract class Player {
         return name;
     }
 
-  
      //Returns the primary color of the player.	   
     /*@ pure */
     public Color getPrimaryColor() {
@@ -52,19 +51,6 @@ public abstract class Player {
         return secondary;
     }
 
-    /*@
-       requires board != null & !board.isFull();
-       ensures board.isField(\result) & board.isEmptyField(\result);
-     */
-    /**
-     * Determines the field for the next move.
-     * 
-     * @param board
-     *            the current game board
-     * @return the player's choice
-     */
-    public abstract List<Integer> determineMove(Board board);
-
     // -- Commands ---------------------------------------------------
 
     /*@
@@ -76,9 +62,5 @@ public abstract class Player {
      * @param board
      *            the current board
      */
-    public void makeMove(Board board) {
-        int choice = determineMove(board);
-        board.setField(choice, getColor(), Ring.RingType.getRing()//TODO);
-    }
-
+    public abstract void makeMove(Board board);
 }
