@@ -24,6 +24,9 @@ public class HumanPlayer extends Player {
     public HumanPlayer(String name, Color color, RingList ringList) {
         super(name, color, ringList);
     }
+    public HumanPlayer(String name, Color color, Color color2, RingList ringList) {
+        super(name, color, color2, ringList);
+    }
 
     // -- Commands ---------------------------------------------------
 
