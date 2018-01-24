@@ -1,12 +1,13 @@
 package controller;
-import model.Board;
-import model.Color;
+import model.*;
+import java.util.*;
 
 public abstract class Player {
     // -- Instance variables -----------------------------------------
 
     public String name;
     private Color color;
+    private List<Field> ownedFields;
 
     // -- Constructors -----------------------------------------------
 

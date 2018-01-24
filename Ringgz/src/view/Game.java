@@ -142,8 +142,8 @@ public class Game {
      */
     private void printResult() {
         if (board.boardIsFull()) {
-            for (int j = 0, j <= 4, j++) {
-            	if players[j].getColor().(board.isWinner()) {
+            for (int j = 0; j < 5; j++) {
+            	if (board.isWinner(players[j].getColor())) {
             		Player winner = players[j];
             	}
             }
