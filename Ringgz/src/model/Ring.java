@@ -33,7 +33,7 @@ public class Ring {
 	}
 	@Override
 	 public boolean equals(Object ring){
-		if (ring instanceof Ring && ((Ring) ring).getColor() == this.getColor() && ) {
+		if (ring instanceof Ring && ((Ring) ring).getColor() == this.getColor() && ((Ring) ring).getTier() == this.getTier() ) {
 			
 		}
 		return false;
