@@ -21,11 +21,11 @@ public class HumanPlayer extends Player {
      * Creates a new human player object.
      * 
      */
-    public HumanPlayer(String name, Color color, RingList ringList) {
-        super(name, color, ringList);
+    public HumanPlayer(String name) {
+        super(name);
     }
     public HumanPlayer(String name, Color color, Color color2, RingList ringList) {
-        super(name, color, color2, ringList);
+        super(name);
     }
 
     // -- Commands ---------------------------------------------------
@@ -45,22 +45,31 @@ public class HumanPlayer extends Player {
      * @throws RinggzException 
      */
  
-    public void makeMove(Board board) throws RinggzException {
-    	String promptField = "> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring?";
-    	int choiceField = readInt(promptField);
-    	String promptRing = "> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place (1,2,3,4,5(BASE))?";
-    	int choiceRing = readInt(promptRing);
-    	Scanner scan = new Scanner(System.in);
-    	System.out.println("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with?");
-    	String choiceColor = scan.nextLine();
+    public void makeMove(Board board) {
+    	Scanner scanner = new Scanner(System.in);
+    	String promptField = ("\n> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring?");
+    	String promptRing = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place (1,2,3,4,5(BASE))?");
+    	String promptColor = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with?");
+    	System.out.println(promptField);
+    	int choiceField = Integer.parseInt(scanner.nextLine());
+    	System.out.println(promptRing);
+    	int choiceRing = Integer.parseInt(scanner.nextLine());
+    	System.out.println(promptColor);
+    	Color choiceColor = Color.toColor(scanner.nextLine());
     	// would be nice if catch the exception and then reinvoke makeMove. That way we solve wrong input immediately
-    	if (board.isAllowed(choiceField, new Ring (Color.toColor(choiceColor),Tier.toTier(choiceRing)))) {
-    		board.setRing(choiceField, new Ring (Color.toColor(choiceColor),Tier.toTier(choiceRing)));
-    	} else {
-    		System.out.println("Invalid move, try another one.");
-    		makeMove(board);
-    	}
-    	scan.close();
+		try {
+			if (board.isAllowed(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)))) {
+				board.setRing(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)));
+				this.ringList.availableRings.remove(new Ring (choiceColor,Tier.toTier(choiceRing)));
+				System.out.println("the ring has been added to the field....");
+			} else {
+				System.out.println("Invalid move, try another one.");
+				this.makeMove(board);
+			}
+		} catch (RinggzException e) {
+			this.makeMove(board);
+		}
+    	scanner.close();
     }
 
     /**

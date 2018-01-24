@@ -109,22 +109,22 @@ public class Field  extends Observable{
 		return result;
 		
 	}
-	public static void main(String[] args) {
-		Field a = new Field();
-		Ring ring = new Ring(Color.BLUE, Tier.MEDIUM);
-		Ring ring2 = new Ring(Color.GREEN, Tier.SMALL);
-		Ring ring3 = new Ring(Color.GREEN, Tier.LARGE);
-		System.out.println(ring);
-		System.out.println(a.FieldNumber);
-		System.out.println(a.fieldState);
-		a.setRing(ring);
-		System.out.println(a.fieldState);
-		a.setRing(ring);
-		a.setRing(ring2);
-		a.setRing(ring3);
-		System.out.println(a.fieldState);
-		System.out.println(a.isWinner());
-	}
+//	public static void main(String[] args) {
+//		Field a = new Field();
+//		Ring ring = new Ring(Color.BLUE, Tier.MEDIUM);
+//		Ring ring2 = new Ring(Color.GREEN, Tier.SMALL);
+//		Ring ring3 = new Ring(Color.GREEN, Tier.LARGE);
+//		System.out.println(ring);
+//		System.out.println(a.FieldNumber);
+//		System.out.println(a.fieldState);
+//		a.setRing(ring);
+//		System.out.println(a.fieldState);
+//		a.setRing(ring);
+//		a.setRing(ring2);
+//		a.setRing(ring3);
+//		System.out.println(a.fieldState);
+//		System.out.println(a.isWinner());
+//	}
 	public void clear() {
 		this.initfieldState();
 		}
