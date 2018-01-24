@@ -18,7 +18,7 @@ import java.util.*;
        ensures this == Color.B ==> \result == Color.R;
      */
 public enum Color {
-	    RED , YELLOW , GREEN , BLUE;
+	    RED , YELLOW , GREEN , BLUE, INIT;
 	//from char to colors
 	public static Color toColor(String a){
 		if (a == "y") {
@@ -46,8 +46,10 @@ public enum Color {
 			return "g";
 		} else if (this == Color.RED) {
 			return "r";
+		} else if (this.equals(null)) {
+			return " ";
 		}else {
-			return null;
+			return " ";
 		}
 	}
 		// if this exception is given to client :redo 

@@ -8,6 +8,8 @@ public class Ring {
 		tier = t;
 	}
 	public Ring() {
+		color = Color.INIT;
+		tier = Tier.INIT;
 	}
 	public void setTier(Tier tier) {
 		this.tier = tier;
@@ -34,7 +36,7 @@ public class Ring {
 	@Override
 	 public boolean equals(Object ring){
 		if (ring instanceof Ring && ((Ring) ring).getColor() == this.getColor() && ((Ring) ring).getTier() == this.getTier() ) {
-			
+			return true;
 		}
 		return false;
 		

@@ -100,6 +100,15 @@ public class Field {
 		}
 		return null;
 	}
+	public String toString() {
+		String result = "";
+		for(Ring ring : this.fieldState) {
+			result += ring.toString();
+		}
+		
+		return result;
+		
+	}
 	public static void main(String[] args) {
 		Field a = new Field();
 		Ring ring = new Ring(Color.BLUE, Tier.MEDIUM);

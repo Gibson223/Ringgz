@@ -15,8 +15,8 @@ public class Board {
      * coding of the fields.
      */
     //@ private invariant fields.length == DIM*DIM;
-    private Field[] fields;
-    Map<Field, List<Ring>> allFields = new HashMap<Field, List<Ring>>();
+    public Field[] fields;
+//    Map<Field, List<Ring>> allFields = new HashMap<Field, List<Ring>>();
 
     // -- Constructors -----------------------------------------------
 
