@@ -4,11 +4,9 @@ package controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Collections;
 
-import model.Board;
-import model.Color;
-import model.Ring;
-import model.Tier;
+import model.*;
 
 public class NaiveStrategy implements Strategy {
 
@@ -16,16 +14,21 @@ public class NaiveStrategy implements Strategy {
 	public String getName() {
 		return "Naive";
 	}
+	@Override
+	public Field determineField(Color c) {
+		Collections.shuffle(c.potentialFields);
+		return c.potentialFields.get(0);
+	}
 
 	@Override
-	public int determineMove(Board b, Ring r) {
-		List<Integer> availableList = new ArrayList<>();
-		for (int i = 0; i < Board.DIM*Board.DIM; i++) {
-			if (b.isAllowed(i,r.getColor())) {
-				availableList.add(i);
+	public Tier determineTier(Field f) {
+		List <Tier> availableTiers = new ArrayList<>();
+		for (Ring ring : f.getFieldState()) {
+			if (ring.getColor() == null) {
+				availableTiers.add(ring.getTier());
 			}
 		}
-		Collections.shuffle(availableList);
-		return availableList.get(0);
+		Collections.shuffle(availableTiers);
+		return availableTiers.get(0);
 	}
 }

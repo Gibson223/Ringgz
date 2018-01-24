@@ -1,5 +1,7 @@
 package model;
 import controller.RinggzException;
+import java.util.*;
+
 
 /**
  * Represents a color in the Ringgz game. There four possible values:
@@ -32,6 +34,9 @@ public enum Color {
 //			throw new Exception("InvalidCharException");
 		}
 	}
+	
+	public List <Field> potentialFields = new LinkedList<>();
+	
 	public String toString() {
 		if (this == Color.YELLOW) {
 			return "y";

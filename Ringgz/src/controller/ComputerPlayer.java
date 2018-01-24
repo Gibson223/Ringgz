@@ -1,4 +1,6 @@
 package controller;
+import java.util.*;
+
 import model.Board;
 import model.Color;
 
@@ -16,7 +18,10 @@ public class ComputerPlayer extends Player {
     }
 
 	@Override
-	public int determineMove(Board board) {
-		return strategy.determineMove(board, getColor());
+	public List<Integer> determineMove(Board board) {
+		List <Integer> result = new LinkedList<>();
+		result.add((strategy.determineField(super.getPrimaryColor())).FieldNumber);
+		result.add((strategy.determineTier(strategy.determineField(super.getPrimaryColor())).FieldNumber));
+
 	}
 }
