@@ -31,6 +31,14 @@ public class Ring {
 	   }
 	   return false;
 	}
+	@Override
+	 public boolean equals(Object ring){
+		if (ring instanceof Ring && ((Ring) ring).getColor() == this.getColor() && ) {
+			
+		}
+		return false;
+		
+	}
 	//returns the color of the ring
 	@Override
 	public String toString() {
