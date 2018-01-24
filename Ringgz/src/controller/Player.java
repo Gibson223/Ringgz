@@ -1,13 +1,13 @@
 package controller;
-import model.*;
-import java.util.*;
+import model.Board;
+import model.Color;
 
 public abstract class Player {
     // -- Instance variables -----------------------------------------
 
     public String name;
-    private Color color;
-    private List<Field> ownedFields;
+    private Color primary;
+    private Color secondary;
 
     // -- Constructors -----------------------------------------------
 
@@ -22,7 +22,11 @@ public abstract class Player {
      */
     public Player(String name, Color color) { //TODO: make it possible to assign more than one color to a single player
         this.name = name;
-        this.color = color;
+        this.primary = color;
+    }
+    public Player(String name, Color primary, Color secondary) { //TODO: make it possible to assign more than one color to a single player
+        this.name = name;
+        this.primary = color;
     }
 
     // -- Queries ----------------------------------------------------
