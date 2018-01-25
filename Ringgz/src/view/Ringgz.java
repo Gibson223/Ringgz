@@ -16,12 +16,12 @@ public class Ringgz {
     	for (int i = 0; i < args.length; i++) {
     		Color color = c; 
     		if (args[i].equals("-N")) {
-    			player[i] = new ComputerPlayer(color, new NaiveStrategy(), ringList);
+    			player[i] = new ComputerPlayer("NaiveStrategy");
     		} else {
     			if (args[i].equals("-S")) {
-    				player[i] = new ComputerPlayer(color, new SmartStrategy(), ringList);
+    				player[i] = new ComputerPlayer("SmartStrategy");
     			} else {
-    				player[i] = new HumanPlayer(args[i], color, ringList);
+    				player[i] = new HumanPlayer(args[i]);
     			}
     		}
     		color.next(); //THIS IS WHAT ROTATES THE COLOR
