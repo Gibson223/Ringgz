@@ -44,27 +44,33 @@ public class HumanPlayer extends Player {
  
     public void makeMove(Board board) {
     	Scanner scanner = new Scanner(System.in);
-    	String promptField = ("\n> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring?");
-    	String promptRing = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place (1,2,3,4,5(BASE))?");
-    	String promptColor = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with?");
-    	System.out.println(promptField);
-    	int choiceField = Integer.parseInt(scanner.nextLine());
-    	System.out.println(promptRing);
-    	int choiceRing = Integer.parseInt(scanner.nextLine());
-    	System.out.println(promptColor);
-    	Color choiceColor = Color.toColor(scanner.nextLine().charAt(0));
+    	String promptField = ("\n> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring? (field number)");
+    	String promptRing = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place? (1,2,3,4,5(BASE))");
+    	String promptColor = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with? (r,g,b,y)");
     	// //TODO would be nice if catch the exception and then reinvoke makeMove. That way we solve wrong input immediately
     	// added it
 		try {
+			System.out.println(promptField);
+	    	int choiceField = Integer.parseInt(scanner.nextLine());
+	    	System.out.println(promptRing);
+	    	int choiceRing = Integer.parseInt(scanner.nextLine());
+	    	System.out.println(promptColor);
+	    	Color choiceColor = Color.toColor(scanner.nextLine().charAt(0));
 			if (board.isAllowed(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)))) {
 				board.setRing(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)));
 				this.ringList.availableRings.remove(new Ring (choiceColor,Tier.toTier(choiceRing)));
-				System.out.println("the ring has been added to the field....");
+				System.out.println("\nthe ring has been added to the field....");
 			} else {
 				System.out.println("Invalid move, try another one.");
 				this.makeMove(board);
 			}
 		} catch (RinggzException e) {
+			this.makeMove(board);
+		} catch (NullPointerException e) {
+			System.out.println("invalid color, input your move again:\n");
+			this.makeMove(board);
+		} catch (NumberFormatException e) {
+			System.out.println("invalid input, try again:\n");
 			this.makeMove(board);
 		}
     	scanner.close();
