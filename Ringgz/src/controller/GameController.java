@@ -42,6 +42,7 @@ public class GameController implements Runnable {
 	}
 	public void playerSetter() {
 		if (this.players.length == 2) {
+//			ringlistpart1 = new ArrayList<Ring>(this.ringlist);
 			players[0].setPrimary(Color.BLUE);
 			players[0].setSecondary(Color.GREEN);
 			players[0].setRingList(ringlist);
@@ -54,13 +55,18 @@ public class GameController implements Runnable {
 		
 	}
 	public int currentplayer = 0;
-	public void play() throws RinggzException {
+	public void play(){
 		boolean succes = false;
 		while(!board.boardIsFull()) {
-					players[currentplayer].makeMove(board);
-					succes = true;
-		        	currentplayer += 1;
-		        	currentplayer %= this.players.length;
+			while(!succes) {
+					try {
+						players[currentplayer].makeMove(board);
+						succes = true;
+					} catch (RinggzException e) {}
+			}
+			currentplayer += 1;
+        	currentplayer %= this.players.length;
+        	succes = false;
         }
 	}
 }
