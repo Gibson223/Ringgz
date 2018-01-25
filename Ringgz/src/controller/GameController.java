@@ -54,20 +54,13 @@ public class GameController implements Runnable {
 		
 	}
 	public int currentplayer = 0;
-	public void play() {
+	public void play() throws RinggzException {
 		boolean succes = false;
 		while(!board.boardIsFull()) {
-			while(!succes) {
-				try {
 					players[currentplayer].makeMove(board);
 					succes = true;
-				} catch (RinggzException e) {};
-			}
-        	while(!board.boardIsFull()) { //Not done
-	        	currentplayer += 1;
-	        	currentplayer %= this.players.length;
-        	}
-		}
-		
+		        	currentplayer += 1;
+		        	currentplayer %= this.players.length;
+        }
 	}
 }
