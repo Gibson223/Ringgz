@@ -15,10 +15,10 @@ public class Field  extends Observable{
 		this.initfieldState();
 	}
 	public void initfieldState() {
-		fieldState.add(new Ring());
-		fieldState.add(new Ring());
-		fieldState.add(new Ring());
-		fieldState.add(new Ring());
+		fieldState.add(new Ring(Color.INIT, Tier.SMALL));
+		fieldState.add(new Ring(Color.INIT, Tier.MEDIUM));
+		fieldState.add(new Ring(Color.INIT, Tier.LARGE));
+		fieldState.add(new Ring(Color.INIT, Tier.LARGEST));
 	}
 	
 	//small to large; 
@@ -43,7 +43,7 @@ public class Field  extends Observable{
 	}
 	public boolean HasBase() {
 		for (Ring ring: fieldState)
-			if (ring.getTier() == Tier.BASE) {
+			if (ring.getTier() == Tier.BASE && ring.getColor() != Color.INIT) {
 				return true;
 			}
 		return false;
@@ -60,12 +60,15 @@ public class Field  extends Observable{
 		return true;
 	}
 	public boolean isAllowed(Ring r) {
-		if (this.HasBase()) {
+		//changing this to isfull SHOULD not give errors....
+//		if (this.HasBase()) {
+//			return false;
+//		}
+		if (this.isFull()) {
 			return false;
 		}
 		for (Ring ring : fieldState){
-			if (ring.getTier() == r.getTier()) {
-				System.out.println("Tier already present..");
+			if (ring.getTier() == r.getTier() && !(ring.getColor() == Color.INIT)) {
 				return false;
 			}
 		}
@@ -73,8 +76,14 @@ public class Field  extends Observable{
 	}
 	public void setRing(Ring ring) {
 		if(this.isAllowed(ring)) {
-			fieldState.remove(0);
-			fieldState.add(ring);
+			if (ring.getTier() == Tier.BASE) {
+				fieldState.set(3, ring);
+			}
+			for (int i = 0; i < 4; i++) {
+				if (this.fieldState.get(i).getTier() == ring.getTier()) {
+					this.fieldState.set(i, ring);
+				}
+			}
 			setChanged();
 			notifyObservers("ring placed");
 		}
@@ -101,6 +110,9 @@ public class Field  extends Observable{
 		return null;
 	}
 	public String toString() {
+		if (this.HasBase() == true) {
+			return "" + fieldState.get(3).getColor() + "BAS";
+		}
 		String result = "";
 		for(Ring ring : this.fieldState) {
 			result += ring.toString();
