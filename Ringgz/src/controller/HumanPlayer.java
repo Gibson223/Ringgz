@@ -48,8 +48,6 @@ public class HumanPlayer extends Player {
     	String promptField = ("\n> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring? (field number)");
     	String promptRing = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place? (1,2,3,4,5(BASE))");
     	String promptColor = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with? (r,g,b,y)");
-    	// //TODO would be nice if catch the exception and then reinvoke makeMove. That way we solve wrong input immediately
-    	// added it
 		try {
 			System.out.println(promptField);
 	    	int choiceField = Integer.parseInt(INPUT.nextLine());
@@ -58,9 +56,25 @@ public class HumanPlayer extends Player {
 	    	
 	    	System.out.println(promptColor);
 	    	Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
-			if ( (board.isAllowed(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing))) && (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null) )) {
-				board.setRing(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)));
-				this.ringList.availableRings.remove(new Ring (choiceColor,Tier.toTier(choiceRing)));
+	    	Ring selectedRing = new Ring (choiceColor,Tier.toTier(choiceRing));
+	    	if(board.firstMove) {
+	    		if(board.middle9.stream().anyMatch(a -> a == choiceField) && (choiceColor != null) ) {
+	    			board.specialbase(choiceField);
+	    			board.firstMove = false;
+	    			System.out.println("the first move has been placed.....");
+	    			//ask how to show the view only once in the field if it is a firstmove
+	    			return;
+	    		} else { 
+	    			System.out.println("this is the first move and the criteria for this are not met....");
+	    			this.makeMove(board);
+	    			return;
+	    		}	    		
+	    	}
+			if ( (board.isAllowed(choiceField, selectedRing) && 
+					(choiceRing < 6) && (choiceRing > 0) && (choiceColor != null) 
+					&& this.ringList.availableRings.contains(selectedRing))) {
+				board.setRing(choiceField, selectedRing);
+				this.ringList.availableRings.remove(selectedRing);
 				System.out.println("\nthe ring has been added to the field....");
 			} else {
 				System.out.println("Invalid move, try another one.");

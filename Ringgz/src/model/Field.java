@@ -8,11 +8,13 @@ import java.util.Observable;
 public class Field  extends Observable{
 	private static int count = 1;
 	public int FieldNumber;
+	private Board board;
 	
-	public Field(){
+	public Field(Board board){
 		FieldNumber = count;
 		count++;
 		this.initfieldState();
+		this.board = board;
 	}
 	public void initfieldState() {
 		fieldState.add(new Ring(Color.INIT, Tier.SMALL));
@@ -84,8 +86,11 @@ public class Field  extends Observable{
 					this.fieldState.set(i, ring);
 				}
 			}
-			setChanged();
-			notifyObservers("ring placed");
+			if(!this.board.firstMove) {
+				setChanged();
+				notifyObservers("ring placed");
+			}
+				
 		}
 	}
 	public Color isWinner() {

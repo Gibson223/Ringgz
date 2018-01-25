@@ -10,6 +10,13 @@ import controller.RinggzException;
 public class Board {
 	public static final int  DIM = 5;
 	public boolean firstMove = true;
+	public final List<Integer> middle9 = Arrays.asList(7,8,9,12,13,14,17,18,19); 
+	public void specialbase(int i) throws RinggzException {
+		this.setRing(i, new Ring(Color.BLUE, Tier.SMALL));
+		this.setRing(i, new Ring(Color.GREEN, Tier.MEDIUM));
+		this.setRing(i, new Ring(Color.RED, Tier.LARGE));
+		this.setRing(i, new Ring(Color.YELLOW, Tier.LARGEST));
+	}
     /**
      * The DIM by DIM fields of the Ringgz student. See NUMBERING for the
      * coding of the fields.
@@ -28,7 +35,8 @@ public class Board {
     public Board() {
     	fields = new Field[DIM * DIM];
     	for (int i = 0; i < 25; i++) {
-    		fields[i] = new Field();
+    		fields[i] = new Field(this);
+    		firstMove = true;
     	}
 //    	for (Field field : fields) {
 //    	allFields.put(field, field.getFieldState());}
@@ -215,11 +223,6 @@ public class Board {
     	}
     	return false;
     }
-    public static void main(String[] args) {
-		Board b = new Board();
-		b.adjacentFields(21).stream().forEach(a -> System.out.println(a.FieldNumber));
-	}
-
   	public boolean FieldHasColor(int field, Color color) throws RinggzException {
   		return getField(field).HasColor(color);
     	}

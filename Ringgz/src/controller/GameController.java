@@ -2,6 +2,9 @@ package controller;
 
 import model.*;
 import view.*;
+
+import java.util.Arrays;
+
 import controller.*;
 
 public class GameController implements Runnable {
@@ -12,7 +15,6 @@ public class GameController implements Runnable {
 	// we get the name from the packets
 	//TODO ask question how to add observers to all fields of the board
 	public GameController( Player s0, Player s1, Player s2, Player s3) {
-//		ringlist = new RingList();
         players = new Player[3];
         players[0] = s0;
         players[1] = s1;
@@ -35,23 +37,26 @@ public class GameController implements Runnable {
 			field.addObserver(tui);
 		}
 		this.playerSetter();
-//		this.ringdivider();
+		this.ringdivider();
         tui.start();
 		this.play();
 
 	}
 	public void playerSetter() {
 		if (this.players.length == 2) {
-//			ringlistpart1 = new ArrayList<Ring>(this.ringlist);
-			players[0].setPrimary(Color.BLUE);
-			players[0].setSecondary(Color.GREEN);
-			players[0].setRingList(ringlist);
-			players[1].setPrimary(Color.RED);
-			players[1].setSecondary(Color.YELLOW);
-			players[1].setRingList(ringlist);
+			players[0].setPrimary(Color.RED);
+			players[0].setSecondary(Color.YELLOW);
+			players[1].setPrimary(Color.GREEN);
+			players[1].setSecondary(Color.BLUE);
 		}
 	}
 	public void ringdivider() {
+		if (this.players.length == 2){
+			RingList ringlistpart1 = new RingList(ringlist.availableRings.subList(0, 30));
+			RingList ringlistpart2 = new RingList(ringlist.availableRings.subList(30, 60));
+			players[0].setRingList(ringlistpart1);
+			players[1].setRingList(ringlistpart2);
+		}
 		
 	}
 	public int currentplayer = 0;
