@@ -20,14 +20,14 @@ import java.util.*;
 public enum Color {
 	    RED , YELLOW , GREEN , BLUE, INIT;
 	//from char to colors
-	public static Color toColor(String a){
-		if (a == "y") {
+	public static Color toColor(char a){
+		if (a == 'y') {
 			return Color.YELLOW;
-		}else if (a == "b") {
+		}else if (a == 'b') {
 			return Color.BLUE;
-		} else if (a == "g") {
+		} else if (a == 'g') {
 			return Color.GREEN;
-		} else if (a == "r") {
+		} else if (a == 'r') {
 			return Color.RED;
 		} else {
 			return null;
@@ -44,8 +44,6 @@ public enum Color {
 			return "g";
 		} else if (this == Color.RED) {
 			return "r";
-		} else if (this.equals(null)) {
-			return " ";
 		}else {
 			return " ";
 		}

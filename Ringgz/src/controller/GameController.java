@@ -11,7 +11,7 @@ public class GameController implements Runnable {
 	public RingList ringlist;
 	// we get the name from the packets
 	//TODO ask question how to add observers to all fields of the board
-	public GameController( Player s0, Player s1, Player s2, Player s3) throws RinggzException {
+	public GameController( Player s0, Player s1, Player s2, Player s3) {
 //		ringlist = new RingList();
         players = new Player[3];
         players[0] = s0;
@@ -24,6 +24,7 @@ public class GameController implements Runnable {
 		players = new Player[2];
 		players[0] = player;
         players[1] = player2;
+        this.run();
 	}
 	@Override
 	public void run() {

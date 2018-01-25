@@ -24,9 +24,6 @@ public class HumanPlayer extends Player {
     public HumanPlayer(String name) {
         super(name);
     }
-    public HumanPlayer(String name, Color color, Color color2, RingList ringList) {
-        super(name);
-    }
 
     // -- Commands ---------------------------------------------------
 
@@ -55,8 +52,9 @@ public class HumanPlayer extends Player {
     	System.out.println(promptRing);
     	int choiceRing = Integer.parseInt(scanner.nextLine());
     	System.out.println(promptColor);
-    	Color choiceColor = Color.toColor(scanner.nextLine());
-    	// would be nice if catch the exception and then reinvoke makeMove. That way we solve wrong input immediately
+    	Color choiceColor = Color.toColor(scanner.nextLine().charAt(0));
+    	// //TODO would be nice if catch the exception and then reinvoke makeMove. That way we solve wrong input immediately
+    	// added it
 		try {
 			if (board.isAllowed(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)))) {
 				board.setRing(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)));
@@ -80,21 +78,6 @@ public class HumanPlayer extends Player {
      *            the question to prompt the user
      * @return the first int value which is entered by the user
      */
-    private int readInt(String prompt) {
-        int value = 0;
-        boolean intRead = false;
-        @SuppressWarnings("resource")
-        Scanner line = new Scanner(System.in);
-        do {
-            System.out.print(prompt);
-            try (Scanner scannerLine = new Scanner(line.nextLine());) {
-                if (scannerLine.hasNextInt()) {
-                    intRead = true;
-                    value = scannerLine.nextInt();
-                }
-            }
-        } while (!intRead);
-        return value;
-    }
+   
 
 }
