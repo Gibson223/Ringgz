@@ -27,7 +27,7 @@ public class NaiveStrategy implements Strategy {
 		List <Tier> availableTiers = new ArrayList<>();
 		availableTiers.removeAll(availableTiers);
 		for (Ring ring : f.getFieldState()) {
-			if (ring.getColor() == null) {
+			if (ring.getColor() == Color.INIT) {
 				availableTiers.add(ring.getTier());
 			}
 		}
