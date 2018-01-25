@@ -8,8 +8,8 @@ import java.util.Map;
 import controller.RinggzException;
 
 public class Board {
-    public static final int DIM = 5;
-    private static final String DELIM = "     ";
+	public static final int  DIM = 5;
+	public boolean firstMove = true;
     /**
      * The DIM by DIM fields of the Ringgz student. See NUMBERING for the
      * coding of the fields.
@@ -129,8 +129,18 @@ public class Board {
     //@ requires this.isField(i);
     //@ ensures TODO;
     /*@pure*/
+    public boolean adjacentHasBase(int field, Ring ring) {
+    	if(ring.getTier() == Tier.BASE) {
+    		for (Field fieldforbase : this.adjacentFields(field)) {
+    			if (fieldforbase.HasBase() && (fieldforbase.getFieldState().stream().anyMatch(a -> a.getColor() == ring.getColor()))) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
     public boolean isAllowed(int field, Ring ring) throws RinggzException {
-    	return getField(field).isAllowed(ring);
+		return (getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring));
     }
 
     //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
@@ -138,7 +148,8 @@ public class Board {
     //@ ensures TODO;
     /*@pure*/
     public boolean isAllowed(int row, int col, Ring ring) throws RinggzException {
-        return getField(row, col).isAllowed(ring);
+    	return this.isAllowed(index(row, col), ring);
+        
     }
     public void setRing(int i, Ring ring) throws RinggzException {
     	getField(i).setRing(ring);
