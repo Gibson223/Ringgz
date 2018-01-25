@@ -8,6 +8,8 @@ import model.*;
  * Class for maintaining a human player in Ringzz. Module 2 programming project
  */
 public class HumanPlayer extends Player {
+	
+	private static final Scanner INPUT = new Scanner(System.in);
 
     // -- Constructors -----------------------------------------------
 
@@ -43,7 +45,6 @@ public class HumanPlayer extends Player {
      */
  
     public void makeMove(Board board) {
-    	Scanner scanner = new Scanner(System.in);
     	String promptField = ("\n> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring? (field number)");
     	String promptRing = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place? (1,2,3,4,5(BASE))");
     	String promptColor = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with? (r,g,b,y)");
@@ -51,11 +52,12 @@ public class HumanPlayer extends Player {
     	// added it
 		try {
 			System.out.println(promptField);
-	    	int choiceField = Integer.parseInt(scanner.nextLine());
+	    	int choiceField = Integer.parseInt(INPUT.nextLine());
 	    	System.out.println(promptRing);
-	    	int choiceRing = Integer.parseInt(scanner.nextLine());
+	    	int choiceRing = Integer.parseInt(INPUT.nextLine());
+	    	
 	    	System.out.println(promptColor);
-	    	Color choiceColor = Color.toColor(scanner.nextLine().charAt(0));
+	    	Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
 			if (board.isAllowed(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)))) {
 				board.setRing(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)));
 				this.ringList.availableRings.remove(new Ring (choiceColor,Tier.toTier(choiceRing)));
@@ -73,7 +75,6 @@ public class HumanPlayer extends Player {
 			System.out.println("invalid input, try again:\n");
 			this.makeMove(board);
 		}
-    	scanner.close();
     }
 
     /**
