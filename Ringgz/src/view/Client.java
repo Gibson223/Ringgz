@@ -12,7 +12,7 @@ import view.*;
 public class Client {
 	public static void main(String[] args) {
 		Player Gibson = new HumanPlayer("Gibson");
-		Player Random = new HumanPlayer("Random");
+		Player Random = new ComputerPlayer("Random");
 		GameController gc = new GameController(Gibson, Random);
 		Thread game = new Thread(gc);
 		game.start();
