@@ -58,7 +58,7 @@ public class HumanPlayer extends Player {
 	    	
 	    	System.out.println(promptColor);
 	    	Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
-			if (board.isAllowed(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)))) {
+			if ( (board.isAllowed(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing))) && (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null) )) {
 				board.setRing(choiceField, new Ring (choiceColor,Tier.toTier(choiceRing)));
 				this.ringList.availableRings.remove(new Ring (choiceColor,Tier.toTier(choiceRing)));
 				System.out.println("\nthe ring has been added to the field....");
