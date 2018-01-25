@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Collections;
 
 public class NaiveStrategy implements Strategy {
 
@@ -26,6 +25,7 @@ public class NaiveStrategy implements Strategy {
 	@Override
 	public Tier determineTier(Field f) {
 		List <Tier> availableTiers = new ArrayList<>();
+		availableTiers.removeAll(availableTiers);
 		for (Ring ring : f.getFieldState()) {
 			if (ring.getColor() == null) {
 				availableTiers.add(ring.getTier());
