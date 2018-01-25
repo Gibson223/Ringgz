@@ -1,7 +1,6 @@
 package controller;
 import model.Board;
 import model.Color;
-import model.Ring;
 import model.*;
 import java.util.ArrayList;
 import java.util.List;
