@@ -26,7 +26,7 @@ public class ComputerPlayer extends Player {
 		if (board.firstMove) {
 			int fieldChoice = strategy.determineField(board, this).FieldNumber;
 			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Ring ring = new Ring(super.getPrimaryColor(),strategy.determineTier(board.getField(fieldChoice)));
+			Ring ring = new Ring(strategy.determineColor(board, this),strategy.determineTier(board.getField(fieldChoice)));
 			board.setRing(fieldChoice, ring);
 			for (Field field : potentialFields) {
 				potentialFields.remove(field);
@@ -37,7 +37,7 @@ public class ComputerPlayer extends Player {
 		} else {
 			int fieldChoice = strategy.determineField(board, this).FieldNumber;
 			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Ring ring = new Ring(super.getPrimaryColor(),strategy.determineTier(board.getField(fieldChoice)));
+			Ring ring = new Ring(strategy.determineColor(board, this),strategy.determineTier(board.getField(fieldChoice)));
 			board.setRing(fieldChoice, ring);
 			potentialFields.add(board.getField(fieldChoice));
 			potentialFields.addAll(board.adjacentFields(fieldChoice));

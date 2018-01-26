@@ -17,6 +17,7 @@ public class SmartStrategy implements Strategy {
 		return "Smart";
 	}
 
+	@Override
 	public Field determineField(Board board, Player p) {
 		Collections.shuffle(p.potentialFields);
 		Field smartField = p.potentialFields.get(0);
@@ -53,4 +54,14 @@ public class SmartStrategy implements Strategy {
 		Collections.shuffle(availableTiers);
 		return availableTiers.get(0);
 	}
+
+	@Override
+	public Color determineColor(Board board, Player p) {
+		List<Color> colors = new ArrayList<>();
+		colors.add(p.getPrimaryColor());
+		colors.add(p.getSecondaryColor());
+		Collections.shuffle(colors);
+		return colors.get(0);
+	}
+
 }
