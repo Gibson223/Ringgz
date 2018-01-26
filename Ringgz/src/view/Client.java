@@ -1,13 +1,8 @@
 package view;
 
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-
-import controller.*;
-import model.*;
-import view.*;
+import controller.GameController;
+import controller.HumanPlayer;
+import controller.Player;
 
 public class Client {
 	public static void main(String[] args) {
@@ -16,7 +11,9 @@ public class Client {
 	public static void localGame() {
 		Player Gibson = new HumanPlayer("Gibson");
 		Player Random = new HumanPlayer("Random");
-		GameController gc = new GameController(Gibson, Random);
+		Player geez = new HumanPlayer("geezer");
+		Player nuller = new HumanPlayer("null");
+		GameController gc = new GameController(Gibson, Random, geez, null);
 		Thread game = new Thread(gc);
 		game.start();
 	}

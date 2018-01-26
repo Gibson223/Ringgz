@@ -8,11 +8,21 @@ import java.util.Observable;
 public class Field  extends Observable{
 	private static int count = 1;
 	public int FieldNumber;
-	
-	public Field(){
+	private Board board;
+	public void placeBase() {
+		this.fieldState.clear();
+		this.fieldState.add(new Ring(Color.BLUE, Tier.SMALL));
+		this.fieldState.add(new Ring(Color.GREEN, Tier.MEDIUM));
+		this.fieldState.add(new Ring(Color.RED, Tier.LARGE));
+		this.fieldState.add(new Ring(Color.YELLOW, Tier.LARGEST));
+		setChanged();
+		notifyObservers("ring placed");
+	}
+	public Field(Board board){
 		FieldNumber = count;
 		count++;
 		this.initfieldState();
+		this.board = board;
 	}
 	public void initfieldState() {
 		fieldState.add(new Ring(Color.INIT, Tier.SMALL));
@@ -60,10 +70,6 @@ public class Field  extends Observable{
 		return true;
 	}
 	public boolean isAllowed(Ring r) {
-		//changing this to isfull SHOULD not give errors....
-//		if (this.HasBase()) {
-//			return false;
-//		}
 		if (this.isFull()) {
 			return false;
 		}
@@ -86,6 +92,7 @@ public class Field  extends Observable{
 			}
 			setChanged();
 			notifyObservers("ring placed");
+				
 		}
 	}
 	public Color isWinner() {
@@ -119,6 +126,12 @@ public class Field  extends Observable{
 	}
 	
 	public String toString() {
+		if (this.fieldState.stream().allMatch(a -> (a.getColor() == Color.INIT && this.FieldNumber < 10))) {
+			return "--"+ this.FieldNumber +"-"; 
+		}
+		if (this.fieldState.stream().allMatch(a -> (a.getColor() == Color.INIT ))) {
+			return "-"+ this.FieldNumber +"-"; 
+		}
 		if (this.HasBase() == true) {
 			return "" + fieldState.get(3).getColor() + "BAS";
 		}
