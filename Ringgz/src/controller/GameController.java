@@ -4,39 +4,48 @@ import model.*;
 import view.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import controller.*;
 
 public class GameController implements Runnable {
-	public Player[] players;
+	public List<Player> players = new ArrayList<Player>();
 	public Board board;
 	public TUI tui;
 	public RingList ringlist;
 	// we get the name from the packets
 	//TODO ask question how to add observers to all fields of the board
 	public GameController( Player s0, Player s1, Player s2, Player s3) {
-        players = new Player[4];
-        players[0] = s0;
-        players[1] = s1;
-        players[2] = s2;
-        players[3] = s3;
+		List<Object> playerlist = new ArrayList<>();
+		playerlist.add(s0);
+		playerlist.add(s1);
+		playerlist.add(s2);
+		playerlist.add(s3);
+		playerlist.stream().filter(a -> a != null).forEach(a -> players.add((Player) a));
+//		for (int i = 0 ; i < playerlist.size(); i++) {
+//			if(playerlist.get(i) != null /*|| !playerlist.get(i).name.equals(null)*/ || playerlist.get(i).name != null) {
+//				players.add(playerlist.get(i));
+//			}
+//		}
         this.run();
 	}
-	public GameController(Player player, Player player2) {
-		players = new Player[2];
-		players[0] = player;
-        players[1] = player2;
-        this.run();
-	}
-	public GameController(Player player, Player player2, Player player3) {
-		players = new Player[3];
-		players[0] = player;
-        players[1] = player2;
-        players[2] = player3;
-        this.run();
-	}
+//	public GameController(Player player, Player player2) {
+//		players = new Player[2];
+//		players[0] = player;
+//        players[1] = player2;
+//        this.run();
+//	}
+//	public GameController(Player player, Player player2, Player player3) {
+//		players = new Player[3];
+//		players[0] = player;
+//        players[1] = player2;
+//        players[2] = player3;
+//        this.run();
+//	}
 	@Override
 	public void run() {
 		board = new Board();
@@ -52,54 +61,54 @@ public class GameController implements Runnable {
 
 	}
 	public void playerSetter() {
-		if (this.players.length == 2) {
-			players[0].setPrimary(Color.RED);
-			players[0].setSecondary(Color.YELLOW);
-			players[1].setPrimary(Color.GREEN);
-			players[1].setSecondary(Color.BLUE);
+		if (this.players.size() == 2) {
+			players.get(0).setPrimary(Color.RED);
+			players.get(0).setSecondary(Color.YELLOW);
+			players.get(1).setPrimary(Color.GREEN);
+			players.get(1).setSecondary(Color.BLUE);
 		}
-		if(this.players.length == 3) {
-			players[0].setPrimary(Color.RED);
-			players[1].setPrimary(Color.YELLOW);
-			players[2].setPrimary(Color.GREEN);
-			players[0].setSecondary(Color.BLUE);
-			players[1].setSecondary(Color.BLUE);
-			players[2].setSecondary(Color.BLUE);
+		if(this.players.size() == 3) {
+			players.get(0).setPrimary(Color.RED);
+			players.get(1).setPrimary(Color.YELLOW);
+			players.get(2).setPrimary(Color.GREEN);
+			players.get(0).setSecondary(Color.BLUE);
+			players.get(1).setSecondary(Color.BLUE);
+			players.get(2).setSecondary(Color.BLUE);
 		}
-		if(this.players.length == 4) {
-			players[0].setPrimary(Color.RED);
-			players[1].setPrimary(Color.YELLOW);
-			players[2].setPrimary(Color.GREEN);
-			players[3].setPrimary(Color.BLUE);			
+		if(this.players.size() == 4) {
+			players.get(0).setPrimary(Color.RED);
+			players.get(1).setPrimary(Color.YELLOW);
+			players.get(2).setPrimary(Color.GREEN);
+			players.get(3).setPrimary(Color.BLUE);			
 		}
 	}
 	public void ringdivider() {
-		if (this.players.length == 2){
+		if (this.players.size() == 2){
 			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
 			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 60)));
-			players[0].setRingList(ringlistpart1);
-			players[1].setRingList(ringlistpart2);
+			players.get(0).setRingList(ringlistpart1);
+			players.get(1).setRingList(ringlistpart2);
 		}
-		if (this.players.length == 3) {
+		if (this.players.size() == 3) {
 			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
 			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
 			RingList ringlistpart3 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
 			ringlistpart1.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(45, 50)));
 			ringlistpart2.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(50, 55)));
 			ringlistpart3.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(55, 60)));
-			players[0].setRingList(ringlistpart1);
-			players[1].setRingList(ringlistpart2);
-			players[2].setRingList(ringlistpart3);
+			players.get(0).setRingList(ringlistpart1);
+			players.get(1).setRingList(ringlistpart2);
+			players.get(2).setRingList(ringlistpart3);
 		}
-		if(this.players.length == 4) {
+		if(this.players.size() == 4) {
 			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
 			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
 			RingList ringlistpart3 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
 			RingList ringlistpart4 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(45, 60)));
-			players[0].setRingList(ringlistpart1);
-			players[1].setRingList(ringlistpart2);
-			players[2].setRingList(ringlistpart3);
-			players[3].setRingList(ringlistpart4);
+			players.get(0).setRingList(ringlistpart1);
+			players.get(1).setRingList(ringlistpart2);
+			players.get(2).setRingList(ringlistpart3);
+			players.get(3).setRingList(ringlistpart4);
 		}
 		
 	}
@@ -109,12 +118,12 @@ public class GameController implements Runnable {
 		while(!board.boardIsFull()) {
 			while(!succes) {
 					try {
-						players[currentplayer].makeMove(board);
+						players.get(currentplayer).makeMove(board);
 						succes = true;
 					} catch (RinggzException e) {}
 			}
 			currentplayer += 1;
-        	currentplayer %= this.players.length;
+        	currentplayer %= this.players.size();
         	succes = false;
         }
 	}

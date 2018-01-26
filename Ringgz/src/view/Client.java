@@ -17,8 +17,8 @@ public class Client {
 		Player Gibson = new HumanPlayer("Gibson");
 		Player Random = new HumanPlayer("Random");
 		Player geez = new HumanPlayer("geezer");
-		Player fourth= new HumanPlayer("fourther");
-		GameController gc = new GameController(Gibson, Random, geez, fourth);
+		Player nuller = new HumanPlayer("null");
+		GameController gc = new GameController(Gibson, Random, geez, null);
 		Thread game = new Thread(gc);
 		game.start();
 	}
