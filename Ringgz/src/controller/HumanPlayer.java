@@ -71,6 +71,7 @@ public class HumanPlayer extends Player {
 	    	Ring selectedRing = new Ring (choiceColor,Tier.toTier(choiceRing));
 	    	
 			if ( (board.isAllowed(choiceField, selectedRing) && 
+					(board.proximityCheck(choiceField, getPrimaryColor())) &&
 					(choiceRing < 6) && (choiceRing > 0) && (choiceColor != null) 
 					&& this.ringList.availableRings.contains(selectedRing))) {
 				board.setRing(choiceField, selectedRing);

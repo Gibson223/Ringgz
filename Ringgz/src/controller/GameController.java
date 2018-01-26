@@ -24,26 +24,8 @@ public class GameController implements Runnable {
 		playerlist.add(s2);
 		playerlist.add(s3);
 		playerlist.stream().filter(a -> a != null).forEach(a -> players.add((Player) a));
-//		for (int i = 0 ; i < playerlist.size(); i++) {
-//			if(playerlist.get(i) != null /*|| !playerlist.get(i).name.equals(null)*/ || playerlist.get(i).name != null) {
-//				players.add(playerlist.get(i));
-//			}
-//		}
         this.run();
 	}
-//	public GameController(Player player, Player player2) {
-//		players = new Player[2];
-//		players[0] = player;
-//        players[1] = player2;
-//        this.run();
-//	}
-//	public GameController(Player player, Player player2, Player player3) {
-//		players = new Player[3];
-//		players[0] = player;
-//        players[1] = player2;
-//        players[2] = player3;
-//        this.run();
-//	}
 	@Override
 	public void run() {
 		board = new Board();

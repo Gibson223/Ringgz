@@ -8,7 +8,6 @@ import java.util.Observable;
 public class Field  extends Observable{
 	private static int count = 1;
 	public int FieldNumber;
-	private Board board;
 	public void placeBase() {
 		this.fieldState.clear();
 		this.fieldState.add(new Ring(Color.BLUE, Tier.SMALL));
@@ -18,11 +17,10 @@ public class Field  extends Observable{
 		setChanged();
 		notifyObservers("ring placed");
 	}
-	public Field(Board board){
+	public Field(){
 		FieldNumber = count;
 		count++;
 		this.initfieldState();
-		this.board = board;
 	}
 	public void initfieldState() {
 		fieldState.add(new Ring(Color.INIT, Tier.SMALL));

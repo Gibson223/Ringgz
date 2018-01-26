@@ -32,7 +32,7 @@ public class Board {
     public Board() {
     	fields = new Field[DIM * DIM];
     	for (int i = 0; i < 25; i++) {
-    		fields[i] = new Field(this);
+    		fields[i] = new Field();
     		firstMove = true;
     	}
 //    	for (Field field : fields) {
