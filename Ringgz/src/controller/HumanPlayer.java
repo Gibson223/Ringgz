@@ -44,7 +44,8 @@ public class HumanPlayer extends Player {
      * @throws RinggzException 
      */
  
-    public void makeMove(Board board) {
+    @Override
+	public void makeMove(Board board) {
     	String promptField = ("\n> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", where will you place your ring? (field number)");
     	String promptRing = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what kind of ring will you place? (1,2,3,4,5(BASE))");
     	String promptColor = ("> " + getName() + " (" + getPrimaryColor().toString() + ")" + ", what color do you want to play with? (r,g,b,y)");

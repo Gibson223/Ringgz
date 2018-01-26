@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Collections;
 
 public class NaiveStrategy implements Strategy {
 
@@ -13,6 +12,7 @@ public class NaiveStrategy implements Strategy {
 	public String getName() {
 		return "Naive";
 	}
+	@Override
 	public Field determineField(Board board, Color c) {
 		try {
 			potentialFields.addAll(Arrays.asList(board.getField(7), board.getField(8), board.getField(9), board.getField(12), board.getField(13), board.getField(14), board.getField(17), board.getField(18), board.getField(19)));

@@ -1,6 +1,4 @@
 package model;
-import controller.RinggzException;
-import java.util.*;
 
 
 /**
@@ -35,6 +33,7 @@ public enum Color {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		if (this == Color.YELLOW) {
 			return "y";

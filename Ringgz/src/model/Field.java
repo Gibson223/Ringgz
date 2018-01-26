@@ -116,6 +116,7 @@ public class Field  extends Observable{
 		}
 		return null;
 	}
+	@Override
 	public String toString() {
 		if (this.fieldState.stream().allMatch(a -> (a.getColor() == Color.INIT && this.FieldNumber < 10))) {
 			return "--"+ this.FieldNumber +"-"; 

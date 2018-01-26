@@ -1,13 +1,6 @@
 package view;
 
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-
 import controller.*;
-import model.*;
-import view.*;
 
 public class Client {
 	public static void main(String[] args) {

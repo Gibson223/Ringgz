@@ -4,13 +4,7 @@ import model.*;
 import view.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import controller.*;
 
 public class GameController implements Runnable {
 	public List<Player> players = new ArrayList<Player>();

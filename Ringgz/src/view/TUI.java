@@ -1,8 +1,6 @@
 package view;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
-
 import controller.RinggzException;
 import model.Board;
 import model.Color;
@@ -43,7 +41,7 @@ public class TUI implements Observer {
 	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg0 instanceof Field && arg1 instanceof String && ("ring placed".equals(((String)arg1)))) {
+		if (arg0 instanceof Field && arg1 instanceof String && ("ring placed".equals((arg1)))) {
 			this.view();
 		}
 	}
