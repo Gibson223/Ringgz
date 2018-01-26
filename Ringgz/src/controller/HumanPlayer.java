@@ -53,7 +53,6 @@ public class HumanPlayer extends Player {
 	    	int choiceField = Integer.parseInt(INPUT.nextLine());
 	    	System.out.println(promptRing);
 	    	int choiceRing = Integer.parseInt(INPUT.nextLine());
-	    	
 	    	System.out.println(promptColor);
 	    	Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
 	    	Ring selectedRing = new Ring (choiceColor,Tier.toTier(choiceRing));
@@ -61,7 +60,7 @@ public class HumanPlayer extends Player {
 	    		if(board.middle9.stream().anyMatch(a -> a == choiceField) && (choiceColor != null) ) {
 	    			board.specialbase(choiceField);
 	    			board.firstMove = false;
-	    			System.out.println("the first move has been placed.....");
+	    			System.out.println("the first move has been placed");
 	    			//ask how to show the view only once in the field if it is a firstmove
 	    			return;
 	    		} else { 
