@@ -14,8 +14,8 @@ public class Client {
 		localGame();
 	}
 	public static void localGame() {
-		Player Gibson = new ComputerPlayer("Gibson");
-		Player Random = new ComputerPlayer("Random");
+		Player Gibson = new HumanPlayer("Gibson");
+		Player Random = new HumanPlayer("Random");
 		GameController gc = new GameController(Gibson, Random);
 		Thread game = new Thread(gc);
 		game.start();

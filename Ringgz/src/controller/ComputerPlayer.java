@@ -40,6 +40,7 @@ public class ComputerPlayer extends Player {
 			Ring ring = new Ring(super.getPrimaryColor(),strategy.determineTier(board.getField(fieldChoice)));
 			board.setRing(fieldChoice, ring);
 			potentialFields.add(board.getField(fieldChoice));
-			potentialFields.addAll(board.adjacentFields(fieldChoice));		}
+			potentialFields.addAll(board.adjacentFields(fieldChoice));
+		}
 	}
 }
