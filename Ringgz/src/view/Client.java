@@ -1,13 +1,8 @@
 package view;
 
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-
-import controller.*;
-import model.*;
-import view.*;
+import controller.GameController;
+import controller.HumanPlayer;
+import controller.Player;
 
 public class Client {
 	public static void main(String[] args) {
