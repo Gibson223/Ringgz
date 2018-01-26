@@ -51,13 +51,8 @@ public class HumanPlayer extends Player {
 		try {
 			System.out.println(promptField);
 	    	int choiceField = Integer.parseInt(INPUT.nextLine());
-	    	System.out.println(promptRing);
-	    	int choiceRing = Integer.parseInt(INPUT.nextLine());
-	    	System.out.println(promptColor);
-	    	Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
-	    	Ring selectedRing = new Ring (choiceColor,Tier.toTier(choiceRing));
 	    	if(board.firstMove) {
-	    		if(board.middle9.stream().anyMatch(a -> a == choiceField) && (choiceColor != null) ) {
+	    		if(board.middle9.stream().anyMatch(a -> a == choiceField) ) {
 	    			board.specialbase(choiceField);
 	    			board.firstMove = false;
 	    			System.out.println("the first move has been placed");
@@ -69,6 +64,12 @@ public class HumanPlayer extends Player {
 	    			return;
 	    		}	    		
 	    	}
+	    	System.out.println(promptRing);
+	    	int choiceRing = Integer.parseInt(INPUT.nextLine());
+	    	System.out.println(promptColor);
+	    	Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
+	    	Ring selectedRing = new Ring (choiceColor,Tier.toTier(choiceRing));
+	    	
 			if ( (board.isAllowed(choiceField, selectedRing) && 
 					(choiceRing < 6) && (choiceRing > 0) && (choiceColor != null) 
 					&& this.ringList.availableRings.contains(selectedRing))) {

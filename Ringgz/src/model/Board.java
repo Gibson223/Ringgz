@@ -12,10 +12,7 @@ public class Board {
 	public boolean firstMove = true;
 	public final List<Integer> middle9 = Arrays.asList(7,8,9,12,13,14,17,18,19); 
 	public void specialbase(int i) throws RinggzException {
-		this.setRing(i, new Ring(Color.BLUE, Tier.SMALL));
-		this.setRing(i, new Ring(Color.GREEN, Tier.MEDIUM));
-		this.setRing(i, new Ring(Color.RED, Tier.LARGE));
-		this.setRing(i, new Ring(Color.YELLOW, Tier.LARGEST));
+		this.getField(i).placeBase();
 	}
     /**
      * The DIM by DIM fields of the Ringgz student. See NUMBERING for the
