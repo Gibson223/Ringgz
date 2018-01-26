@@ -12,14 +12,14 @@ public class NaiveStrategy implements Strategy {
 	public String getName() {
 		return "Naive";
 	}
-	public Field determineField(Board board, Color c) {
+	public Field determineField(Board board, Player p) {
 		try {
-			potentialFields.addAll(Arrays.asList(board.getField(7), board.getField(8), board.getField(9), board.getField(12), board.getField(13), board.getField(14), board.getField(17), board.getField(18), board.getField(19)));
+			p.potentialFields.addAll(Arrays.asList(board.getField(7), board.getField(8), board.getField(9), board.getField(12), board.getField(13), board.getField(14), board.getField(17), board.getField(18), board.getField(19)));
 		} catch (RinggzException e) {
 			e.printStackTrace();
 		}
-		Collections.shuffle(potentialFields);
-		return potentialFields.get(0);
+		Collections.shuffle(p.potentialFields);
+		return p.potentialFields.get(0);
 	}
 
 	@Override
