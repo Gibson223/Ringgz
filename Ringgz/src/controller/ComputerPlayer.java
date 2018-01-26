@@ -24,23 +24,63 @@ public class ComputerPlayer extends Player {
 	@Override
 	public void makeMove(Board board) throws RinggzException {
 		if (board.firstMove) {
-			int fieldChoice = strategy.determineField(board, this).FieldNumber;
+			int choiceField = strategy.determineField(board, this).FieldNumber;
 			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Ring ring = new Ring(strategy.determineColor(board, this),strategy.determineTier(board.getField(fieldChoice)));
-			board.setRing(fieldChoice, ring);
-			for (Field field : potentialFields) {
-				potentialFields.remove(field);
+			Color choiceColor = strategy.determineColor(board, this);
+			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
+			Ring selectedRing = new Ring(choiceColor, choiceTier);
+			try {
+			if ( (board.isAllowed(choiceField, selectedRing) && 
+					(board.proximityCheck(choiceField, getPrimaryColor()))
+					&& (choiceColor != null) 
+					&& this.ringList.availableRings.contains(selectedRing))) {
+				board.setRing(choiceField, selectedRing);
+				this.ringList.availableRings.remove(selectedRing);
+				System.out.println("\nthe ring has been added to the field....");
+			} else {
+				System.out.println("Invalid move, try another one.");
+				this.makeMove(board);
 			}
-			potentialFields.add(board.getField(fieldChoice));
-			potentialFields.addAll(board.adjacentFields(fieldChoice));
+		}catch (RinggzException e) {
+			this.makeMove(board);
+		} catch (NullPointerException e) {
+			System.out.println("invalid color, input your move again:\n");
+			this.makeMove(board);
+		} catch (NumberFormatException e) {
+			System.out.println("invalid input, try again:\n");
+			this.makeMove(board);}
+			potentialFields.add(board.getField(choiceField));
+			potentialFields.addAll(board.adjacentFields(choiceField));
 
 		} else {
-			int fieldChoice = strategy.determineField(board, this).FieldNumber;
+			int choiceField = strategy.determineField(board, this).FieldNumber;
 			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Ring ring = new Ring(strategy.determineColor(board, this),strategy.determineTier(board.getField(fieldChoice)));
-			board.setRing(fieldChoice, ring);
-			potentialFields.add(board.getField(fieldChoice));
-			potentialFields.addAll(board.adjacentFields(fieldChoice));
+			Color choiceColor = strategy.determineColor(board, this);
+			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
+			Ring selectedRing = new Ring(choiceColor, choiceTier);
+			try {
+			if ( (board.isAllowed(choiceField, selectedRing) && 
+					(board.proximityCheck(choiceField, getPrimaryColor()))
+					&& (choiceColor != null) 
+					&& this.ringList.availableRings.contains(selectedRing))) {
+				board.setRing(choiceField, selectedRing);
+				this.ringList.availableRings.remove(selectedRing);
+				System.out.println("\nthe ring has been added to the field....");
+			} else {
+				System.out.println("Invalid move, try another one.");
+				this.makeMove(board);
+			}
+		}catch (RinggzException e) {
+			this.makeMove(board);
+		} catch (NullPointerException e) {
+			System.out.println("invalid color, input your move again:\n");
+			this.makeMove(board);
+		} catch (NumberFormatException e) {
+			System.out.println("invalid input, try again:\n");
+			this.makeMove(board);}	
+			
+			potentialFields.add(board.getField(choiceField));
+			potentialFields.addAll(board.adjacentFields(choiceField));
 		}
 	}
 }
