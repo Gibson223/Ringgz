@@ -2,9 +2,6 @@ package controller;
 
 import model.*;
 import view.*;
-
-import java.util.Arrays;
-
 import controller.*;
 
 public class GameController implements Runnable {
