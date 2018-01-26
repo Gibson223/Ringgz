@@ -11,7 +11,7 @@ import model.RingList;
 public class ServerPlayer extends Player{
 	public InputStream in;
 	public ServerPlayer(String name, Color color, RingList ringList, Socket clientSocket) {
-		super(name, color, ringList);
+		super(name);
 		try {
 			this.in = clientSocket.getInputStream();//i think we have to do something like this
 		} catch (IOException e) {

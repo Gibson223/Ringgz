@@ -1,10 +1,13 @@
 package controller;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import model.Board;
 import model.Color;
+import model.Field;
+import model.Tier;
 
 public class SmartStrategy implements Strategy{
 
@@ -12,44 +15,34 @@ public class SmartStrategy implements Strategy{
 	public String getName() {
 		return "Smart";
 	}
+	
+	@Override
+	public Field determineField(Board board, Color c) {
+		if (board.firstMove) {
+			try {
+				potentialFields.addAll(Arrays.asList(board.getField(7), board.getField(8), board.getField(9), board.getField(12), board.getField(13), board.getField(14), board.getField(17), board.getField(18), board.getField(19)));
+			} catch (RinggzException e) {
+				e.printStackTrace();
+			}
+		}
+		boolean fieldFound = false;
+		while (!fieldFound) {
+			Collections.shuffle(potentialFields);
+			Field smartField = potentialFields.get(0);
+			int frec = Collections.frequency(smartField.getFieldColors(),c);
+			if (frec > 2) {
+				determineField(board,c);
+			} else {
+				fieldFound = true;
+				return smartField;
+			}
+		}	
+	}
 
 	@Override
-	//TODO
-	public int determineMove(Board b, Color c) {
-		List<Integer> emptyList = new ArrayList<>();
-		for (int i = 0; i < 9; i++) {
-			if (b.isEmptyField(i)) {
-				emptyList.add(i);
-			}
-		}
-		if (emptyList.contains(4)) {
-			return 4;
-		} else {
-			for (int j : emptyList) {
-				Board copy = b.deepCopy();
-				copy.setField(j, m);
-				if (copy.isWinner(m)) {
-					return j;
-				}
-			}
-			for (int k : emptyList) {
-				Board copy = b.deepCopy();
-				if (m == Mark.OO) {
-					copy.setField(k, Mark.XX);
-					if (copy.isWinner(Mark.XX)) {
-						return k;
-					}
-				} else {
-					copy.setField(k,Mark.OO);
-					if (copy.isWinner(Mark.OO)) {
-						return k;
-					}
-				}
-			}
-		
-			Collections.shuffle(emptyList);
-			return emptyList.get(0);			
-		}
+	public Tier determineTier(Field f) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

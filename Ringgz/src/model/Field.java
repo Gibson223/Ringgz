@@ -109,6 +109,15 @@ public class Field  extends Observable{
 		}
 		return null;
 	}
+	
+	public List<Color> getFieldColors() {
+		List<Color> result = new ArrayList<>();
+		for (Ring ring : this.getFieldState()) {
+			result.add(ring.getColor());
+		}
+		return result;
+	}
+	
 	public String toString() {
 		if (this.HasBase() == true) {
 			return "" + fieldState.get(3).getColor() + "BAS";

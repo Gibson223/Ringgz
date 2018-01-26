@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import controller.NetworkPlayer;
+import controller.ServerPlayer;
 import controller.Player;
-import model.Base;
 import model.Board;
 import model.Ring;
-import model.StartBase;
 import net.Protocol;
 import net.Protocol.Packets;
 import net.ProtocolViolatedException;
@@ -96,7 +94,6 @@ public class GameManager implements Runnable {
 				// TODO: lobby should be suspended.
 			}
 		}
-		preperationPhase();
 		playingPhase();
 		endingPhase();
 	}
@@ -183,76 +180,6 @@ public class GameManager implements Runnable {
 			}
 		}
 		return true;
-	}
-	
-	/**
-	 * This method prepares the server-side model for the game: it distributes colors and
-	 * pieces amongst the players.
-	 */
-	private void preperationPhase() {
-		this.players = new ArrayList<>();
-		for(int c = 0; c < this.clientHandlers.size(); c++) {
-			this.players.add(new NetworkPlayer());
-		}
-		if(this.players.size() == 2) {
-			handPieces2Players();
-		} else if(this.players.size() == 3) {
-			handPieces3Players();
-		} else {
-			handPieces4Players();
-		}
-		this.players.get(0).givePiece(new StartBase());
-	}
-	
-	private void handPieces2Players() {
-		for(int p = 0; p < 2; p++) {
-			Player player = this.players.get(p);
-			player.setPrimaryColor(2 * p);
-			player.setSecondaryColor(2 * p + 1);
-			for(int color = 0; color < 2; color++) {
-				for(int c = 0; c < 3; c++) {
-					player.givePiece(new Base(2 * p + color));
-					player.givePiece(new Ring(0, 2 * p + color));
-					player.givePiece(new Ring(1, 2 * p + color));
-					player.givePiece(new Ring(2, 2 * p + color));
-					player.givePiece(new Ring(3, 2 * p + color));
-				}
-			}
-		}
-	}
-
-	private void handPieces3Players() {
-		for(int p = 0; p < 3; p++) {
-			Player player = this.players.get(p);
-			player.setPrimaryColor(p);
-			player.setSecondaryColor(4);
-			for(int c = 0; c < 3; c++) {
-				player.givePiece(new Base(p));
-				player.givePiece(new Ring(0, p));
-				player.givePiece(new Ring(1, p));
-				player.givePiece(new Ring(2, p));
-				player.givePiece(new Ring(3, p));
-			}
-			player.givePiece(new Base(4));
-			player.givePiece(new Ring(0, 4));
-			player.givePiece(new Ring(1, 4));
-			player.givePiece(new Ring(2, 4));
-			player.givePiece(new Ring(3, 4));
-		}
-	}
-
-	private void handPieces4Players() {
-		for(int p = 0; p < 4; p++) {
-			Player player = this.players.get(p);
-			player.setPrimaryColor(p);
-			for(int c = 0; c < 3; c++) {
-				player.givePiece(new Base(p));
-				player.givePiece(new Ring(0, p));
-				player.givePiece(new Ring(1, p));
-				player.givePiece(new Ring(2, p));
-				player.givePiece(new Ring(3, p));
-			}
-		}
 	}
 
 	/**
