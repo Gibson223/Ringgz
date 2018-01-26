@@ -9,6 +9,7 @@ public abstract class Player {
     public  final String name;
     private Color  primary;
     private Color secondary;
+    
     public Player(String name) {
     	this.name = name;
     }

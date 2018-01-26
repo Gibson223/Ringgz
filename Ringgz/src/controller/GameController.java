@@ -1,24 +1,22 @@
 package controller;
 
-import model.*;
-import view.*;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-import controller.*;
+import java.util.List;
+
+import model.Board;
+import model.Color;
+import model.Field;
+import model.Ring;
+import model.RingList;
+import view.TUI;
 
 public class GameController implements Runnable {
 	public List<Player> players = new ArrayList<Player>();
 	public Board board;
 	public TUI tui;
 	public RingList ringlist;
-	// we get the name from the packets
-	//TODO ask question how to add observers to all fields of the board
+	
 	public GameController( Player s0, Player s1, Player s2, Player s3) {
 		List<Object> playerlist = new ArrayList<>();
 		playerlist.add(s0);
