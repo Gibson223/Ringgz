@@ -12,127 +12,119 @@ import net.Protocol.Extensions;
 import net.Protocol.Packets;
 import net.ProtocolViolatedException;
 
-/**
- * This class is a separate thread for the server to keep track of a connection with
- * one specific client. This <code>ClientHandler</code> does <b>not</b> handle game
- * input (moving). These packets are forwarded to a <code>GameManager</code>.
+/*
+ * The job of this class is to keep a certain client's connection with the server
  */
 public class ClientHandler implements Runnable {
 
-	private final Server server;
-	private final Socket clientSocket;
 	private final BufferedReader in;
 	private final BufferedWriter out;
-	
+	private final Server server;
+	private final Socket clientSocket;
 	private String clientUsername;
 	private String[] extensions;
-	
+
 	/**
-	 * Lobby that the client of this handler is currently in. If this field is <code>null</code>,
-	 * the client is currently not in a lobby.
+	 * Game the client this handler refers to is in.
 	 */
 	private GameManager game;
-	
-	private boolean responded;
-	private boolean ready;
-	
+
 	/**
 	 * The player type of the client of this handler.
 	 */
 	private String playerType;
-	
+
 	public ClientHandler(Server server, Socket clientSocket) throws IOException {
 		this.server = server;
 		this.clientSocket = clientSocket;
 		this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream(), "UTF-8"));
-        this.out = new BufferedWriter(new OutputStreamWriter(this.clientSocket.getOutputStream(), "UTF-8"));
+		this.out = new BufferedWriter(new OutputStreamWriter(this.clientSocket.getOutputStream(), "UTF-8"));
 	}
-	
+
 	@Override
 	public void run() {
 		try {
-			while(true) {
+			while (true) {
 				String message = this.in.readLine();
 				handleMessageWithConnect(message.split(Protocol.DELIMITER));
 			}
 		} catch (IOException e) {
-			//This means someone disconnected
+			// This means someone disconnected
 		} catch (ProtocolViolatedException e) {
 			this.server.print(e.getMessage());
 		}
 	}
-	
+
 	/**
-	 * This method is always called over <code>handleMessage()</code>, because it will
-	 * filter out the CONNECT type packet. If it is that type of packet, it will handle
-	 * it. If it is not a CONNECT type packet, and the CONNECT packet was sent before,
-	 * it will forward the data to <code>handleMessage()</code>, which will handle all
-	 * other type of messages.
+	 * This method handles the CONNECT packet.
+	 * 
 	 * @param data
-	 * an array of all the information blocks of the packet.
-	 * @throws ProtocolNotFollowedException 
-	 * when the networking protocol is violated in any way.
+	 *            an array of all the information blocks of the packet.
+	 * @throws ProtocolNotFollowedException
+	 *             is thrown if the protocol is violated in any way.
 	 */
 	private void handleMessageWithConnect(String[] data) throws ProtocolViolatedException {
 		String packetType = data[0];
-		if(this.clientUsername != null && !packetType.equals(Protocol.Packets.CONNECT)) {
+		if (this.clientUsername != null && !packetType.equals(Protocol.Packets.CONNECT)) {
 			handleMessage(data);
-		} else if(clientUsername != null) {
+		} else if (clientUsername != null) {
 			this.server.print("Client sent another connection packet?");
 		} else {
 			this.clientUsername = data[1];
 			int extensionAmount = data.length - 2;
 			this.extensions = new String[extensionAmount];
-			for(int c = 0; c < extensionAmount; c++) {
+			for (int c = 0; c < extensionAmount; c++) {
 				this.extensions[c] = data[c + 2];
 			}
-			String extensionString = "";
-			for(int c = 0; c < Server.EXTENSIONS.length; c++) {
-				extensionString = extensionString + Protocol.DELIMITER + Server.EXTENSIONS[c];
-			}
-			sendMessage(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT + extensionString);
-			this.server.print("New client [" + this.clientUsername + "] connected to the server.");
+//			String extensionString = "";
+//			for (int c = 0; c < Server.EXTENSIONS.length; c++) {
+//				extensionString += Protocol.DELIMITER + Server.EXTENSIONS[c];
+//			}
+			sendMessage(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT); //+ extensionString
+			this.server.print("[" + this.clientUsername + "] has connected to the server.");
 		}
 	}
-	
+
+	private boolean ready;
+	private boolean responded;
+
 	/**
-	 * Handles any other packets than the CONNECT packet. Notice packets like MOVE (which
-	 * have to do with playing the game) do also go through this method, which it
-	 * forwards to a <code>GameManager</code> if the client is currently in-game.
+	 * Handles every packet except for the CONNECT packet (see method above).
+	 * 
 	 * @param data
-	 * an array of all the information blocks of the packet.
-	 * @throws ProtocolNotFollowedException 
-	 * when the networking protocol is violated in any way.
+	 *            an array of all the information blocks of the packet.
+	 * @throws ProtocolNotFollowedException
+	 *             is thrown if the protocol is violated in any way.
 	 */
 	private void handleMessage(String[] data) throws ProtocolViolatedException {
 		String packetType = data[0];
 		switch (packetType) {
-		
+
 		case Packets.GAME_REQUEST:
-			if(game == null) {
+			if (game == null) {
 				try {
 					int playerAmount = Integer.parseInt(data[1]);
-					if(playerAmount < 2 || playerAmount > 4) {
-						throw new ProtocolViolatedException("Data[1] is integer, but is out of range.");
+					if (playerAmount < 2 || playerAmount > 4) {
+						throw new ProtocolViolatedException("Data[1] isn't a valid integer.");
 					}
-					if(data[2].equals(Protocol.HUMAN_PLAYER) || data[2].equals(Protocol.COMPUTER_PLAYER)) {
+					if (data[2].equals(Protocol.HUMAN_PLAYER) || data[2].equals(Protocol.COMPUTER_PLAYER)) {
 						this.playerType = data[2];
-						if(data.length == 4) {
+						if (data.length == 4) {
 							this.game = this.server.getLobby(playerAmount, this.playerType, data[3]);
-						} else if(data.length == 3) {
+						} else if (data.length == 3) {
 							this.game = this.server.getLobby(playerAmount, this.playerType);
 						}
-						if(this.game.addPlayer(this)) {
+						if (this.game.addPlayer(this)) {
 							sendMessage(Protocol.Packets.JOINED_LOBBY);
 						} else {
 							this.game = null;
 						}
 					} else {
-						throw new ProtocolViolatedException("Data[2] is not a player type");
+						throw new ProtocolViolatedException("Data[2] is not a valid player type");
 					}
-				} catch(NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					throw new ProtocolViolatedException("Data[1] is not an integer");
-				} catch(ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					throw new ProtocolViolatedException("Too few arguments given for GAME_REQUEST from client.");
 				}
 			} else {
@@ -140,10 +132,10 @@ public class ClientHandler implements Runnable {
 			}
 			break;
 		case Packets.PLAYER_STATUS:
-			if(this.game != null) {
-				if(data.length == 2) {
+			if (this.game != null) {
+				if (data.length == 2) {
 					setResponded(true);
-					if(data[1].equals(Protocol.ACCEPT)) {
+					if (data[1].equals(Protocol.ACCEPT)) {
 						setReady(true);
 					} else {
 						setReady(false);
@@ -152,101 +144,60 @@ public class ClientHandler implements Runnable {
 						this.game.notify();
 					}
 				} else {
-					throw new ProtocolViolatedException("Too few arguments given for PLAYER_STATUS by client (GameManager.java).");
+					throw new ProtocolViolatedException("Too few arguments given for PLAYER_STATUS by client.");
 				}
 			} else {
-				throw new ProtocolViolatedException("Player gave ready status while not in a lobby.");
+				throw new ProtocolViolatedException("Cannot give ready status while you aren't in a lobby.");
 			}
 			break;
-		case Packets.MESSAGE:
-			handleChatMessage(data);
-			break;
-			
-		/*
-		 * Packets below this point have to do with playing the game, and therefore are
-		 * forwarded to a GameManager (IF the client is actually in a game, of course).
-		 */
+
 		case Packets.MOVE:
-			if(this.game != null) {
+			if (this.game != null) {
 				this.game.handleMessage(this, data);
 			}
 			break;
-			
+
 		default:
 			break;
 		}
 	}
-	
-	private void handleChatMessage(String[] data) throws ProtocolViolatedException {
-		String message;
-		String messageType ;
-		if(data.length >= 3 && data.length <= 4) {
-			message = data[1];
-			messageType = data[2];
-			switch(messageType) {
-			
-			case Protocol.GLOBAL:
-				this.server.broadcast(Protocol.Packets.MESSAGE + Protocol.DELIMITER + message + Protocol.DELIMITER + messageType + Protocol.DELIMITER + clientUsername);
-				break;
-			case Protocol.LOBBY:
-				break;
-			case Protocol.PRIVATE:
-				if(data.length >= 4) {
-					String receiver = data[3];
-					ClientHandler handler = this.server.getClientHandlerFor(receiver);
-					if(handler != null) {
-						if(handler.clientHasExtensions(Extensions.EXTENSION_CHATTING)) {
-							handler.sendMessage(Protocol.Packets.MESSAGE + Protocol.DELIMITER + message + Protocol.DELIMITER + messageType + Protocol.DELIMITER + clientUsername);
-						}
-					} else {
-						throw new ProtocolViolatedException("Given receiver username does not exist or is not online.");
-					}
-				} else {
-					throw new ProtocolViolatedException("Receiver was not given for a message of type PRIVATE.");
-				}
-				break;
-			
-			}
-		} else {
-			throw new ProtocolViolatedException("Wrong number of information blocks for MESSAGE packet.");
-		}
-	}
-	
+
 	/**
-	 * Sends a given string to the inputstream of the client. If the writing to the
-	 * client somehow fails, the thread of this <code>ClientHandler</code> is
-	 * suspended.
+	 * Sends a certain message to the client.
+	 * 
 	 * @param message
-	 * The string message that will be sent to the client.
+	 *            The message that will be sent.
 	 */
 	public void sendMessage(String message) {
 		try {
 			this.out.write(message + "\n");
 			this.out.flush();
 		} catch (IOException e) {
-			// connection was lost. Ergo: client disconnected.
-			// TODO: let this end this Thread.
-			this.server.print("Something went wrong writing to client.");
+			this.server.print("There was an error writing to client.");
 		}
 	}
-	
+
+	public String getPlayerType() {
+		return this.playerType;
+	}
+
 	public String getClientUsername() {
 		return this.clientUsername;
 	}
-	
+
 	public boolean clientHasExtensions(String extension) {
-		if(this.extensions != null) {
-			for(int c = 0; c < this.extensions.length; c++) {
-				if(this.extensions[c].equals(extension)) {
+		if (this.extensions != null) {
+			for (int c = 0; c < this.extensions.length; c++) {
+				if (this.extensions[c].equals(extension)) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	public String getPlayerType() {
-		return this.playerType;
+
+	public boolean isReady() {
+		return ready;
 	}
 
 	public boolean hasResponded() {
@@ -255,10 +206,6 @@ public class ClientHandler implements Runnable {
 
 	public void setResponded(boolean responded) {
 		this.responded = responded;
-	}
-
-	public boolean isReady() {
-		return ready;
 	}
 
 	public void setReady(boolean ready) {
