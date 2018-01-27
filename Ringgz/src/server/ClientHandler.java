@@ -51,14 +51,14 @@ public class ClientHandler implements Runnable {
 	@Override
 	public void run() {
 		try {
-			while(true) { // TODO: clean way to stop this loop when server shuts down.
+			while(true) {
 				String message = this.in.readLine();
 				handleMessageWithConnect(message.split(Protocol.DELIMITER));
 			}
 		} catch (IOException e) {
-			// connection was lost. Ergo: client disconnected.
+			//This means someone disconnected
 		} catch (ProtocolViolatedException e) {
-			this.server.print(e.getMessage()); // protocol was somehow violated.
+			this.server.print(e.getMessage());
 		}
 	}
 	

@@ -1,148 +1,118 @@
 package view;
 
-import model.*;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 
-import controller.Player;
-import controller.RinggzException;
-import model.Board;
+import net.Protocol;
+import net.Protocol.Extensions;
+import net.Protocol.Packets;
+import net.ProtocolViolatedException;
 
 /**
- * Class for maintaining the Ringgz game.
- * @author Inigo Artolozaga and Gibson Vredeveld
+ * The <code>Game</code> class, which is responsible for making the game function like it should. It
+ * will keep track of all <code>Player</code>s and the <code>Move</code>s that they make.
  */
-public class Game {
-    public static final int NUMBER_PLAYERS = 4; //TODO make this modifiable;
+public class Game implements Runnable {
+	
+	private final BufferedReader in;
+	private final BufferedWriter out;
+	private final Socket socket;
+	private final String clientName;
+	private final View view;
+	
+	public Game(View view, String clientName, InetAddress host, int port) throws IOException {
+		this.view = view;
+		this.clientName = clientName;
+		this.socket = new Socket(host, port);
+		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+        this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+        sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.clientName + Protocol.DELIMITER + Extensions.EXTENSION_CHATTING);
+	}
+	
+	@Override
+	public void run() {
+		try {
+			while(true) {
+				String msg = in.readLine();
+				handleMessage(msg.split(Protocol.DELIMITER));
+			}
+		} catch (IOException e) {
+			shutdown();
+		} catch (ProtocolViolatedException e) {
+			view.displayError(e.getMessage());
+			shutdown();
+		}
+	}
+	
+	private void handleMessage(String[] data) throws ProtocolViolatedException {
+		String packetType = data[0];
+		switch(packetType) {
+		
+		case Packets.CONNECT:
+			if(data.length >= 2) {
+				if(data[1].equals(Protocol.ACCEPT)) {
+					view.onConnectionAccepted();
+					Object[] args = view.getGameRequest();
+					// TODO: parse server extensions.
+					if(args.length == 1) {
+						// TODO: parse whether user is human or AI.
+						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER + Protocol.HUMAN_PLAYER);
+					} else {
+						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER + Protocol.HUMAN_PLAYER + Protocol.DELIMITER + args[1]);
+					}
+				} else {
+					view.onConnectionDeclined();
+					shutdown();
+				}
+			} else {
+				throw new ProtocolViolatedException("Server CONNECT response did not contain enough data.");
+			}
+			break;
+			
+		case Packets.JOINED_LOBBY:
+			view.waitingInLoby();
+			break;
+			
+		case Packets.ALL_PLAYERS_CONNECTED:
+			view.allPlayersConnected();
+			String input = TUI.readString("");
+			if(input.equals("y")) {
+				sendMessage(Packets.PLAYER_STATUS + Protocol.DELIMITER + Protocol.ACCEPT);
+			} else {
+				sendMessage(Packets.PLAYER_STATUS + Protocol.DELIMITER + Protocol.DECLINE);
+			}
+			break;
+			
+		case Packets.GAME_STARTED:
+			view.onGameStarted();
+			break;
+		
+		default:
+			break;
+		}
+	}
 
-    /*@ private invariant board != null; */
-    /**
-     * The board.
-     */
-    private Board board;
-
-    /*@  private invariant players.length == NUMBER_PLAYERS;
-        private invariant (\forall int i; 0 <= i && i < NUMBER_PLAYERS; 
-       	                           players[i] != null); 
-     */
-    /**
-     * The players of the game.
-     */
-    private Player[] players;
-
-    /*@ private invariant 0 <= current  && current < NUMBER_PLAYERS; */
-    /**
-     * Index of the current player.
-     */
-    private int current;
-
-    // -- Constructors -----------------------------------------------
-
-    /*@ requires s0 != null;
-        requires s1 != null;
-     */
-    /**
-     * Creates a new Game object.
-     * @param s0 the first player
-     * @param s1 the second player
-     */
-    public Game(Player s0, Player s1, Player s2, Player s3) { // TODO make this not hardcoded for 4 players;
-        board = new Board();
-        players = new Player[NUMBER_PLAYERS];
-        players[0] = s0;
-        players[1] = s1;
-        players[2] = s2;
-        players[3] = s3;
-        current = 0;
-    }
-
-    // -- Commands ---------------------------------------------------
-
-    /**
-     * Starts the Tic Tac Toe game. <br>
-     * Asks after each ended game if the user want to continue. Continues until
-     * the user does not want to play anymore.
-     * @throws RinggzException 
-     */
-    public void start() throws RinggzException {
-        boolean again = true;
-        while (again) {
-            play();
-            again = readBoolean("\n> Play another time? (y/n)?", "y", "n");
-            reset();
-        }
-    }
-
-    /**
-     * Prints a question which can be answered by yes (true) or no (false).
-     * After prompting the question on standard out, this method reads a String
-     * from standard in and compares it to the parameters for yes and no. If the
-     * user inputs a different value, the prompt is repeated and te method reads
-     * input again.
-     * 
-     * @param prompt the question to print
-     * @param yes
-     *            the String corresponding to a yes answer
-     * @param no
-     *            the String corresponding to a no answer
-     * @return true is the yes answer is typed, false if the no answer is typed
-     */
-    private boolean readBoolean(String prompt, String yes, String no) {
-        String answer;
-        do {
-            System.out.print(prompt);
-            try (Scanner in = new Scanner(System.in)) {
-                answer = in.hasNextLine() ? in.nextLine() : null;
-            }
-        } while (answer == null || (!answer.equals(yes) && !answer.equals(no)));
-        return answer.equals(yes);
-    }
-
-    /**
-     * Resets the game. <br>
-     * The board is emptied and player[0] becomes the current player.
-     */
-    private void reset() {
-        current = 0;
-        board.reset();
-    }
-
-    /**
-     * Plays the Ringgz game. <br>
-     * First the (still empty) board is shown. Then the game is played
-     * until it is over. Players can make a move one after the other. 
-     * After each move, the changed game situation is printed.
-     * @throws RinggzException 
-     */
-    private void play() throws RinggzException {
-        System.out.println(board.toString());
-        while(!board.boardIsFull()) {
-        	players[current].makeMove(board);
-        	while(!board.boardIsFull()); //Not done
-        	current += 1;
-        	current %= 3;
-        	update();
-        }
-        printResult();
-    }
-
-    /**
-     * Prints the game situation.
-     */
-    private void update() {
-        System.out.println("\ncurrent game situation: \n\n" + board.toString() + "\n");
-    }
-
-    /*@
-       requires this.board.gameOver();
-     */
-
-    /**
-     * Prints the result of the last game. <br>
-     */
-    private void printResult() {
-        if (board.boardIsFull()) {
-            Color winner = board.isWinner();
-            System.out.println("Player with color " + winner.toString() + " has won!");
-        }
-    }
+	public void sendMessage(String msg) {
+		try {
+			out.write(msg + "\n");
+			out.flush();
+		} catch (IOException e) {
+			shutdown();
+		}
+	}
+	
+	public void shutdown() {
+		try {
+			in.close();
+			out.close();
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

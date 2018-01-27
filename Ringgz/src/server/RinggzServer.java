@@ -37,7 +37,7 @@ public class RinggzServer implements Runnable {
 	}
 	
 	private void acceptClients() throws IOException {
-		while(running) { // TODO: cleaner way of shutting down server.
+		while(running) {
 			Socket client = socket.accept();
 			ClientHandler handler = new ClientHandler(this, client);
 			new Thread(handler).start();
@@ -147,6 +147,7 @@ public class RinggzServer implements Runnable {
 	public static void main(String[] args) {
 		try {
 			new Thread(new RinggzServer()).start();
+			System.out.println("The server has been started.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

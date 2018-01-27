@@ -38,7 +38,6 @@ public class ComputerPlayer extends Player {
 				this.ringList.availableRings.remove(selectedRing);
 				System.out.println("\nthe ring has been added to the field....");
 			} else {
-				System.out.println("Invalid move, try another one.");
 				this.makeMove(board);
 			}
 		}catch (RinggzException e) {
@@ -65,18 +64,15 @@ public class ComputerPlayer extends Player {
 					&& this.ringList.availableRings.contains(selectedRing))) {
 				board.setRing(choiceField, selectedRing);
 				this.ringList.availableRings.remove(selectedRing);
-				System.out.println("\nthe ring has been added to the field....");
+				System.out.println("\n \n the Computer has added a ring to the field....");
 			} else {
-				System.out.println("Invalid move, try another one.");
 				this.makeMove(board);
 			}
 		}catch (RinggzException e) {
 			this.makeMove(board);
 		} catch (NullPointerException e) {
-			System.out.println("invalid color, input your move again:\n");
 			this.makeMove(board);
 		} catch (NumberFormatException e) {
-			System.out.println("invalid input, try again:\n");
 			this.makeMove(board);}	
 			
 			potentialFields.add(board.getField(choiceField));

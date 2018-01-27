@@ -1,35 +1,39 @@
 package view;
 
-import controller.GameController;
-import controller.HumanPlayer;
-import controller.Player;
+import java.io.IOException;
+import java.net.InetAddress;
 
+import view.View.ViewState;
+import server.RinggzServer;
+
+/**
+ * The <code>Ringgz</code> class, which is just a wrapper class to hold the main method,
+ * which initiates the game.
+ */
 public class Client {
-	public static void main(String[] args) {
-		localGame();
-	}
-	public static void localGame() {
-		Player Gibson = new HumanPlayer("Gibson");
-		Player Random = new HumanPlayer("Random");
-		Player geez = new HumanPlayer("geezer");
-		Player nuller = new HumanPlayer("null");
-		GameController gc = new GameController(Gibson, Random, geez, null);
-		Thread game = new Thread(gc);
-		game.start();
-	}
-//	public static void main(String[] args) {
-//		System.out.println("please type in a name, inetaddress and portnumber.....\n(separated by a space)");
-//		Scanner in = new Scanner(System.in);
-//		String name = in.nextLine().split(" ")[0];
-//        try {
-//			InetAddress addr = InetAddress.getByName(in.nextLine().split(" ")[1]);
-//		} catch (UnknownHostException e) {
-//			System.out.println("wrong adress");
-//			e.printStackTrace();
-//		}
-//        int port = Integer.parseInt(in.nextLine().split(" ")[2]);
-//		;
-//		Socket client = new Socket();
-//	}
 
+	/** Starts the client. */
+	public static void main(String[] args) {
+		View view = new TUI();
+		new Thread(view).start();
+		Game client = null;
+		
+		Object[] arguments = view.getArguments();
+		view.setViewState(ViewState.CONNECTING);
+		InetAddress ipAddress = (InetAddress) arguments[0];
+		String username = (String) arguments[1];
+		int port = RinggzServer.PORT;
+		
+		boolean connecting = true;
+		while(connecting) {
+			try {
+				connecting = false;
+				client = new Game(view, username, ipAddress, port);
+				new Thread(client).start();
+			} catch (IOException e) {
+				connecting = true;
+			}
+		}
+		client.sendMessage(username);
+	}
 }
