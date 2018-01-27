@@ -8,40 +8,33 @@ import java.net.UnknownHostException;
 
 import net.Protocol;
 
-/**
- * Textual User Interface (TUI) for the Ringgz game.
- */
+//TUI for Ringgz
 public class TUI implements View {
 
 	public static final String EXIT = "exit";
 	
 	private ViewState viewState;
 	
-	/**
-	 * Creates a Textual User Interface (TUI) using the given <code>Game</code>.
-	 */
+	//Creates a TUI with the given Game
 	public TUI() {
 		setViewState(ViewState.STARTUP);
 	}
 	
 	@Override
 	public void displayStartupState() {
-		print("Please insert your username and the server IP address <username> <ip>");
+		print("Insert username and IP separated by a space");
 	}
 	
 	@Override
 	public void displayConnectingState() {
-		print("Connecting to the server...");
+		print("Connecting...");
 	}
 	
 	@Override
 	public void displayConnectedState() {
-		print("You are now connected to the server!");
-		print("You can request a game: <player amount> <opponent preference>");
-		print("The player amount can be either 2, 3 or 4 and the opponent preference is one of the following:");
-		print("\"human\"");
-		print("\"computer\"");
-		print("leave the field empty, this indicates you have no opponent preference.");
+		print("You are connected.");
+		print("To request a game: <player amount> <opponent preference>");
+		print("The player amount can be either 2, 3 or 4 and the opponent preference is either /human/ or /computer/");
 	}
 	
 	@Override
@@ -71,7 +64,7 @@ public class TUI implements View {
 	
 	@Override
 	public void run() {
-		// do anything.
+		//
 	}
 
 	@Override
@@ -118,20 +111,20 @@ public class TUI implements View {
 			String[] args = input.split(" ");
 			if(args.length != 2) {
 				valid = false;
-				print("Not enough arguments given (need 2). Please try again.");
+				print("Two arguments are needed. Please try again.");
 				continue;
 			}
 			username = args[0];
 			if(username.contains(";")) {
 				valid = false;
-				print("Username may not contain a semicolon (;). Please try again.");
+				print("A username cannot contain a semicollon. Please try again.");
 				continue;
 			}
 			try {
 				ipAddress = InetAddress.getByName(args[1]);
 			} catch (UnknownHostException e) {
 				valid = false;
-				print("Given IP address is invalid. Please try again.");
+				print("Invalid IP. Please try again.");
 				continue;
 			}
 		}
@@ -145,7 +138,7 @@ public class TUI implements View {
 	
 	@Override
 	public void onConnectionDeclined() {
-		print("Server did not accept connection.");
+		print("Server denied connection.");
 	}
 	
 	@Override
@@ -159,7 +152,7 @@ public class TUI implements View {
 			String[] args = input.split(" ");
 			if(args.length < 1 || args.length > 2) {
 				valid = false;
-				print("Not the right numbe of arguments given (need at lest 1, maximum of 2). Please try again.");
+				print("Not the right number of arguments given.");
 				continue;
 			}
 			try {
@@ -187,24 +180,24 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void waitingInLoby() {
+	public void waitingInLobby() {
 		print("Joined a lobby!");
 	}
 	
 	@Override
 	public boolean allPlayersConnected() {
-		print("All players connected, are you ready? You have ten seconds to respond. (y/n)");
+		print("All players connected, are you ready? (y/n)");
 		return false;
 	}
 	
 	@Override
 	public void onGameStarted() {
-		print("Game started!");
+		print("The game has started!");
 	}
 
 	@Override
 	public void otherMoves() {
-		print("Waiting for other player(s)");
+		print("Waiting for other players");
 	}
 
 	@Override

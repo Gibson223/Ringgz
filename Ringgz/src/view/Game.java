@@ -75,7 +75,7 @@ public class Game implements Runnable {
 			break;
 			
 		case Packets.JOINED_LOBBY:
-			view.waitingInLoby();
+			view.waitingInLobby();
 			break;
 			
 		case Packets.ALL_PLAYERS_CONNECTED:

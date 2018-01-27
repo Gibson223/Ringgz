@@ -30,7 +30,7 @@ public class GameController implements Runnable {
 	public void run() {
 		board = new Board();
 		ringlist = new RingList();
-		tui = new TUI(this.board);
+		tui = new TUI();
 		for  (Field field: board.fields) {
 			field.addObserver(tui);
 		}
