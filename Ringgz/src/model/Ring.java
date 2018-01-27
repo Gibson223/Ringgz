@@ -3,45 +3,55 @@ package model;
 public class Ring {
 	private Color color;
 	private Tier tier;
-	public Ring(Color c, Tier t){
+
+	public Ring(Color c, Tier t) {
 		color = c;
 		tier = t;
 	}
+
 	public Ring() {
 		color = Color.INIT;
 		tier = Tier.INIT;
 	}
+
 	public void setTier(Tier tier) {
 		this.tier = tier;
 	}
+
 	public Tier getTier() {
 		return tier;
 	}
+
 	public Color getColor() {
 		return color;
 	}
+
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	//CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
-	//@ensures //TODO
+
+	// CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
+	// @ensures //TODO
 	public static boolean isRing(Tier choice) {
-	   for(Tier aType : Tier.values()) {
-	      if(aType == choice) {
-	         return true;
-	      }
-	   }
-	   return false;
+		for (Tier aType : Tier.values()) {
+			if (aType == choice) {
+				return true;
+			}
+		}
+		return false;
 	}
+
 	@Override
-	 public boolean equals(Object ring){
-		if (ring instanceof Ring && ((Ring) ring).getColor() == this.getColor() && ((Ring) ring).getTier() == this.getTier() ) {
+	public boolean equals(Object ring) {
+		if (ring instanceof Ring && ((Ring) ring).getColor() == this.getColor()
+				&& ((Ring) ring).getTier() == this.getTier()) {
 			return true;
 		}
 		return false;
-		
+
 	}
-	//returns the color of the ring
+
+	// returns the color of the ring
 	@Override
 	public String toString() {
 		return this.getColor().toString();

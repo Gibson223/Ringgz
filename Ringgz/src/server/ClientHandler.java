@@ -76,11 +76,11 @@ public class ClientHandler implements Runnable {
 			for (int c = 0; c < extensionAmount; c++) {
 				this.extensions[c] = data[c + 2];
 			}
-//			String extensionString = "";
-//			for (int c = 0; c < Server.EXTENSIONS.length; c++) {
-//				extensionString += Protocol.DELIMITER + Server.EXTENSIONS[c];
-//			}
-			sendMessage(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT); //+ extensionString
+			// String extensionString = "";
+			// for (int c = 0; c < Server.EXTENSIONS.length; c++) {
+			// extensionString += Protocol.DELIMITER + Server.EXTENSIONS[c];
+			// }
+			sendMessage(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT); // + extensionString
 			this.server.print("[" + this.clientUsername + "] has connected to the server.");
 		}
 	}

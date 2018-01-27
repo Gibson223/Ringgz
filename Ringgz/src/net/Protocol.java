@@ -120,10 +120,10 @@ public interface Protocol {
 	 * This class contains all string representations of all the game extensions.
 	 * There are four extensions:
 	 * <ul>
-	 * 	 <li>Chatting</li>
-	 * 	 <li>Challenging</li>
-	 * 	 <li>Leaderboard</li>
-	 * 	 <li>Security</li>
+	 * <li>Chatting</li>
+	 * <li>Challenging</li>
+	 * <li>Leaderboard</li>
+	 * <li>Security</li>
 	 * </ul>
 	 */
 	public static interface Extensions {

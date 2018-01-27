@@ -14,30 +14,32 @@ import net.Protocol.Packets;
 import net.ProtocolViolatedException;
 
 /**
- * The <code>Game</code> class, which is responsible for making the game function like it should. It
- * will keep track of all <code>Player</code>s and the <code>Move</code>s that they make.
+ * The <code>Game</code> class, which is responsible for making the game
+ * function like it should. It will keep track of all <code>Player</code>s and
+ * the <code>Move</code>s that they make.
  */
 public class Game implements Runnable {
-	
+
 	private final BufferedReader in;
 	private final BufferedWriter out;
 	private final Socket socket;
 	private final String clientName;
 	private final View view;
-	
+
 	public Game(View view, String clientName, InetAddress host, int port) throws IOException {
 		this.view = view;
 		this.clientName = clientName;
 		this.socket = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-        this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-        sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.clientName + Protocol.DELIMITER + Extensions.EXTENSION_CHATTING);
+		this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+		sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.clientName + Protocol.DELIMITER
+				+ Extensions.EXTENSION_CHATTING);
 	}
-	
+
 	@Override
 	public void run() {
 		try {
-			while(true) {
+			while (true) {
 				String msg = in.readLine();
 				handleMessage(msg.split(Protocol.DELIMITER));
 			}
@@ -48,22 +50,24 @@ public class Game implements Runnable {
 			shutdown();
 		}
 	}
-	
+
 	private void handleMessage(String[] data) throws ProtocolViolatedException {
 		String packetType = data[0];
-		switch(packetType) {
-		
+		switch (packetType) {
+
 		case Packets.CONNECT:
-			if(data.length >= 2) {
-				if(data[1].equals(Protocol.ACCEPT)) {
+			if (data.length >= 2) {
+				if (data[1].equals(Protocol.ACCEPT)) {
 					view.onConnectionAccepted();
 					Object[] args = view.getGameRequest();
 					// TODO: parse server extensions.
-					if(args.length == 1) {
+					if (args.length == 1) {
 						// TODO: parse whether user is human or AI.
-						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER + Protocol.HUMAN_PLAYER);
+						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER
+								+ Protocol.HUMAN_PLAYER);
 					} else {
-						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER + Protocol.HUMAN_PLAYER + Protocol.DELIMITER + args[1]);
+						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER
+								+ Protocol.HUMAN_PLAYER + Protocol.DELIMITER + args[1]);
 					}
 				} else {
 					view.onConnectionDeclined();
@@ -73,25 +77,25 @@ public class Game implements Runnable {
 				throw new ProtocolViolatedException("Server CONNECT response did not contain enough data.");
 			}
 			break;
-			
+
 		case Packets.JOINED_LOBBY:
 			view.waitingInLobby();
 			break;
-			
+
 		case Packets.ALL_PLAYERS_CONNECTED:
 			view.allPlayersConnected();
 			String input = TUI.readString("");
-			if(input.equals("y")) {
+			if (input.equals("y")) {
 				sendMessage(Packets.PLAYER_STATUS + Protocol.DELIMITER + Protocol.ACCEPT);
 			} else {
 				sendMessage(Packets.PLAYER_STATUS + Protocol.DELIMITER + Protocol.DECLINE);
 			}
 			break;
-			
+
 		case Packets.GAME_STARTED:
 			view.onGameStarted();
 			break;
-		
+
 		default:
 			break;
 		}
@@ -105,7 +109,7 @@ public class Game implements Runnable {
 			shutdown();
 		}
 	}
-	
+
 	public void shutdown() {
 		try {
 			in.close();

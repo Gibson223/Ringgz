@@ -7,8 +7,8 @@ import view.View.ViewState;
 import server.Server;
 
 /**
- * The <code>Ringgz</code> class, which is just a wrapper class to hold the main method,
- * which initiates the game.
+ * The <code>Ringgz</code> class, which is just a wrapper class to hold the main
+ * method, which initiates the game.
  */
 public class Client {
 
@@ -17,15 +17,15 @@ public class Client {
 		View view = new TUI();
 		new Thread(view).start();
 		Game client = null;
-		
+
 		Object[] arguments = view.getArguments();
 		view.setViewState(ViewState.CONNECTING);
 		InetAddress ipAddress = (InetAddress) arguments[0];
 		String username = (String) arguments[1];
 		int port = Server.PORT;
-		
+
 		boolean connecting = true;
-		while(connecting) {
+		while (connecting) {
 			try {
 				connecting = false;
 				client = new Game(view, username, ipAddress, port);

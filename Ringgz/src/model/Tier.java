@@ -1,17 +1,19 @@
 package model;
-public enum Tier{
+
+public enum Tier {
 	SMALL, MEDIUM, LARGE, LARGEST, BASE, INIT;
 	public boolean occupied() {
-		if(this == SMALL || this == MEDIUM || this == LARGE || this == BASE) {
+		if (this == SMALL || this == MEDIUM || this == LARGE || this == BASE) {
 			return true;
 		} else {
 			return false;
 		}
 	}
+
 	public static Tier toTier(int i) {
 		if (i == 1) {
 			return Tier.SMALL;
-		} else if(i == 2) {
+		} else if (i == 2) {
 			return Tier.MEDIUM;
 		} else if (i == 3) {
 			return Tier.LARGE;
@@ -21,6 +23,6 @@ public enum Tier{
 			return Tier.BASE;
 		} else {
 			return null;
-		}		
+		}
 	}
 }
