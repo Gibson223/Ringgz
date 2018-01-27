@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import view.*;
 import net.Protocol;
 import net.Protocol.Extensions;
 
@@ -148,6 +149,8 @@ public class RinggzServer implements Runnable {
 		try {
 			new Thread(new RinggzServer()).start();
 			System.out.println("The server has been started.");
+			TUI tui = new TUI();
+			tui.run();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
