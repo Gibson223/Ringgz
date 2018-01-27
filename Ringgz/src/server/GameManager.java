@@ -21,7 +21,7 @@ public class GameManager implements Runnable {
 	
 	private static final long STATUS_WAIT = 10000;
 	
-	private final RinggzServer server;
+	private final Server server;
 	
 	/**
 	 * List  of <code>ClientHandler</code>s. These handlers are in charge of the network
@@ -69,7 +69,7 @@ public class GameManager implements Runnable {
 	 * @param maxPlayers
 	 * the maximum amount of players.
 	 */
-	public GameManager(RinggzServer server, int maxPlayers) {
+	public GameManager(Server server, int maxPlayers) {
 		this.server = server;
 		this.maxPlayers = maxPlayers;
 		this.clientHandlers = new ArrayList<>();
@@ -79,7 +79,7 @@ public class GameManager implements Runnable {
 	/**
 	 * Creates a <code>GameManager</code> with a maximum of four players.
 	 */
-	public GameManager(RinggzServer server) {
+	public GameManager(Server server) {
 		this(server, 4);
 	}
 

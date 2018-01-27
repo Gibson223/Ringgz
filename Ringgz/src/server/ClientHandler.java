@@ -19,7 +19,7 @@ import net.ProtocolViolatedException;
  */
 public class ClientHandler implements Runnable {
 
-	private final RinggzServer server;
+	private final Server server;
 	private final Socket clientSocket;
 	private final BufferedReader in;
 	private final BufferedWriter out;
@@ -41,7 +41,7 @@ public class ClientHandler implements Runnable {
 	 */
 	private String playerType;
 	
-	public ClientHandler(RinggzServer server, Socket clientSocket) throws IOException {
+	public ClientHandler(Server server, Socket clientSocket) throws IOException {
 		this.server = server;
 		this.clientSocket = clientSocket;
 		this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream(), "UTF-8"));
@@ -87,8 +87,8 @@ public class ClientHandler implements Runnable {
 				this.extensions[c] = data[c + 2];
 			}
 			String extensionString = "";
-			for(int c = 0; c < RinggzServer.EXTENSIONS.length; c++) {
-				extensionString = extensionString + Protocol.DELIMITER + RinggzServer.EXTENSIONS[c];
+			for(int c = 0; c < Server.EXTENSIONS.length; c++) {
+				extensionString = extensionString + Protocol.DELIMITER + Server.EXTENSIONS[c];
 			}
 			sendMessage(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT + extensionString);
 			this.server.print("New client [" + this.clientUsername + "] connected to the server.");

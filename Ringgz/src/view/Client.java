@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import view.View.ViewState;
-import server.RinggzServer;
+import server.Server;
 
 /**
  * The <code>Ringgz</code> class, which is just a wrapper class to hold the main method,
@@ -22,7 +22,7 @@ public class Client {
 		view.setViewState(ViewState.CONNECTING);
 		InetAddress ipAddress = (InetAddress) arguments[0];
 		String username = (String) arguments[1];
-		int port = RinggzServer.PORT;
+		int port = Server.PORT;
 		
 		boolean connecting = true;
 		while(connecting) {

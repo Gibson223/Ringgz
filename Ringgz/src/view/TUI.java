@@ -221,42 +221,7 @@ public class TUI implements View {
 		System.out.println(message);
 	}
 
-	public void view() {
-		for (Field field : board.fields) {
-			if (((field.FieldNumber - 1) % 5) == 0) {
-				System.out.print("\n\n" + "|");
-			}
-			System.out.print(field.toString() + "|");
-		}
-	}
-
 	public void run() {
-		Board b = new Board();
-		TUI tui = new TUI();
-		Ring ring = new Ring(Color.BLUE, Tier.BASE);
-		Ring ring1 = new Ring(Color.GREEN, Tier.BASE);
-		Ring ring2 = new Ring(Color.BLUE, Tier.BASE);
-		Ring ring3 = new Ring(Color.BLUE, Tier.BASE);
-		try {
-			b.setRing(2, ring);
-			b.setRing(4, ring1);
-			b.setRing(6, ring2);
-			b.setRing(8, ring3);
-			tui.view();
-		} catch (RinggzException e) {
-			e.printStackTrace();
-		}
-
+		//
 	}
-
-	public void update(Observable arg0, Object arg1) {
-		if (arg0 instanceof Field && arg1 instanceof String && ("ring placed".equals(((String) arg1)))) {
-			this.view();
-		}
-	}
-
-	public void start() {
-		this.view();
-	}
-
 }
