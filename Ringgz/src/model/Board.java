@@ -113,7 +113,6 @@ public class Board {
 	 * @throws RinggzException
 	 */
 	// @ requires this.isField(i);
-	// @ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
 	/* @pure */
 	public Field getField(int i) throws RinggzException {
 		if (this.isField(i)) {
@@ -134,7 +133,6 @@ public class Board {
 	 * @throws RinggzException
 	 */
 	// @ requires this.isField(row,col);
-	// @ ensures \result == Mark.EMPTY || \result == Mark.XX || \result == Mark.OO;
 	/* @pure */
 	public Field getField(int row, int col) throws RinggzException {
 		return getField(index(row, col));
@@ -142,7 +140,6 @@ public class Board {
 
 	// RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
 	// @ requires this.isField(i);
-	// @ ensures TODO;
 	/* @pure */
 	public boolean adjacentHasBase(int field, Ring ring) {
 		if (ring.getTier() == Tier.BASE) {
@@ -162,7 +159,6 @@ public class Board {
 
 	// RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
 	// @ requires this.isField(row,col);
-	// @ ensures TODO;
 	/* @pure */
 	public boolean isAllowed(int row, int col, Ring ring) throws RinggzException {
 		return this.isAllowed(index(row, col), ring);
@@ -176,7 +172,6 @@ public class Board {
 	// RETURNS TRUE IF A CERTAIN FIELD IS EMPTY - IMPORTANT TO CHECK IF A PLAYER CAN
 	// PLACE A BASE
 	// @ requires this.isField(i);
-	// @ ensures TODO;
 	/* @pure */
 	public boolean isEmptyField(int i) throws RinggzException {
 		return !this.getField((i)).isFull();
@@ -192,7 +187,6 @@ public class Board {
 	// do while loop in player which makes it easy to register first move
 
 	// CHECKS IF BOARD IS FULL
-	// @ ensures TODO (hint: for loop);
 	/* @pure */
 	public boolean boardIsFull() {
 		for (Field field : fields) {
@@ -201,6 +195,12 @@ public class Board {
 			}
 		}
 		return true;
+	}
+	
+	public static void main (String[] args) throws RinggzException{
+		Board board = new Board();
+		//Check that adjacentFields() works
+		System.out.println(board.adjacentFields(1));
 	}
 
 	// @returns List<Field> of adjacent fields
