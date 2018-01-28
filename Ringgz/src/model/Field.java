@@ -65,11 +65,11 @@ public class Field extends Observable {
 			return true;
 		}
 		for (Ring ring : fieldState) {
-			if (!ring.getTier().occupied() || ring.getColor() != Color.INIT) {
+			if ((!ring.getTier().occupied() || ring.getColor() == Color.INIT) ) {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public boolean isAllowed(Ring r) {
@@ -110,7 +110,9 @@ public class Field extends Observable {
 			}
 		}
 		map.remove(Color.INIT);
-		System.out.println(map);
+		if (map.isEmpty()) {
+			return null;
+		}
 		Integer highest = java.util.Collections.max(map.values());
 		if (java.util.Collections.frequency(map.values(), highest) == 1) {
 			for (Map.Entry<Color, Integer> c : map.entrySet()) {
@@ -146,7 +148,6 @@ public class Field extends Observable {
 		}
 
 		return result;
-
 	}
 
 	// public static void main(String[] args) {
