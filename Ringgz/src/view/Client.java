@@ -6,10 +6,7 @@ import java.net.InetAddress;
 import view.View.ViewState;
 import server.Server;
 
-/**
- * The <code>Ringgz</code> class, which is just a wrapper class to hold the main
- * method, which initiates the game.
- */
+//Creates a client
 public class Client {
 
 	/** Starts the client. */

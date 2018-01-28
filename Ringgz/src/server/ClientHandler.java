@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import view.*;
 import net.Protocol;
 import net.Protocol.Extensions;
 import net.Protocol.Packets;
@@ -150,16 +151,21 @@ public class ClientHandler implements Runnable {
 				throw new ProtocolViolatedException("Cannot give ready status while you aren't in a lobby.");
 			}
 			break;
+			
+		case Packets.GAME_STARTED:
+			TUI tui = new TUI();
+			tui.run();
+			break;
 
 		case Packets.MOVE:
 			if (this.game != null) {
 				this.game.handleMessage(this, data);
 			}
 			break;
-
+			
 		default:
 			break;
-		}
+		}			
 	}
 
 	/**
@@ -171,7 +177,7 @@ public class ClientHandler implements Runnable {
 	public void sendMessage(String message) {
 		try {
 			this.out.write(message + "\n");
-			this.out.flush();
+			this.out.flush(); //Important
 		} catch (IOException e) {
 			this.server.print("There was an error writing to client.");
 		}

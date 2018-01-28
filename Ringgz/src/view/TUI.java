@@ -26,44 +26,29 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void displayStartupState() {
+	public void StartupState() {
 		print("Insert username and IP separated by a space");
 	}
 
 	@Override
-	public void displayConnectingState() {
+	public void ConnectingState() {
 		print("Connecting...");
 	}
 
 	@Override
-	public void displayConnectedState() {
+	public void ConnectedState() {
 		print("You are connected.");
 		print("To request a game: <player amount> <opponent preference>");
 		print("The player amount can be either 2, 3 or 4 and the opponent preference is either /human/ or /computer/");
 	}
 
 	@Override
-	public void displayLobbyState() {
-		// TODO Auto-generated method stub
+	public void PostGameState() {
+		print("Game over");
 	}
 
 	@Override
-	public void displayGameState() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void displayGameMovingState() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void displayPostGameState() {
-		print("Game has finished");
-	}
-
-	@Override
-	public void displayError(String error) {
+	public void Error(String error) {
 		print("[ERROR] " + error);
 	}
 
@@ -72,25 +57,16 @@ public class TUI implements View {
 		this.viewState = viewState;
 		switch (this.viewState) {
 		case STARTUP:
-			displayStartupState();
+			StartupState();
 			break;
 		case CONNECTING:
-			displayConnectingState();
+			ConnectingState();
 			break;
 		case CONNECTED:
-			displayConnectedState();
-			break;
-		case LOBBY:
-			displayLobbyState();
-			break;
-		case GAME:
-			displayGameState();
-			break;
-		case GAME_MOVING:
-			displayGameMovingState();
+			ConnectedState();
 			break;
 		case POST_GAME:
-			displayPostGameState();
+			PostGameState();
 			break;
 		}
 	}
@@ -197,8 +173,8 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void otherMoves() {
-		print("Waiting for other players");
+	public void awaitingMoves() {
+		print("Waiting for other players to make their move...");
 	}
 
 	@Override
@@ -208,13 +184,13 @@ public class TUI implements View {
 
 	public static String readString(String text) {
 		System.out.print(text);
-		String antw = null;
+		String answer = null;
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			antw = in.readLine();
+			answer = in.readLine();
 		} catch (IOException e) {
 		}
-		return (antw == null) ? "" : antw;
+		return (answer == null) ? "" : answer;
 	}
 
 	private static void print(String message) {
@@ -232,7 +208,6 @@ public class TUI implements View {
 
 	public void run() {
 		Board b = new Board();
-		TUI tui = new TUI();
 		Ring ring = new Ring(Color.BLUE, Tier.BASE);
 		Ring ring1 = new Ring(Color.GREEN, Tier.BASE);
 		Ring ring2 = new Ring(Color.BLUE, Tier.BASE);
@@ -244,6 +219,7 @@ public class TUI implements View {
 			b.setRing(8, ring3);
 		} catch (RinggzException e) {
 		}
+		this.start();
 
 	}
 

@@ -46,7 +46,7 @@ public class Game implements Runnable {
 		} catch (IOException e) {
 			shutdown();
 		} catch (ProtocolViolatedException e) {
-			view.displayError(e.getMessage());
+			view.Error(e.getMessage());
 			shutdown();
 		}
 	}
