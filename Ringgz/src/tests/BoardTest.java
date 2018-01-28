@@ -1,7 +1,7 @@
 package tests;
 import model.*;
 import controller.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,23 +44,42 @@ class BoardTest {
 		assertEquals(board.getField(5,5), board.fields[24]);		
 	}
 	
-//	@Test
-//	void adjacentFieldTest() {
-//		System.out.println(board.adjacentFields(1));
-//		assertEquals(board.adjacentFields(1),(ArrayList) [-81-, -77-]);
-//	}
+	@Test
+	void adjacentFieldTest() throws RinggzException{
+		System.out.println(board.adjacentFields(1));
+		assertEquals(board.adjacentFields(1),Arrays.asList(board.getField(6),board.getField(2)));
+	}
+	
+	@Test
+	void proximityCheckTest() throws RinggzException {
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		board.setRing(1, ring1);
+		assertTrue(board.proximityCheck(6,Color.BLUE));
+		assertTrue(board.proximityCheck(2,Color.BLUE));
+	}
+	
+	@Test
+	void isAllowedTest() throws RinggzException {
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		board.setRing(1, ring1);
+		assertFalse(board.isAllowed(1,1,ring1));
+		assertFalse(board.isAllowed(1,ring1));
+		assertTrue(board.isAllowed(1,2,ring1));
+		assertTrue(board.isAllowed(2,ring1));
+	}
+	
+	@Test
+	void adjacentHasBaseTest() throws RinggzException {
+		Ring ring1 = new Ring(Color.BLUE, Tier.BASE);
+		board.setRing(1, ring1);
+		assertTrue(board.adjacentHasBase(2, ring1));
+	}
 	
 	@Test
 	void isEmptyFieldTest() throws RinggzException{
 		board.reset();
 		assertTrue(board.isEmptyField(1));
 		assertTrue(board.isEmptyField(25));
-	}
-	
-	
-	@Test
-	void gameOverTest() {
-		assertTrue(!board.boardIsFull());
 	}
 	
 	@Test
@@ -106,7 +125,30 @@ class BoardTest {
 			board.setRing(field.FieldNumber, ring3);
 			board.setRing(field.FieldNumber, ring4);
 		}
-		assertTrue(!board.boardIsFull());
+		assertTrue(board.boardIsFull());
+	}
+	
+	@Test
+	void gameOverTest() throws RinggzException {
+		board.reset();
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring2 = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring3 = new Ring(Color.BLUE, Tier.LARGE);
+		Ring ring4 = new Ring(Color.BLUE, Tier.LARGEST);
+		for (Field field : board.fields) {
+			board.setRing(field.FieldNumber, ring1);	
+			board.setRing(field.FieldNumber, ring2);
+			board.setRing(field.FieldNumber, ring3);
+			board.setRing(field.FieldNumber, ring4);
+		}
+		assertTrue(board.gameOver());
+	}
+	
+	@Test
+	void FieldHasColorTest() throws RinggzException {
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		board.setRing(1, ring1);
+		assertTrue(board.FieldHasColor(1,Color.BLUE));
 	}
 	
 }

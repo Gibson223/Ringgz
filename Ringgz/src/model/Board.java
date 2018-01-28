@@ -47,7 +47,6 @@ public class Board {
 	 * Creates a deep copy of the board.
 	 */
 	// @ ensures \result != this;
-	// TODO: Adapt this to copy all the rings from each field
 	public Board deepCopy() {
 		Board clone = new Board();
 		clone.fields = this.fields;
@@ -139,9 +138,9 @@ public class Board {
 		return getField(index(row, col));
 	}
 
-	// RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
-	// @ requires this.isField(i);
-	/* @pure */
+	//RETURNS TRUE IF AN ADJACENT FIELD HAS A BASE
+	//@requires this.isField(i);
+	//@pure
 	public boolean adjacentHasBase(int field, Ring ring) {
 		if (ring.getTier() == Tier.BASE) {
 			for (Field fieldforbase : this.adjacentFields(field)) {
@@ -154,6 +153,9 @@ public class Board {
 		return false;
 	}
 
+	// RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
+	// @ requires this.isField(i);
+	/* @pure */
 	public boolean isAllowed(int field, Ring ring) throws RinggzException {
 		return (getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring));
 	}
@@ -196,12 +198,6 @@ public class Board {
 			}
 		}
 		return true;
-	}
-	
-	public static void main (String[] args) throws RinggzException{
-		Board board = new Board();
-		//Check that adjacentFields() works
-		System.out.println(board.adjacentFields(1));
 	}
 
 	// @returns List<Field> of adjacent fields

@@ -11,9 +11,9 @@ import java.util.*;
  */
 // RETURNS NEXT COLOR
 /*
- * @ ensures this == Color.R ==> \result == Color.Y; ensures this == Color.Y ==>
- * \result == Color.G; ensures this == Color.G ==> \result == Color.B; ensures
- * this == Color.B ==> \result == Color.R;
+ * @ ensures this == Color.RED ==> \result == Color.YELLOW; ensures this == Color.YELLOW ==>
+ * \result == Color.GREEN; ensures this == Color.GREEN ==> \result == Color.BLUE; ensures
+ * this == Color.BLUE ==> \result == Color.RED;
  */
 public enum Color {
 	RED, YELLOW, GREEN, BLUE, INIT;
