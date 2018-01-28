@@ -150,6 +150,11 @@ public class FieldTest {
 		assertEquals(field.toString(), new String("--0-"));
 		assertEquals(b.getField(20).toString(), new String("-20-"));	
 		field2.setRing(new Ring(Color.BLUE, Tier.BASE));
-		assertEquals(field2.toString(),);
+		assertEquals(field2.toString(), new String("bBAS"));
+		field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALL)));
+		field.getFieldState().set(1, (new Ring(Color.GREEN, Tier.MEDIUM)));
+		field.getFieldState().set(2, (new Ring(Color.GREEN, Tier.LARGE)));
+		field.getFieldState().set(3, (new Ring(Color.GREEN, Tier.LARGEST)));
+		assertEquals(field.toString(), new String("bggg"));
 		}
 }
