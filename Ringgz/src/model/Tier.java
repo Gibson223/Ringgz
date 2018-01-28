@@ -3,7 +3,7 @@ package model;
 public enum Tier {
 	SMALL, MEDIUM, LARGE, LARGEST, BASE, INIT;
 	public boolean occupied() {
-		if (this == SMALL || this == MEDIUM || this == LARGE || this == BASE) {
+		if (this == SMALL || this == MEDIUM || this == LARGE || this == LARGEST || this == BASE) {
 			return true;
 		} else {
 			return false;
