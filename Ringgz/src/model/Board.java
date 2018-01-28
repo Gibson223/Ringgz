@@ -190,7 +190,7 @@ public class Board {
 	/* @pure */
 	public boolean boardIsFull() {
 		for (Field field : fields) {
-			if (!field.isFull()) {
+			if (!field.isFull()) {	
 				return false;
 			}
 		}
@@ -296,8 +296,9 @@ public class Board {
 	// public boolean isWinner(Player player) {
 	// //TODO: conditions for winning
 	// }
+	
+	
 	// RESETS THE BOARD
-	// @ ensures TODO
 	public void reset() {
 		for (Field field : fields) {
 			field.clear();

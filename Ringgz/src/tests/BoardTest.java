@@ -51,20 +51,45 @@ class BoardTest {
 //	}
 	
 	@Test
+	void isEmptyFieldTest() throws RinggzException{
+		board.reset();
+		assertFalse(board.isEmptyField(1));
+		assertFalse(board.isEmptyField(25));
+	}
+	
+	
+	@Test
 	void gameOverTest() {
 		assertFalse(!board.boardIsFull());
 	}
 	
 	@Test
-	void resetTest() throws RinggzException{
-		board.reset();
+	void resetTest() throws RinggzException {
+		Board b = new Board();
 		Ring ring = new Ring();
-		board.setRing(1, ring);
-		board.setRing(25, ring);
-		board.reset();
-		assertEquals(board.getField(1).toString(),"-101-");
-		assertEquals(board.getField(25).toString(),"-125-");
+		ring.setColor(Color.RED);
+		ring.setTier(Tier.BASE);
+		b.setRing(1, ring);
+		b.setRing(25, ring);
+		b.reset();
+		assertEquals(b.getField(1).toString(),"-101-");
+		assertEquals(b.getField(25).toString(),"-125-");
 	}
 	
+	@Test
+	//Fills one field with blue rings and checks who has the majority of won fields
+	void isWinnerTest() throws RinggzException{
+		board.reset();
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring2 = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring3 = new Ring(Color.BLUE, Tier.LARGE);
+		Ring ring4 = new Ring(Color.BLUE, Tier.LARGEST);
+		board.setRing(1, ring1);	
+		board.setRing(1, ring2);
+		board.setRing(1, ring3);
+		board.setRing(1, ring4);
+		System.out.println(board.isWinner());
+		assertTrue(board.isWinner() == Color.BLUE);
+	}
 	
 }
