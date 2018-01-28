@@ -13,11 +13,11 @@ import net.Protocol.Extensions;
 import net.Protocol.Packets;
 import net.ProtocolException;
 
-/*
- * The job of this class is to keep a certain client's connection with the server
- */
+//  The job of this class is to keep a certain client's connection with the server
+
 public class Connection implements Runnable {
 
+	//FIELDS
 	private final BufferedReader in;
 	private final BufferedWriter out;
 	private final Server server;
@@ -25,16 +25,13 @@ public class Connection implements Runnable {
 	private String username;
 	private String[] extensions;
 
-	/**
-	 * Game the client this handler refers to is in.
-	 */
+	//Game the client is in.
 	private Match game;
 
-	/**
-	 * The player type of the client of this handler.
-	 */
+	// The player kind of the client.	
 	private String playerKind;
 
+	// Constructor for the Connection
 	public Connection(Server server, Socket clientSocket) throws IOException {
 		this.server = server;
 		this.socket = clientSocket;
@@ -47,7 +44,7 @@ public class Connection implements Runnable {
 		try {
 			while (true) {
 				String message = this.in.readLine();
-				handleConnect(message.split(Protocol.DELIMITER));
+				getConnect(message.split(Protocol.DELIMITER));
 			}
 		} catch (IOException e) {
 			// This means someone disconnected
@@ -56,32 +53,16 @@ public class Connection implements Runnable {
 		}
 	}
 
-	/**
-	 * This method handles the CONNECT packet.
-	 * 
-	 * @param data
-	 *            an array of all the information blocks.
-	 * @throws ProtocolNotFollowedException
-	 *             is thrown if the protocol is violated in any way.
-	 */
-	private void handleConnect(String[] data) throws ProtocolException {
+	// Handles the CONNECT packet.
+
+	private void getConnect(String[] data) throws ProtocolException {
 		String packetType = data[0];
+		// To make sure this method only gets the CONNECT package
 		if (this.username != null && !packetType.equals(Protocol.Packets.CONNECT)) {
-			handleMessage(data);
-		} else if (username != null) {
-			this.server.print("Client sent another connection packet?");
+			getOther(data);
 		} else {
 			this.username = data[1];
-			int extensionAmount = data.length - 2;
-			this.extensions = new String[extensionAmount];
-			for (int c = 0; c < extensionAmount; c++) {
-				this.extensions[c] = data[c + 2];
-			}
-			// String extensionString = "";
-			// for (int c = 0; c < Server.EXTENSIONS.length; c++) {
-			// extensionString += Protocol.DELIMITER + Server.EXTENSIONS[c];
-			// }
-			sendMessage(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT); // + extensionString
+			sendPrompt(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT); // + extensionString
 			this.server.print("[" + this.username + "] has connected to the server.");
 		}
 	}
@@ -89,15 +70,9 @@ public class Connection implements Runnable {
 	private boolean ready;
 	private boolean responded;
 
-	/**
-	 * Handles every packet except for the CONNECT packet (see method above).
-	 * 
-	 * @param data
-	 *            an array of all the information blocks of the packet.
-	 * @throws ProtocolNotFollowedException
-	 *             is thrown if the protocol is violated in any way.
-	 */
-	private void handleMessage(String[] data) throws ProtocolException {
+	// Handles every packet except for the CONNECT packet (see method above).
+
+	private void getOther(String[] data) throws ProtocolException {
 		String packetType = data[0];
 		switch (packetType) {
 
@@ -108,6 +83,7 @@ public class Connection implements Runnable {
 					if (playerAmount < 2 || playerAmount > 4) {
 						throw new ProtocolException("Data[1] isn't a valid integer.");
 					}
+					//Checks for the kind of player 
 					if (data[2].equals(Protocol.HUMAN_PLAYER) || data[2].equals(Protocol.COMPUTER_PLAYER)) {
 						this.playerKind = data[2];
 						if (data.length == 4) {
@@ -116,20 +92,20 @@ public class Connection implements Runnable {
 							this.game = this.server.getLobby(playerAmount, this.playerKind);
 						}
 						if (this.game.addPlayer(this)) {
-							sendMessage(Protocol.Packets.JOINED_LOBBY);
+							sendPrompt(Protocol.Packets.JOINED_LOBBY);
 						} else {
 							this.game = null;
 						}
 					} else {
-						throw new ProtocolException("Data[2] is not a valid player type");
+						throw new ProtocolException("Not a valid kind of player.");
 					}
-				} catch (NumberFormatException e) {
-					throw new ProtocolException("Data[1] is not an integer");
 				} catch (ArrayIndexOutOfBoundsException e) {
-					throw new ProtocolException("Too few arguments given for GAME_REQUEST from client.");
+					throw new ProtocolException("Not enough arguments");
+				} catch (NumberFormatException e) {
+					throw new ProtocolException("Invalid integer");
 				}
 			} else {
-				throw new ProtocolException("Client requested game while already in a lobby.");
+				throw new ProtocolException("Cannot request a game while already in a lobby.");
 			}
 			break;
 		case Packets.PLAYER_STATUS:
@@ -145,16 +121,15 @@ public class Connection implements Runnable {
 						this.game.notify();
 					}
 				} else {
-					throw new ProtocolException("Too few arguments given for PLAYER_STATUS.");
+					throw new ProtocolException("Not enough arguments");
 				}
 			} else {
-				throw new ProtocolException("Cannot give ready status while you aren't in a lobby.");
+				throw new ProtocolException("You can't give that prompt outside of a lobby");
 			}
 			break;
-			
+
 		case Packets.GAME_STARTED:
-			TUI tui = new TUI();
-			tui.run();
+
 			break;
 
 		case Packets.MOVE:
@@ -162,22 +137,17 @@ public class Connection implements Runnable {
 				this.game.handleMessage(this, data);
 			}
 			break;
-			
+
 		default:
 			break;
-		}			
+		}
 	}
 
-	/**
-	 * Sends a certain message to the client.
-	 * 
-	 * @param message
-	 *            The message that will be sent.
-	 */
-	public void sendMessage(String message) {
+	//Sends a message to a client
+	public void sendPrompt(String prompt) {
 		try {
-			this.out.write(message + "\n");
-			this.out.flush(); //Important
+			this.out.write(prompt + "\n");
+			this.out.flush(); // Important
 		} catch (IOException e) {
 			this.server.print("There was an error writing to client.");
 		}

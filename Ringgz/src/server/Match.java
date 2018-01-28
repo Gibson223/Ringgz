@@ -18,23 +18,24 @@ public class Match implements Runnable {
 	// List of players.
 	private List<Player> players;
 
-	// List of Client Handlers.
-	private final List<Connection> clientHandlers;
+	// List of Client Assistants.
+	private final List<Connection> Assistants;
 
+	// The server the match will be played on.
 	private final Server server;
 
 	// The board the players play in.
 	private Board board;
 
 	// Returns if a lobby is currently in the middle of a game.
-	private boolean ingame;
+	private boolean gameOn;
 
 	// Amount of players that will be allowed in a game (chosen by player).
 	private final int maxPlayers;
 
 	// String that indicates what kind of player a player wants to play against.
 	public String playerPreference;
-	
+
 	// This will be the wait time (in ms) for the confirmation when players join a
 	// server.
 	private static final long STATUS_WAIT = 30000;
@@ -48,8 +49,8 @@ public class Match implements Runnable {
 	public Match(Server server, int maxPlayers) {
 		this.server = server;
 		this.maxPlayers = maxPlayers;
-		this.ingame = false;
-		this.clientHandlers = new ArrayList<>();
+		this.gameOn = false;
+		this.Assistants = new ArrayList<>();
 	}
 
 	// Creates a lobby with a maximum of four players.
@@ -59,22 +60,22 @@ public class Match implements Runnable {
 
 	@Override
 	public void run() {
-		while (!this.ingame) {
+		while (!this.gameOn) {
 			try {
 				waitForPlayers();
-				shufflePlayers();
-				this.ingame = startGame();
+				mixPlayers();
+				this.gameOn = start();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public void handleMessage(Connection handler, String[] data) throws ProtocolException {
-		String packetType = data[0];
+	public void handleMessage(Connection assistant, String[] data) throws ProtocolException {
+		String packetType = data[0]; // First element of the data block represents the packet type
 		switch (packetType) {
 		default:
-			throw new ProtocolException("Unhandled packet in GameManager.java: " + packetType);
+			throw new ProtocolException("There's something wrong with the protocol implementation");
 		}
 	}
 
@@ -85,36 +86,38 @@ public class Match implements Runnable {
 	}
 
 	// Tries to start the game and returns whether it has been possible.
-	private synchronized boolean startGame() throws InterruptedException {
+	// The synchronized block serves the purpose of being able to handle more than
+	// one game in the same server without them interfering with one another
+	private synchronized boolean start() throws InterruptedException {
 		String usernames = "";
-		for (Connection handler : this.clientHandlers) {
-			usernames += Protocol.DELIMITER + handler.getUsername();
+		for (Connection assistant : this.Assistants) {
+			usernames += Protocol.DELIMITER + assistant.getUsername();
 		}
-		for (Connection handler : this.clientHandlers) {
-			handler.sendMessage(Packets.ALL_PLAYERS_CONNECTED + usernames);
+		for (Connection assistant : this.Assistants) {
+			assistant.sendPrompt(Packets.ALL_PLAYERS_CONNECTED + usernames);
 		}
-		long start = System.currentTimeMillis();
+		long startingTime = System.currentTimeMillis();
 		while (!allResponded()) {
-			long current = System.currentTimeMillis();
-			if (current - start < STATUS_WAIT) {
+			long presentTime = System.currentTimeMillis();
+			if ((presentTime - startingTime) < STATUS_WAIT) {
 				wait(STATUS_WAIT);
 			}
 		}
 		if (!allAccepted()) {
-			for (Connection handler : this.clientHandlers) {
-				if (!handler.hasResponded() || !handler.isReady()) {
-					removePlayer(handler);
+			for (Connection assistant : this.Assistants) {
+				if (!assistant.hasResponded() || !assistant.isReady()) {
+					removePlayer(assistant);
 				}
 			}
-			for (Connection handler : this.clientHandlers) {
-				handler.sendMessage(Packets.JOINED_LOBBY);
+			for (Connection assistant : this.Assistants) {
+				assistant.sendPrompt(Packets.JOINED_LOBBY);
 			}
-			this.server.print(
-					"Couldn't start game because " + (maxPlayers() - getCurrentPlayers()) + " players refused.");
+			this.server
+					.print("Couldn't start game because " + (maxPlayers() - getCurrentPlayers()) + " players refused.");
 			return false;
 		} else {
-			for (Connection handler : this.clientHandlers) {
-				handler.sendMessage(Packets.GAME_STARTED);
+			for (Connection assistant : this.Assistants) {
+				assistant.sendPrompt(Packets.GAME_STARTED);
 			}
 			this.server.print(" The game has started with " + getCurrentPlayers() + " players.");
 			return true;
@@ -123,8 +126,8 @@ public class Match implements Runnable {
 
 	// Returns whether all the players have answered a certain prompt.
 	private boolean allResponded() {
-		for (Connection handler : this.clientHandlers) {
-			if (!handler.hasResponded()) {
+		for (Connection assistant : this.Assistants) {
+			if (!assistant.hasResponded()) {
 				return false;
 			}
 		}
@@ -133,8 +136,8 @@ public class Match implements Runnable {
 
 	// Returns whether all the players have accepted to start the game.
 	private boolean allAccepted() {
-		for (Connection handler : this.clientHandlers) {
-			if (!handler.isReady()) {
+		for (Connection assistant : this.Assistants) {
+			if (!assistant.isReady()) {
 				return false;
 			}
 		}
@@ -148,7 +151,7 @@ public class Match implements Runnable {
 
 	// Returns a list with all the players.
 	public List<Connection> getPlayers() {
-		return this.clientHandlers;
+		return this.Assistants;
 	}
 
 	// Returns whether the lobby is full or not.
@@ -157,15 +160,15 @@ public class Match implements Runnable {
 	}
 
 	// Shuffles the order of the players for a random starting order
-	private void shufflePlayers() {
-		Collections.shuffle(this.clientHandlers);
+	private void mixPlayers() {
+		Collections.shuffle(this.Assistants);
 	}
 
 	// Adds a player to this lobby. Returns whether he/she could join.
-	public synchronized boolean addPlayer(Connection handler) {
-		if (!this.ingame && getCurrentPlayers() < this.maxPlayers
-				&& (this.playerPreference == null || this.playerPreference.equals(handler.getPlayerKind()))) {
-			this.clientHandlers.add(handler);
+	public synchronized boolean addPlayer(Connection assistant) {
+		if (!this.gameOn && getCurrentPlayers() < this.maxPlayers
+				&& (this.playerPreference == null || this.playerPreference.equals(assistant.getPlayerKind()))) {
+			this.Assistants.add(assistant);
 			notify();
 			return true;
 		} else {
@@ -174,8 +177,8 @@ public class Match implements Runnable {
 	}
 
 	// Removes a certain player.
-	public void removePlayer(Connection handler) {
-		this.clientHandlers.remove(handler);
+	public void removePlayer(Connection assistant) {
+		this.Assistants.remove(assistant);
 	}
 
 	// Returns the maximum amount of players.
@@ -185,6 +188,6 @@ public class Match implements Runnable {
 
 	// Returns the current amount of players in the lobby.
 	public int getCurrentPlayers() {
-		return this.clientHandlers.size();
+		return this.Assistants.size();
 	}
 }
