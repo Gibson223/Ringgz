@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Observable;
 
 public class Field extends Observable {
-	public final int FieldNumber;
+	public int FieldNumber;
 
 	public void placeBase() {
 		this.fieldState.clear();

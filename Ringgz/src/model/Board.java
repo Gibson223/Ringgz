@@ -36,6 +36,7 @@ public class Board {
 		fields = new Field[DIM * DIM];
 		for (int i = 0; i < 25; i++) {
 			fields[i] = new Field();
+			fields[i].FieldNumber = i +1;
 			firstMove = true;
 		}
 		// for (Field field : fields) {
