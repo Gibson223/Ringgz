@@ -53,14 +53,14 @@ class BoardTest {
 	@Test
 	void isEmptyFieldTest() throws RinggzException{
 		board.reset();
-		assertFalse(board.isEmptyField(1));
-		assertFalse(board.isEmptyField(25));
+		assertTrue(board.isEmptyField(1));
+		assertTrue(board.isEmptyField(25));
 	}
 	
 	
 	@Test
 	void gameOverTest() {
-		assertFalse(!board.boardIsFull());
+		assertTrue(!board.boardIsFull());
 	}
 	
 	@Test
@@ -72,24 +72,41 @@ class BoardTest {
 		b.setRing(1, ring);
 		b.setRing(25, ring);
 		b.reset();
-		assertEquals(b.getField(1).toString(),"-101-");
-		assertEquals(b.getField(25).toString(),"-125-");
+		assertEquals(b.getField(1).toString(),"--1-");
+		assertEquals(b.getField(25).toString(),"-25-");
 	}
 	
 	@Test
-	//Fills one field with blue rings and checks who has the majority of won fields
+	//Fills all fields with blue rings and checks who has the majority of won fields
 	void isWinnerTest() throws RinggzException{
 		board.reset();
 		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
 		Ring ring2 = new Ring(Color.BLUE, Tier.MEDIUM);
 		Ring ring3 = new Ring(Color.BLUE, Tier.LARGE);
 		Ring ring4 = new Ring(Color.BLUE, Tier.LARGEST);
-		board.setRing(1, ring1);	
-		board.setRing(1, ring2);
-		board.setRing(1, ring3);
-		board.setRing(1, ring4);
-		System.out.println(board.isWinner());
+		for (Field field : board.fields) {
+			board.setRing(field.FieldNumber, ring1);	
+			board.setRing(field.FieldNumber, ring2);
+			board.setRing(field.FieldNumber, ring3);
+			board.setRing(field.FieldNumber, ring4);
+		}
 		assertTrue(board.isWinner() == Color.BLUE);
+	}
+	
+	@Test
+	void boardIsFullTest() throws RinggzException {
+		board.reset();
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring2 = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring3 = new Ring(Color.BLUE, Tier.LARGE);
+		Ring ring4 = new Ring(Color.BLUE, Tier.LARGEST);
+		for (Field field : board.fields) {
+			board.setRing(field.FieldNumber, ring1);	
+			board.setRing(field.FieldNumber, ring2);
+			board.setRing(field.FieldNumber, ring3);
+			board.setRing(field.FieldNumber, ring4);
+		}
+		assertTrue(!board.boardIsFull());
 	}
 	
 }
