@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.Observable;
 
 public class Field extends Observable {
-	private static int count = 1;
-	public int FieldNumber;
+	public final int FieldNumber;
 
 	public void placeBase() {
 		this.fieldState.clear();
@@ -21,8 +20,6 @@ public class Field extends Observable {
 	}
 
 	public Field() {
-		FieldNumber = count;
-		count++;
 		this.initfieldState();
 	}
 
@@ -68,11 +65,11 @@ public class Field extends Observable {
 			return true;
 		}
 		for (Ring ring : fieldState) {
-			if (!ring.getTier().occupied()) {
+			if (!ring.getTier().occupied() || ring.getColor() != Color.INIT) {
 				return false;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	public boolean isAllowed(Ring r) {
@@ -169,6 +166,7 @@ public class Field extends Observable {
 	// System.out.println(a.isWinner());
 	// }
 	public void clear() {
+		this.fieldState.clear();
 		this.initfieldState();
 	}
 }

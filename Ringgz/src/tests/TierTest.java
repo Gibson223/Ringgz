@@ -6,14 +6,20 @@ import org.junit.Before;
 import org.junit.Test;
 import model.*;
 public class TierTest {
-	Tier small = Tier.BASE;
-	Tier medium = Tier.MEDIUM;
-	Tier large = Tier.LARGE;
-	Tier largest = Tier.LARGEST;
-	Tier base = Tier.BASE;
-	Tier init = Tier.INIT;
+	private Tier small ;
+	private Tier medium;
+	private Tier large ;
+	private Tier largest ;
+	private Tier base ;
+	private Tier init ;
 	@Before
 	public void setUp() throws Exception {
+		small = Tier.SMALL;
+		medium = Tier.MEDIUM;
+		large = Tier.LARGE;
+		largest = Tier.LARGEST;
+		base = Tier.BASE;
+		init = Tier.INIT;
 	}
 	@Test
 	public void testToChar() {
@@ -23,6 +29,11 @@ public class TierTest {
 		assertTrue(Tier.toTier(4) == Tier.LARGEST);
 		assertTrue(Tier.toTier(5) == Tier.BASE);
 		assertTrue(Tier.toTier(10) == null);
+		assertFalse(Tier.toTier(1) == Tier.INIT);
+		assertFalse(Tier.toTier(2) == Tier.INIT);
+		assertFalse(Tier.toTier(3) == Tier.INIT);
+		assertFalse(Tier.toTier(4) == Tier.INIT);
+		assertFalse(Tier.toTier(5) == Tier.INIT);
 	}
 	@Test
 	public void testOccupied() {
