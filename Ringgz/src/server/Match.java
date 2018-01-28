@@ -8,22 +8,18 @@ import controller.Player;
 import model.Board;
 import net.Protocol;
 import net.Protocol.Packets;
-import net.ProtocolViolatedException;
+import net.ProtocolException;
 
 /**
  * The purpose of this class is to manage a certain game.
  */
-public class GameManager implements Runnable {
-
-	// This will be the wait time (in ms) for the confirmation when players join a
-	// server.
-	private static final long STATUS_WAIT = 30000;
+public class Match implements Runnable {
 
 	// List of players.
 	private List<Player> players;
 
 	// List of Client Handlers.
-	private final List<ClientHandler> clientHandlers;
+	private final List<Connection> clientHandlers;
 
 	private final Server server;
 
@@ -38,6 +34,10 @@ public class GameManager implements Runnable {
 
 	// String that indicates what kind of player a player wants to play against.
 	public String playerPreference;
+	
+	// This will be the wait time (in ms) for the confirmation when players join a
+	// server.
+	private static final long STATUS_WAIT = 30000;
 
 	/**
 	 * Creates a lobby with a max amount of players.
@@ -45,7 +45,7 @@ public class GameManager implements Runnable {
 	 * @param maxPlayers
 	 *            maximum amount of players.
 	 */
-	public GameManager(Server server, int maxPlayers) {
+	public Match(Server server, int maxPlayers) {
 		this.server = server;
 		this.maxPlayers = maxPlayers;
 		this.ingame = false;
@@ -53,7 +53,7 @@ public class GameManager implements Runnable {
 	}
 
 	// Creates a lobby with a maximum of four players.
-	public GameManager(Server server) {
+	public Match(Server server) {
 		this(server, 4);
 	}
 
@@ -70,16 +70,16 @@ public class GameManager implements Runnable {
 		}
 	}
 
-	public void handleMessage(ClientHandler handler, String[] data) throws ProtocolViolatedException {
+	public void handleMessage(Connection handler, String[] data) throws ProtocolException {
 		String packetType = data[0];
 		switch (packetType) {
 		default:
-			throw new ProtocolViolatedException("Unhandled packet in GameManager.java: " + packetType);
+			throw new ProtocolException("Unhandled packet in GameManager.java: " + packetType);
 		}
 	}
 
 	private synchronized void waitForPlayers() throws InterruptedException {
-		while (getCurrentPlayers() < getMaxPlayers()) {
+		while (getCurrentPlayers() < maxPlayers()) {
 			wait();
 		}
 	}
@@ -87,10 +87,10 @@ public class GameManager implements Runnable {
 	// Tries to start the game and returns whether it has been possible.
 	private synchronized boolean startGame() throws InterruptedException {
 		String usernames = "";
-		for (ClientHandler handler : this.clientHandlers) {
-			usernames += Protocol.DELIMITER + handler.getClientUsername();
+		for (Connection handler : this.clientHandlers) {
+			usernames += Protocol.DELIMITER + handler.getUsername();
 		}
-		for (ClientHandler handler : this.clientHandlers) {
+		for (Connection handler : this.clientHandlers) {
 			handler.sendMessage(Packets.ALL_PLAYERS_CONNECTED + usernames);
 		}
 		long start = System.currentTimeMillis();
@@ -101,19 +101,19 @@ public class GameManager implements Runnable {
 			}
 		}
 		if (!allAccepted()) {
-			for (ClientHandler handler : this.clientHandlers) {
+			for (Connection handler : this.clientHandlers) {
 				if (!handler.hasResponded() || !handler.isReady()) {
 					removePlayer(handler);
 				}
 			}
-			for (ClientHandler handler : this.clientHandlers) {
+			for (Connection handler : this.clientHandlers) {
 				handler.sendMessage(Packets.JOINED_LOBBY);
 			}
 			this.server.print(
-					"Couldn't start game because " + (getMaxPlayers() - getCurrentPlayers()) + " players refused.");
+					"Couldn't start game because " + (maxPlayers() - getCurrentPlayers()) + " players refused.");
 			return false;
 		} else {
-			for (ClientHandler handler : this.clientHandlers) {
+			for (Connection handler : this.clientHandlers) {
 				handler.sendMessage(Packets.GAME_STARTED);
 			}
 			this.server.print(" The game has started with " + getCurrentPlayers() + " players.");
@@ -123,7 +123,7 @@ public class GameManager implements Runnable {
 
 	// Returns whether all the players have answered a certain prompt.
 	private boolean allResponded() {
-		for (ClientHandler handler : this.clientHandlers) {
+		for (Connection handler : this.clientHandlers) {
 			if (!handler.hasResponded()) {
 				return false;
 			}
@@ -133,7 +133,7 @@ public class GameManager implements Runnable {
 
 	// Returns whether all the players have accepted to start the game.
 	private boolean allAccepted() {
-		for (ClientHandler handler : this.clientHandlers) {
+		for (Connection handler : this.clientHandlers) {
 			if (!handler.isReady()) {
 				return false;
 			}
@@ -147,7 +147,7 @@ public class GameManager implements Runnable {
 	}
 
 	// Returns a list with all the players.
-	public List<ClientHandler> getPlayers() {
+	public List<Connection> getPlayers() {
 		return this.clientHandlers;
 	}
 
@@ -162,9 +162,9 @@ public class GameManager implements Runnable {
 	}
 
 	// Adds a player to this lobby. Returns whether he/she could join.
-	public synchronized boolean addPlayer(ClientHandler handler) {
+	public synchronized boolean addPlayer(Connection handler) {
 		if (!this.ingame && getCurrentPlayers() < this.maxPlayers
-				&& (this.playerPreference == null || this.playerPreference.equals(handler.getPlayerType()))) {
+				&& (this.playerPreference == null || this.playerPreference.equals(handler.getPlayerKind()))) {
 			this.clientHandlers.add(handler);
 			notify();
 			return true;
@@ -174,12 +174,12 @@ public class GameManager implements Runnable {
 	}
 
 	// Removes a certain player.
-	public void removePlayer(ClientHandler handler) {
+	public void removePlayer(Connection handler) {
 		this.clientHandlers.remove(handler);
 	}
 
 	// Returns the maximum amount of players.
-	public int getMaxPlayers() {
+	public int maxPlayers() {
 		return this.maxPlayers;
 	}
 
