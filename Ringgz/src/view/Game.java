@@ -11,7 +11,7 @@ import java.net.Socket;
 import net.Protocol;
 import net.Protocol.Extensions;
 import net.Protocol.Packets;
-import net.ProtocolViolatedException;
+import net.ProtocolException;
 
 /**
  * The <code>Game</code> class, which is responsible for making the game
@@ -41,17 +41,17 @@ public class Game implements Runnable {
 		try {
 			while (true) {
 				String msg = in.readLine();
-				handleMessage(msg.split(Protocol.DELIMITER));
+				processPacket(msg.split(Protocol.DELIMITER));
 			}
 		} catch (IOException e) {
 			shutdown();
-		} catch (ProtocolViolatedException e) {
+		} catch (ProtocolException e) {
 			view.Error(e.getMessage());
 			shutdown();
 		}
 	}
 
-	private void handleMessage(String[] data) throws ProtocolViolatedException {
+	private void processPacket(String[] data) throws ProtocolException {
 		String packetType = data[0];
 		switch (packetType) {
 
@@ -60,9 +60,7 @@ public class Game implements Runnable {
 				if (data[1].equals(Protocol.ACCEPT)) {
 					view.onConnectionAccepted();
 					Object[] args = view.getGameRequest();
-					// TODO: parse server extensions.
 					if (args.length == 1) {
-						// TODO: parse whether user is human or AI.
 						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER
 								+ Protocol.HUMAN_PLAYER);
 					} else {
@@ -74,14 +72,10 @@ public class Game implements Runnable {
 					shutdown();
 				}
 			} else {
-				throw new ProtocolViolatedException("Server CONNECT response did not contain enough data.");
+				throw new ProtocolException("Cannot connect.");
 			}
 			break;
-
-		case Packets.JOINED_LOBBY:
-			view.waitingInLobby();
-			break;
-
+			
 		case Packets.ALL_PLAYERS_CONNECTED:
 			view.allPlayersConnected();
 			String input = TUI.readString("");
@@ -90,6 +84,11 @@ public class Game implements Runnable {
 			} else {
 				sendMessage(Packets.PLAYER_STATUS + Protocol.DELIMITER + Protocol.DECLINE);
 			}
+			break;
+
+
+		case Packets.JOINED_LOBBY:
+			view.waitingInLobby();
 			break;
 
 		case Packets.GAME_STARTED:

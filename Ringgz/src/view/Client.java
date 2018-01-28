@@ -9,28 +9,27 @@ import server.Server;
 //Creates a client
 public class Client {
 
-	/** Starts the client. */
+	// Creates a client for the game
 	public static void main(String[] args) {
-		View view = new TUI();
-		new Thread(view).start();
-		Game client = null;
-
-		Object[] arguments = view.getArguments();
-		view.setViewState(ViewState.CONNECTING);
-		InetAddress ipAddress = (InetAddress) arguments[0];
+		View TUI = new TUI();
+		new Thread(TUI).start();
+		Game newClient = null;
+		Object[] arguments = TUI.getArguments();
+		TUI.setViewState(ViewState.CONNECTING);
+		InetAddress IP = (InetAddress) arguments[0];
 		String username = (String) arguments[1];
 		int port = Server.PORT;
 
-		boolean connecting = true;
-		while (connecting) {
+		boolean success = false;
+		while (!success) {
 			try {
-				connecting = false;
-				client = new Game(view, username, ipAddress, port);
-				new Thread(client).start();
+				success = true;
+				newClient = new Game(TUI, username, IP, port);
+				new Thread(newClient).start();
 			} catch (IOException e) {
-				connecting = true;
+				success = false;
 			}
 		}
-		client.sendMessage(username);
+		newClient.sendMessage(username);
 	}
 }

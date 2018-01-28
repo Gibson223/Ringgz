@@ -39,7 +39,8 @@ public class TUI implements View {
 	public void ConnectedState() {
 		print("You are connected.");
 		print("To request a game: <player amount> <opponent preference>");
-		print("The player amount can be either 2, 3 or 4 and the opponent preference is either /human/ or /computer/");
+		print("Player amount options: 2, 3 or 4");
+		print("Opponent preference options: /human/ or /computer/");
 	}
 
 	@Override
@@ -91,11 +92,6 @@ public class TUI implements View {
 				continue;
 			}
 			username = args[0];
-			if (username.contains(";")) {
-				valid = false;
-				print("A username cannot contain a semicollon. Please try again.");
-				continue;
-			}
 			try {
 				ipAddress = InetAddress.getByName(args[1]);
 			} catch (UnknownHostException e) {
