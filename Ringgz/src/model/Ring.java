@@ -30,8 +30,7 @@ public class Ring {
 		this.color = color;
 	}
 
-	// CHECKS IF THE CHOSEN RING IS A VALID CHOICE IN THE ENUM ABOVE
-	// @ensures //TODO
+	// CHECKS IF THE CHOSEN RING IS A VALID CHOICE
 	public static boolean isRing(Tier choice) {
 		for (Tier aType : Tier.values()) {
 			if (aType == choice) {
@@ -51,7 +50,7 @@ public class Ring {
 
 	}
 
-	// returns the color of the ring
+	// returns the color of the ring in a String
 	@Override
 	public String toString() {
 		return this.getColor().toString();
