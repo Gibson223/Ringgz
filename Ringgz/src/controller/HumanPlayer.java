@@ -54,7 +54,7 @@ public class HumanPlayer extends Player {
 			int choiceField = Integer.parseInt(INPUT.nextLine());
 			if (board.firstMove) {
 				if (board.middle9.stream().anyMatch(a -> a == choiceField)) {
-					board.specialbase(choiceField);
+					board.specialBase(choiceField);
 					board.firstMove = false;
 					System.out.println("the first move has been placed");
 					// ask how to show the view only once in the field if it is a firstmove

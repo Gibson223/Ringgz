@@ -80,6 +80,7 @@ class BoardTest {
 		board.reset();
 		assertTrue(board.isEmptyField(1));
 		assertTrue(board.isEmptyField(25));
+		assertTrue(board.isEmptyField(1,1,Tier.LARGE));
 	}
 	
 	@Test
@@ -93,6 +94,14 @@ class BoardTest {
 		b.reset();
 		assertEquals(b.getField(1).toString(),"--1-");
 		assertEquals(b.getField(25).toString(),"-25-");
+	}
+	
+	@Test
+	void specialBaseTest() throws RinggzException {
+		Board board = new Board();
+		board.specialBase(1);
+		System.out.println(board.getField(1).toString());
+		assertEquals(board.getField(1).toString(), "bgry");
 	}
 	
 	@Test
@@ -142,6 +151,15 @@ class BoardTest {
 			board.setRing(field.FieldNumber, ring4);
 		}
 		assertTrue(board.gameOver());
+	}
+	
+	@Test
+	void deepCopyTest() throws RinggzException {
+		Board board = new Board();
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		board.setRing(1, ring1);
+		Board clone = board.deepCopy();
+		assertEquals(clone.fields, board.fields);
 	}
 	
 	@Test

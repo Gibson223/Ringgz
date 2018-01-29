@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import controller.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -129,7 +130,7 @@ public class Connection implements Runnable {
 			break;
 
 		case Packets.GAME_STARTED:
-
+			GameController gc = new GameController(p0,p1,p2,p3);
 			break;
 
 		case Packets.MOVE:

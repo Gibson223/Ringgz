@@ -32,12 +32,12 @@ public class GameController implements Runnable {
 		board = new Board();
 		ringlist = new RingList();
 		tui = new TUI();
-		for (Field field : board.fields) {
-			field.addObserver(tui);
-		}
+//		for (Field field : board.fields) {
+//			field.addObserver(tui);
+//		}
 		this.playerSetter();
 		this.ringdivider();
-		tui.start();
+		//tui.start();
 		this.play();
 
 	}
