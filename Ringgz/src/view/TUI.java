@@ -18,25 +18,25 @@ public class TUI implements View {
 
 	public static final String EXIT = "exit";
 
-	private ViewState viewState;
+	private ViewType type;
 
 	// Creates a TUI with the given Game
 	public TUI() {
-		setViewState(ViewState.STARTUP);
+		setViewType(ViewType.STARTUP);
 	}
 
 	@Override
-	public void StartupState() {
+	public void Initial() {
 		print("Insert username and IP separated by a space");
 	}
 
 	@Override
-	public void ConnectingState() {
+	public void Connecting() {
 		print("Connecting...");
 	}
 
 	@Override
-	public void ConnectedState() {
+	public void Connected() {
 		print("You are connected.");
 		print("To request a game: <player amount> <opponent preference>");
 		print("Player amount options: 2, 3 or 4");
@@ -44,7 +44,7 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void PostGameState() {
+	public void GameOver() {
 		print("Game over");
 	}
 
@@ -54,27 +54,27 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void setViewState(ViewState viewState) {
-		this.viewState = viewState;
-		switch (this.viewState) {
+	public void setViewType(ViewType type) {
+		this.type = type;
+		switch (this.type) {
 		case STARTUP:
-			StartupState();
+			Initial();
 			break;
 		case CONNECTING:
-			ConnectingState();
+			Connecting();
 			break;
 		case CONNECTED:
-			ConnectedState();
+			Connected();
 			break;
 		case POST_GAME:
-			PostGameState();
+			GameOver();
 			break;
 		}
 	}
 
 	@Override
-	public ViewState getViewState() {
-		return this.viewState;
+	public ViewType getViewType() {
+		return this.type;
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class TUI implements View {
 
 	@Override
 	public void onConnectionAccepted() {
-		setViewState(ViewState.CONNECTED);
+		setViewType(ViewType.CONNECTED);
 	}
 
 	@Override
@@ -153,12 +153,12 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void waitingInLobby() {
+	public void inLobby() {
 		print("Joined a lobby!");
 	}
 
 	@Override
-	public boolean allPlayersConnected() {
+	public boolean allConnected() {
 		print("All players connected, are you ready? (y/n)");
 		return false;
 	}
@@ -175,7 +175,7 @@ public class TUI implements View {
 
 	@Override
 	public void gameFinished() {
-		setViewState(ViewState.POST_GAME);
+		setViewType(ViewType.POST_GAME);
 	}
 
 	public static String readString(String text) {

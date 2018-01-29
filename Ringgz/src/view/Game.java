@@ -77,7 +77,7 @@ public class Game implements Runnable {
 			break;
 			
 		case Packets.ALL_PLAYERS_CONNECTED:
-			view.allPlayersConnected();
+			view.allConnected();
 			String input = TUI.readString("");
 			if (input.equals("y")) {
 				sendMessage(Packets.PLAYER_STATUS + Protocol.DELIMITER + Protocol.ACCEPT);
@@ -88,7 +88,7 @@ public class Game implements Runnable {
 
 
 		case Packets.JOINED_LOBBY:
-			view.waitingInLobby();
+			view.inLobby();
 			break;
 
 		case Packets.GAME_STARTED:
