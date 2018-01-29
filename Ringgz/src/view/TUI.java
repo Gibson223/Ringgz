@@ -193,33 +193,33 @@ public class TUI implements View {
 		System.out.println(message);
 	}
 
-	public void view() {
-		for (Field field : board.fields) {
-			if (((field.FieldNumber - 1) % 5) == 0) {
-				System.out.print("\n\n" + "|");
-			}
-			System.out.print(field.toString() + "|");
-		}
-	}
-
+//	public void view() {
+//		for (Field field : board.fields) {
+//			if (((field.FieldNumber - 1) % 5) == 0) {
+//				System.out.print("\n\n" + "|");
+//			}
+//			System.out.print(field.toString() + "|");
+//		}
+//	}
+//
 	public void run() {
-		Board b = new Board();
-		Ring ring = new Ring(Color.BLUE, Tier.BASE);
-		Ring ring1 = new Ring(Color.GREEN, Tier.BASE);
-		Ring ring2 = new Ring(Color.BLUE, Tier.BASE);
-		Ring ring3 = new Ring(Color.BLUE, Tier.BASE);
-		try {
-			b.setRing(2, ring);
-			b.setRing(4, ring1);
-			b.setRing(6, ring2);
-			b.setRing(8, ring3);
-		} catch (RinggzException e) {
-		}
-		this.start();
-
+//		Board b = new Board();
+//		Ring ring = new Ring(Color.BLUE, Tier.BASE);
+//		Ring ring1 = new Ring(Color.GREEN, Tier.BASE);
+//		Ring ring2 = new Ring(Color.BLUE, Tier.BASE);
+//		Ring ring3 = new Ring(Color.BLUE, Tier.BASE);
+//		try {
+//			b.setRing(2, ring);
+//			b.setRing(4, ring1);
+//			b.setRing(6, ring2);
+//			b.setRing(8, ring3);
+//		} catch (RinggzException e) {
+//		}
+//		this.start();
+//
 	}
-
-	public void start() {
-		this.view();
-	}
+//
+//	public void start() {
+//		this.view();
+//	}
 }
