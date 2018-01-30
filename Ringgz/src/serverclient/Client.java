@@ -20,42 +20,37 @@ public class Client implements Runnable{
 	private BufferedReader dis;
     private PrintWriter dos;
     boolean none = true;
+    private String username;
     public static void main(String[] args) throws IOException {
-		Client client = new Client();
+		Client client = new Client("51IG");
 		Thread c = new Thread(client);
 		c.start();
 	}
+    public String INITmessage = "" + this.username ;
+    
 	public void run() {
-		try {
-			this.sendmessage();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		dos.write(INITmessage);
 		while (true) {
 			//waiting
 		}
 	}
-	public Client() throws IOException {
+	public Client(String username) throws IOException {
+		this.username = username;
 		ip = InetAddress.getLocalHost();
-//		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		socket = new Socket(ip, PORT);
 		this.dis = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		this.dos = new PrintWriter(socket.getOutputStream(), true);
-		String s = "you are connected to a clienthandler";
-		dos.println(s);
 	}
 	public synchronized void readmessage() throws IOException {
 		System.out.println(dis.readLine());
 		System.out.println(dis.readLine());
 		System.out.println("message read...");
-		none = false;
 	}
-	public synchronized void sendmessage() throws IOException {
-		dos.write("I hope it works");
+	public synchronized void sendmessage(String message) throws IOException {
+		dos.write(message);
 	}
 	public void stop() throws IOException {
-		System.out.println("input received...\nShutting down...");
+		System.out.println("Shutting down...");
 		dis.close();
 		dos.close();
 	}

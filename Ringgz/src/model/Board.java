@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import controller.RinggzException;
+import view.TUI;
 
 public class Board {
 	public static final int DIM = 5;
@@ -24,6 +25,7 @@ public class Board {
 	// @ private invariant fields.length == DIM*DIM;
 	public Field[] fields;
 	// Map<Field, List<Ring>> allFields = new HashMap<Field, List<Ring>>();
+	public final TUI tui;
 
 	// -- Constructors -----------------------------------------------
 
@@ -32,7 +34,8 @@ public class Board {
 	 */
 	// @ ensures TODO;
 	// fields are being created according to debug
-	public Board() {
+	public Board(TUI tui) {
+		this.tui = tui;
 		fields = new Field[DIM * DIM];
 		for (int i = 0; i < 25; i++) {
 			fields[i] = new Field();

@@ -1,7 +1,8 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Collections;
 import java.util.List;
 
 import model.Board;
@@ -9,6 +10,11 @@ import model.Color;
 import model.Field;
 import model.Ring;
 import model.RingList;
+import model.Tier;
+import net.Protocol;
+import net.Protocol.Packets;
+import serverclient.ClientHandler;
+import serverclient.Server;
 import view.TUI;
 
 public class GameController implements Runnable {
@@ -16,9 +22,26 @@ public class GameController implements Runnable {
 	public Board board;
 	public TUI tui;
 	public RingList ringlist;
-
+	public int maxplayers;
+	public List<ClientHandler> clients;
+	private Server server;
+	public boolean started;
+	public final int alloweddelay = 20000;
+	
+	public GameController(Server server,int maxplayers) {
+		this.server = server;
+		this.maxplayers = maxplayers;
+		
+	}
+	public void run() {
+		while(!this.started) { // TODO: clean way to stop this loop when server shuts down.
+			this.startgame();
+		}
+	}
+	
 	public GameController(Player s0, Player s1, Player s2, Player s3) {
 		List<Object> playerlist = new ArrayList<>();
+		List<ClientHandler> clients = new ArrayList<>();
 		playerlist.add(s0);
 		playerlist.add(s1);
 		playerlist.add(s2);
@@ -26,18 +49,66 @@ public class GameController implements Runnable {
 		playerlist.stream().filter(a -> a != null).forEach(a -> players.add((Player) a));
 		this.run();
 	}
-
-	@Override
-	public void run() {
-		board = new Board();
+	private synchronized boolean startGame() throws InterruptedException {
+		Collections.shuffle(clients);
+//		for(ClientHandler client : this.clients) {
+//			usernames = usernames + Protocol.DELIMITER + handler.getClientUsername();
+//		}
+//		for(ClientHandler client : this.clients) {
+//			handler.sendMessage(Packets.ALL_PLAYERS_CONNECTED + usernames);
+//		}
+//		long start = System.currentTimeMillis();
+//		while(!allresponded()) {
+//			long current = System.currentTimeMillis();
+//			if(current - start < STATUS_WAIT) {
+//				wait(STATUS_WAIT);
+//			}
+//		}
+//	}
+		if(!allready()) {
+			for(ClientHandler client : this.clients) {
+				if(!client.getResponded() || !client.getReady()) {
+					removeClient(client);
+				}
+			}
+			for(ClientHandler client : this.clients) {
+				client.sendmessage(Packets.JOINED_LOBBY);
+			}
+			return false;
+		} else {
+			for(ClientHandler client : this.clients) {
+				client.sendmessage((Packets.GAME_STARTED));
+			}
+			return true;
+		}
+	}
+	private boolean allready() {
+		for(ClientHandler handler : this.clients) {
+			if(!handler.getResponded() || !handler.getReady()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	public synchronized boolean addPlayer(ClientHandler handler) {
+		if(!this.started && this.clients.size() < this.maxplayers) {
+			this.clients.add(handler);
+			notify();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public void startgame() {
+		board = new Board(tui);
 		ringlist = new RingList();
 		tui = new TUI();
-//		for (Field field : board.fields) {
-//			field.addObserver(tui);
-//		}
+		for (Field field : board.fields) {
+			field.addObserver(tui);
+		}
 		this.playerSetter();
 		this.ringdivider();
-		//tui.start();
+		tui.view();
 		this.play();
 
 	}
@@ -97,10 +168,49 @@ public class GameController implements Runnable {
 	}
 
 	public int currentplayer = 0;
+	public boolean checkMove(Object[] move) {
+		if (board.firstMove) {
+			if (board.middle9.stream().anyMatch(a -> a == choiceField)) {
+				board.specialBase(choiceField);
+				board.firstMove = false;
+				System.out.println("the first move has been placed");
+				// ask how to show the view only once in the field if it is a firstmove
+				return;
+			} else {
+				System.out.println("this is the first move and the criteria for this are not met....");
+				this.makeMove(board);
+				return;
+			}
+		}
+		System.out.println(promptRing);
+		int choiceRing = Integer.parseInt(INPUT.nextLine());
+		System.out.println(promptColor);
+		Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
+		Ring selectedRing = new Ring(choiceColor, Tier.toTier(choiceRing));
 
+		if ((board.isAllowed(choiceField, selectedRing) && (board.proximityCheck(choiceField, getPrimaryColor()))
+				&& (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null)
+				&& this.ringList.availableRings.contains(selectedRing))) {
+			board.setRing(choiceField, selectedRing);
+			this.ringList.availableRings.remove(selectedRing);
+			System.out.println("\nthe ring has been added to the field....");
+		} else {
+			System.out.println("Invalid move, try another one.");
+			this.makeMove(board);
+		}
+	} catch (RinggzException e) {
+		this.makeMove(board);
+	} catch (NullPointerException e) {
+		System.out.println("invalid color, input your move again:\n");
+		this.makeMove(board);
+	} catch (NumberFormatException e) {
+		System.out.println("invalid input, try again:\n");
+		this.makeMove(board);
+	}
+	}
 	public void play() {
 		boolean succes = false;
-		while (!board.boardIsFull()) {
+		while (!board.boardIsFull())  
 			while (!succes) {
 				try {
 					players.get(currentplayer).makeMove(board);
@@ -112,5 +222,16 @@ public class GameController implements Runnable {
 			currentplayer %= this.players.size();
 			succes = false;
 		}
+	public synchronized boolean addClient(ClientHandler ch) {
+		if (this.players.size() < this.maxplayers && this.started == false) {
+			this.clients.add(ch);
+			ch.linkedgame = this;
+			return true;
+		}
+		else {return false;}
+	}
+	public synchronized void removeClient(ClientHandler ch) {
+		ch.linkedgame = null;
+		this.clients.remove(ch);
 	}
 }

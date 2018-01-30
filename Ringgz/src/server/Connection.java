@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import view.*;
@@ -19,12 +20,12 @@ import net.ProtocolException;
 public class Connection implements Runnable {
 
 	//FIELDS
-	private final BufferedReader in;
-	private final BufferedWriter out;
+	private final BufferedReader dis;
+	private final PrintWriter dos;
 	private final Server server;
-	private final Socket socket;
+	private final Socket clientSocket;
 	private String username;
-	private String[] extensions;
+	private String chatExtension;
 
 	//Game the client is in.
 	private Match game;
@@ -35,16 +36,16 @@ public class Connection implements Runnable {
 	// Constructor for the Connection
 	public Connection(Server server, Socket clientSocket) throws IOException {
 		this.server = server;
-		this.socket = clientSocket;
-		this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), "UTF-8"));
-		this.out = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), "UTF-8"));
+		this.clientSocket = clientSocket;
+		this.dis = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream(), "UTF-8"));
+		this.dos = new PrintWriter(this.clientSocket.getOutputStream(), true);
 	}
 
 	@Override
 	public void run() {
 		try {
 			while (true) {
-				String message = this.in.readLine();
+				String message = this.dis.readLine();
 				getConnect(message.split(Protocol.DELIMITER));
 			}
 		} catch (IOException e) {
@@ -63,7 +64,7 @@ public class Connection implements Runnable {
 			getOther(data);
 		} else {
 			this.username = data[1];
-			sendPrompt(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT); // + extensionString
+			sendPrompt(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT + Protocol.DELIMITER); // + extensionString
 			this.server.print("[" + this.username + "] has connected to the server.");
 		}
 	}
@@ -78,7 +79,7 @@ public class Connection implements Runnable {
 		switch (packetType) {
 
 		case Packets.GAME_REQUEST:
-			if (game == null) {
+			if (game == null) { 
 				try {
 					int playerAmount = Integer.parseInt(data[1]);
 					if (playerAmount < 2 || playerAmount > 4) {
@@ -130,7 +131,7 @@ public class Connection implements Runnable {
 			break;
 
 		case Packets.GAME_STARTED:
-			GameController gc = new GameController(p0,p1,p2,p3);
+			GameController gc = new GameController(p0,p1,p2,p3);//needs edits
 			break;
 
 		case Packets.MOVE:
@@ -146,22 +147,14 @@ public class Connection implements Runnable {
 
 	//Sends a message to a client
 	public void sendPrompt(String prompt) {
-		try {
-			this.out.write(prompt + "\n");
-			this.out.flush(); // Important
-		} catch (IOException e) {
-			this.server.print("There was an error writing to client.");
-		}
+		this.out.write(prompt + "\n");
+		this.out.flush(); 
 	}
-
-	public boolean clientHasExtensions(String extension) {
-		if (this.extensions != null) {
-			for (int c = 0; c < this.extensions.length; c++) {
-				if (this.extensions[c].equals(extension)) {
-					return true;
-				}
+	//adjusted
+	public boolean extensionHandler(String extension) {
+		if (this.chatExtension.equals(extension)) {
+			return true;
 			}
-		}
 		return false;
 	}
 
