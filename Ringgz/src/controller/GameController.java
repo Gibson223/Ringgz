@@ -26,7 +26,7 @@ public class GameController implements Runnable {
 	public List<ClientHandler> clients;
 	private Server server;
 	public boolean started;
-	public final int alloweddelay = 20000;
+	public final int ALLOWEDDELAY = 20000;
 	
 	public GameController(Server server,int maxplayers) {
 		this.server = server;
@@ -51,20 +51,20 @@ public class GameController implements Runnable {
 	}
 	private synchronized boolean startGame() throws InterruptedException {
 		Collections.shuffle(clients);
+		String usernames = "";
 		for(ClientHandler client : this.clients) {
-			usernames = usernames + Protocol.DELIMITER + handler.getClientUsername();
+			usernames = usernames + Protocol.DELIMITER + client.username;
 		}
 		for(ClientHandler client : this.clients) {
-			handler.sendMessage(Packets.ALL_PLAYERS_CONNECTED + usernames);
+			client.sendmessage(Packets.ALL_PLAYERS_CONNECTED + usernames);
 		}
 		long start = System.currentTimeMillis();
-		while(!allresponded()) {
+		while(!this.clients.stream().allMatch(a -> a.getResponded() == true)) {
 			long current = System.currentTimeMillis();
-			if(current - start < STATUS_WAIT) {
-				wait(STATUS_WAIT);
+			if(current - start < ALLOWEDDELAY) {
+				wait();
 			}
 		}
-	}
 		if(!allready()) {
 			for(ClientHandler client : this.clients) {
 				if(!client.getResponded() || !client.getReady()) {
@@ -169,6 +169,8 @@ public class GameController implements Runnable {
 
 	public int currentplayer = 0;
 	public boolean checkMove(Object[] move) {
+		int choiceField = board.index( (Integer) move[0] + 1, (Integer)move[1] + 1);
+		Tier choiceRing = Tier.toTier( (Integer) move[2]);
 		if (board.firstMove) {
 			if (board.middle9.stream().anyMatch(a -> a == choiceField)) {
 				board.specialBase(choiceField);
@@ -190,16 +192,16 @@ public class GameController implements Runnable {
 
 		if ((board.isAllowed(choiceField, selectedRing) && (board.proximityCheck(choiceField, getPrimaryColor()))
 				&& (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null)
-				&& this.ringList.availableRings.contains(selectedRing))) {
+				&& this.players.get(currentplayer).ringList.availableRings.contains(selectedRing))) {
 			board.setRing(choiceField, selectedRing);
-			this.ringList.availableRings.remove(selectedRing);
+			this.players.get(currentplayer).ringList.availableRings.remove(selectedRing);
 			System.out.println("\nthe ring has been added to the field....");
 		} else {
 			System.out.println("Invalid move, try another one.");
 			this.makeMove(board);
 		}
 	} catch (RinggzException e) {
-		this.makeMove(board);
+		this.MakeMove(board);
 	} catch (NullPointerException e) {
 		System.out.println("invalid color, input your move again:\n");
 		this.makeMove(board);
