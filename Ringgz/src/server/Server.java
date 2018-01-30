@@ -1,16 +1,18 @@
 package server;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import net.Protocol;
 
 public class Server implements Runnable {
 
-	public static final int PORT = 20000;
+	public static int PORT = 23197;
 	private List<Match> games;
 	private List<Connection> Assistants;
 	private ServerSocket socket;
@@ -117,10 +119,13 @@ public class Server implements Runnable {
 	// Starts the Server
 	public static void main(String[] args) {
 		try {
+			if (args.length > 0) {
+				PORT = Integer.parseInt(args[0]);
+			}
 			new Thread(new Server()).start();
 			System.out.println("The server has been started.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-}
+}}

@@ -35,7 +35,7 @@ public class Server implements Runnable {
 		online = true;
 	}
 
-	// Starts the Server
+	// Starts the Server 
 	public static void main(String[] args) {
 		try {
 			if (args.length > 0) {
