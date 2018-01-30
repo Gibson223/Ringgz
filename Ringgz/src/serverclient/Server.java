@@ -15,10 +15,11 @@ import java.util.List;
 import controller.GameController;
 import model.*;
 import net.Protocol;
+import server.Server;
 import view.*;
 
 public class Server implements Runnable {
-	public static final int PORT = 23197;
+	public static int PORT = 23197;
 	private ServerSocket server;
 	private List<GameController> games;
 	private List<ClientHandler> clients;
@@ -34,11 +35,17 @@ public class Server implements Runnable {
 		online = true;
 	}
 
-	public static void main(String[] args) throws IOException {
-		System.out.println("starting server");
-		Server server = new Server();
-		Thread s = new Thread(server);
-		s.start();
+	// Starts the Server
+	public static void main(String[] args) {
+		try {
+			if (args.length > 0) {
+				PORT = Integer.parseInt(args[0]);
+			}
+			new Thread(new Server()).start();
+			System.out.println("The server has been started.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -56,7 +63,7 @@ public class Server implements Runnable {
 		while (online) {
 			try {
 				Socket clientSocket = server.accept();
-				ClientHandler clienthandler = new ClientHandler(this,clientSocket);
+				ClientHandler clienthandler = new ClientHandler(this, clientSocket);
 				new Thread(clienthandler).start();
 				this.addHandler(clienthandler);
 				System.out.println("Assigned new thread for client" + clientSocket);
@@ -64,8 +71,9 @@ public class Server implements Runnable {
 			}
 		}
 	}
+
 	public GameController getGame(ClientHandler ch, int preferredplayers) {
-		for (GameController gc: this.games) {
+		for (GameController gc : this.games) {
 			if (gc.players.size() < gc.maxplayers && gc.addClient(ch)) {
 				return gc;
 			}
@@ -74,7 +82,6 @@ public class Server implements Runnable {
 		newgame.addClient(ch);
 		return newgame;
 	}
-	
 
 	public void serverPrint(String s) {
 		System.out.println(s);
@@ -87,15 +94,18 @@ public class Server implements Runnable {
 	private void addHandler(ClientHandler ch) {
 		this.clients.add(ch);
 	}
+
 	private void removeHandler(ClientHandler ch) {
 		this.clients.remove(ch);
 	}
-	//requires packet matches extension chatting
+
+	// requires packet matches extension chatting
 	public void serverMessage(String message) {
-		for(ClientHandler clienthandler: this.getClients()) {
-		clienthandler.sendmessage(message);
+		for (ClientHandler clienthandler : this.getClients()) {
+			clienthandler.sendmessage(message);
 		}
 	}
+
 	private void shutDown() throws IOException {
 		this.dis.close();
 		this.dos.close();
