@@ -29,9 +29,10 @@ public class ComputerPlayer extends Player {
 			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
 			Ring selectedRing = new Ring(choiceColor, choiceTier);
 			try {
-				if ((board.isAllowed(choiceField, selectedRing)
-						&& (board.proximityCheck(choiceField, getPrimaryColor())) && (choiceColor != null)
-						&& this.ringList.availableRings.contains(selectedRing))) {
+				if (board.isAllowed(choiceField, selectedRing)
+						&& (board.proximityCheck(choiceField, getPrimaryColor()))
+						&& (choiceColor != null)
+						&& this.ringList.availableRings.contains(selectedRing)) {
 					board.setRing(choiceField, selectedRing);
 					this.ringList.availableRings.remove(selectedRing);
 					System.out.println("\nthe ring has been added to the field....");
@@ -57,9 +58,10 @@ public class ComputerPlayer extends Player {
 			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
 			Ring selectedRing = new Ring(choiceColor, choiceTier);
 			try {
-				if ((board.isAllowed(choiceField, selectedRing)
-						&& (board.proximityCheck(choiceField, getPrimaryColor())) && (choiceColor != null)
-						&& this.ringList.availableRings.contains(selectedRing))) {
+				if (board.isAllowed(choiceField, selectedRing)
+						&& (board.proximityCheck(choiceField, getPrimaryColor()))
+						&& (choiceColor != null)
+						&& this.ringList.availableRings.contains(selectedRing)) {
 					board.setRing(choiceField, selectedRing);
 					this.ringList.availableRings.remove(selectedRing);
 					System.out.println("\n \n the Computer has added a ring to the field....");

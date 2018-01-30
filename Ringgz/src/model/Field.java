@@ -9,6 +9,8 @@ import java.util.Observable;
 public class Field extends Observable {
 	public int FieldNumber;
 
+	//@requires this != null;
+	//@ensures this.hasBase();
 	public void placeBase() {
 		this.fieldState.clear();
 		this.fieldState.add(new Ring(Color.BLUE, Tier.SMALL));
@@ -35,6 +37,8 @@ public class Field extends Observable {
 	// 4 = large;
 	private List<Ring> fieldState = new ArrayList<>();
 
+	//@requires this != null;
+	//@pure
 	public List<Ring> getFieldState() {
 		return fieldState;
 	}
@@ -43,7 +47,10 @@ public class Field extends Observable {
 
 	// RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING
 	// for proximity check
-	public boolean HasColor(Color color) {
+	// @requires (color == Color.BLUE || color == Color.YELLOW || color == Color.RED ||
+	// color == Color.GREEN);
+	//@pure
+	public boolean hasColor(Color color) {
 		for (Ring ring : fieldState) {
 			if (ring.getColor() == color) {
 				return true;
@@ -52,7 +59,9 @@ public class Field extends Observable {
 		return false;
 	}
 
-	public boolean HasBase() {
+	//@requires this != null;
+	//@pure
+	public boolean hasBase() {
 		for (Ring ring : fieldState)
 			if (ring.getTier() == Tier.BASE && ring.getColor() != Color.INIT) {
 				return true;
@@ -60,18 +69,22 @@ public class Field extends Observable {
 		return false;
 	}
 
+	//@requires this != null;
+	//@pure
 	public boolean isFull() {
-		if (this.HasBase()) {
+		if (this.hasBase()) {
 			return true;
 		}
 		for (Ring ring : fieldState) {
-			if ((!ring.getTier().occupied() || ring.getColor() == Color.INIT) ) {
+			if (!ring.getTier().occupied() || ring.getColor() == Color.INIT)  {
 				return false;
 			}
 		}
 		return true;
 	}
 
+	//@requires this != null && r != null
+	//@pure
 	public boolean isAllowed(Ring r) {
 		if (this.isFull()) {
 			return false;
@@ -84,6 +97,7 @@ public class Field extends Observable {
 		return true;
 	}
 
+	//@requires ring != null;
 	public void setRing(Ring ring) {
 		if (this.isAllowed(ring)) {
 			if (ring.getTier() == Tier.BASE) {
@@ -100,6 +114,9 @@ public class Field extends Observable {
 		}
 	}
 
+	// @ensures (/result == Color.BLUE || /result == Color.YELLOW || /result ==
+	// Color.RED || /result == Color.GREEN);
+	/* @pure */
 	public Color isWinner() {
 		Map<Color, Integer> map = new HashMap<>();
 		for (Ring f : fieldState) {
@@ -124,6 +141,8 @@ public class Field extends Observable {
 		return null;
 	}
 
+	//@requires this != null;
+	//@pure
 	public List<Color> getFieldColors() {
 		List<Color> result = new ArrayList<>();
 		for (Ring ring : this.getFieldState()) {
@@ -132,14 +151,17 @@ public class Field extends Observable {
 		return result;
 	}
 
+	//@requires this != null;
+	//@pure
 	public String toString() {
-		if (this.fieldState.stream().allMatch(a -> (a.getColor() == Color.INIT && this.FieldNumber < 10))) {
+		if (this.fieldState.stream().allMatch(a -> a.getColor() == Color.INIT &&
+				this.FieldNumber < 10)) {
 			return "--" + this.FieldNumber + "-";
 		}
-		if (this.fieldState.stream().allMatch(a -> (a.getColor() == Color.INIT))) {
+		if (this.fieldState.stream().allMatch(a -> a.getColor() == Color.INIT)) {
 			return "-" + this.FieldNumber + "-";
 		}
-		if (this.HasBase() == true) {
+		if (this.hasBase() == true) {
 			return "" + fieldState.get(3).getColor() + "BAS";
 		}
 		String result = "";
@@ -149,23 +171,9 @@ public class Field extends Observable {
 
 		return result;
 	}
-
-	// public static void main(String[] args) {
-	// Field a = new Field();
-	// Ring ring = new Ring(Color.BLUE, Tier.MEDIUM);
-	// Ring ring2 = new Ring(Color.GREEN, Tier.SMALL);
-	// Ring ring3 = new Ring(Color.GREEN, Tier.LARGE);
-	// System.out.println(ring);
-	// System.out.println(a.FieldNumber);
-	// System.out.println(a.fieldState);
-	// a.setRing(ring);
-	// System.out.println(a.fieldState);
-	// a.setRing(ring);
-	// a.setRing(ring2);
-	// a.setRing(ring3);
-	// System.out.println(a.fieldState);
-	// System.out.println(a.isWinner());
-	// }
+	
+	//@requires this != null;
+	//@ensures \old(this) != this;
 	public void clear() {
 		this.fieldState.clear();
 		this.initfieldState();

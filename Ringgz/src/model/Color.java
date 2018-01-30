@@ -1,7 +1,5 @@
 package model;
 
-import controller.RinggzException;
-import java.util.*;
 
 /**
  * Represents a color in the Ringgz game. There four possible values: RED,

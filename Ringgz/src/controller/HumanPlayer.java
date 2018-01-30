@@ -43,12 +43,12 @@ public class HumanPlayer extends Player {
 	 */
 
 	public void makeMove(Board board) {
-		String promptField = ("\n> " + getName() + " (" + getPrimaryColor().toString() + ")"
-				+ ", where will you place your ring? (field number)");
-		String promptRing = ("> " + getName() + " (" + getPrimaryColor().toString() + ")"
-				+ ", what kind of ring will you place? (1,2,3,4,5(BASE))");
-		String promptColor = ("> " + getName() + " (" + getPrimaryColor().toString() + ")"
-				+ ", what color do you want to play with? (r,g,b,y)");
+		String promptField = "\n> " + getName() + " (" + getPrimaryColor().toString() + ")"
+				+ ", where will you place your ring? (field number)";
+		String promptRing = "> " + getName() + " (" + getPrimaryColor().toString() + ")"
+				+ ", what kind of ring will you place? (1,2,3,4,5(BASE))";
+		String promptColor = "> " + getName() + " (" + getPrimaryColor().toString() + ")"
+				+ ", what color do you want to play with? (r,g,b,y)";
 		try {
 			System.out.println(promptField);
 			int choiceField = Integer.parseInt(INPUT.nextLine());
@@ -60,7 +60,8 @@ public class HumanPlayer extends Player {
 					// ask how to show the view only once in the field if it is a firstmove
 					return;
 				} else {
-					System.out.println("this is the first move and the criteria for this are not met....");
+					System.out.println(
+							"this is the first move and the criteria for this are not met...");
 					this.makeMove(board);
 					return;
 				}
@@ -71,9 +72,10 @@ public class HumanPlayer extends Player {
 			Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
 			Ring selectedRing = new Ring(choiceColor, Tier.toTier(choiceRing));
 
-			if ((board.isAllowed(choiceField, selectedRing) && (board.proximityCheck(choiceField, getPrimaryColor()))
+			if (board.isAllowed(choiceField, selectedRing) 
+					&& (board.proximityCheck(choiceField, getPrimaryColor()))
 					&& (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null)
-					&& this.ringList.availableRings.contains(selectedRing))) {
+					&& this.ringList.availableRings.contains(selectedRing)) {
 				board.setRing(choiceField, selectedRing);
 				this.ringList.availableRings.remove(selectedRing);
 				System.out.println("\nthe ring has been added to the field....");

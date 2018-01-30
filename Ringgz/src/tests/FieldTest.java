@@ -45,12 +45,12 @@ public class FieldTest {
 	}
 	@Test
 	public void testColor() {
-		assertFalse(field.HasColor(Color.BLUE));
-		assertFalse(field.HasColor(Color.RED));
-		assertFalse(field.HasColor(Color.YELLOW));
-		assertFalse(field.HasColor(Color.GREEN));
-		assertTrue(field.HasColor(Color.INIT));
-		assertEquals(field.HasColor(Color.BLUE), false);
+		assertFalse(field.hasColor(Color.BLUE));
+		assertFalse(field.hasColor(Color.RED));
+		assertFalse(field.hasColor(Color.YELLOW));
+		assertFalse(field.hasColor(Color.GREEN));
+		assertTrue(field.hasColor(Color.INIT));
+		assertEquals(field.hasColor(Color.BLUE), false);
 	}
 
 	@Test
@@ -80,17 +80,17 @@ public class FieldTest {
 	}
 	@Test
 	public void testHasBase() {
-		assertEquals(field.HasBase(), false);
+		assertEquals(field.hasBase(), false);
 		field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.BASE)));
-		assertEquals(field.HasBase(),true);
+		assertEquals(field.hasBase(),true);
 		field.getFieldState().set(0, (new Ring(Color.INIT, Tier.BASE)));
-		assertEquals(field.HasBase(),false);
+		assertEquals(field.hasBase(),false);
 	}
 	@Test
 	public void testisFull() {
 	field.clear();
 	field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.BASE)));
-	assertEquals(field.HasBase(),true);
+	assertEquals(field.hasBase(),true);
 	field.getFieldState().set(0, (new Ring(Color.INIT, Tier.BASE)));
 	assertEquals(field.isFull(), false); 
 	field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALL)));

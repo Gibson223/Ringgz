@@ -16,8 +16,10 @@ public class NaiveStrategy implements Strategy {
 	@Override
 	public Field determineField(Board board, Player p) {
 		try {
-			p.potentialFields.addAll(Arrays.asList(board.getField(7), board.getField(8), board.getField(9),
-					board.getField(12), board.getField(13), board.getField(14), board.getField(17), board.getField(18),
+			p.potentialFields.addAll(Arrays.asList(board.getField(7),
+					board.getField(8), board.getField(9),
+					board.getField(12), board.getField(13),
+					board.getField(14), board.getField(17), board.getField(18),
 					board.getField(19)));
 		} catch (RinggzException e) {
 			e.printStackTrace();

@@ -32,8 +32,7 @@ public class Game implements Runnable {
 		this.socket = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-		sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.clientName + Protocol.DELIMITER
-				+ Extensions.EXTENSION_CHATTING);
+		sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.clientName);
 	}
 
 	@Override
@@ -58,7 +57,7 @@ public class Game implements Runnable {
 		case Packets.CONNECT:
 			if (data.length >= 2) {
 				if (data[1].equals(Protocol.ACCEPT)) {
-					view.onConnectionAccepted();
+					view.accepted();
 					Object[] args = view.getGameRequest();
 					if (args.length == 1) {
 						sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + args[0] + Protocol.DELIMITER
@@ -68,8 +67,8 @@ public class Game implements Runnable {
 								+ Protocol.HUMAN_PLAYER + Protocol.DELIMITER + args[1]);
 					}
 				} else {
-					view.onConnectionDeclined();
 					shutdown();
+					view.denied();
 				}
 			} else {
 				throw new ProtocolException("Cannot connect.");
@@ -92,7 +91,7 @@ public class Game implements Runnable {
 			break;
 
 		case Packets.GAME_STARTED:
-			view.onGameStarted();
+			view.startGame();
 			break;
 
 		default:

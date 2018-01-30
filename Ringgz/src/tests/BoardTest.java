@@ -166,7 +166,7 @@ class BoardTest {
 	void FieldHasColorTest() throws RinggzException {
 		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
 		board.setRing(1, ring1);
-		assertTrue(board.FieldHasColor(1,Color.BLUE));
+		assertTrue(board.fieldHasColor(1,Color.BLUE));
 	}
 	
 }

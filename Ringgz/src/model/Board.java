@@ -36,7 +36,7 @@ public class Board {
 		fields = new Field[DIM * DIM];
 		for (int i = 0; i < 25; i++) {
 			fields[i] = new Field();
-			fields[i].FieldNumber = i +1;
+			fields[i].FieldNumber = i + 1;
 			firstMove = true;
 		}
 		// for (Field field : fields) {
@@ -73,6 +73,10 @@ public class Board {
 		}
 	}
 
+	// @ requires 0 <= i & col < (DIM*DIM);
+	// this.isField(i) &&
+	// (allFields.containsKey(this.getField(i).FieldNumber == i
+	/* @pure */
 	public int index(int i) {
 		if (this.isField(i)) {
 			return i;
@@ -90,7 +94,7 @@ public class Board {
 	// @ ensures \result == (0 <= index && index < DIM * DIM);
 	/* @pure */
 	public boolean isField(int index) {
-		return (index >= 1 && index <= DIM * DIM);
+		return index >= 1 && index <= DIM * DIM;
 	}
 
 	/**
@@ -101,7 +105,7 @@ public class Board {
 	// @ ensures \result == (0 <= row && row < DIM && 0 <= col && col < DIM);
 	/* @pure */
 	public boolean isField(int row, int col) {
-		return (1 <= row && row <= DIM && 1 <= col && col <= DIM);
+		return 1 <= row && row <= DIM && 1 <= col && col <= DIM;
 	}
 
 	/**
@@ -138,14 +142,16 @@ public class Board {
 		return getField(index(row, col));
 	}
 
-	//RETURNS TRUE IF AN ADJACENT FIELD HAS A BASE
-	//@requires this.isField(i);
-	//@pure
+	// RETURNS TRUE IF AN ADJACENT FIELD HAS A BASE
+	// @requires this.isField(i);
+	// @pure
 	public boolean adjacentHasBase(int field, Ring ring) {
 		if (ring.getTier() == Tier.BASE) {
 			for (Field fieldforbase : this.adjacentFields(field)) {
-				if (fieldforbase.HasBase()
-						&& (fieldforbase.getFieldState().stream().anyMatch(a -> a.getColor() == ring.getColor()))) {
+				if (fieldforbase.hasBase()
+						&&
+						(fieldforbase.getFieldState().
+								stream().anyMatch(a -> a.getColor() == ring.getColor()))) {
 					return true;
 				}
 			}
@@ -157,7 +163,7 @@ public class Board {
 	// @ requires this.isField(i);
 	/* @pure */
 	public boolean isAllowed(int field, Ring ring) throws RinggzException {
-		return (getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring));
+		return getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring);
 	}
 
 	// RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
@@ -177,12 +183,11 @@ public class Board {
 	// @ requires this.isField(i);
 	/* @pure */
 	public boolean isEmptyField(int i) throws RinggzException {
-		return !this.getField((i)).isFull();
+		return !this.getField(i).isFull();
 	}
 
 	// RETURNS TRUE IF A CERTAIN FIELD IS EMPTY
 	// @ requires this.isField(row,col);
-	// @ ensures TODO;
 	/* @pure */
 	public boolean isEmptyField(int row, int col, Tier choice) throws RinggzException {
 		return isEmptyField(index(row, col));
@@ -193,50 +198,60 @@ public class Board {
 	/* @pure */
 	public boolean boardIsFull() {
 		for (Field field : fields) {
-			if (!field.isFull()) {	
+			if (!field.isFull()) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	// @returns List<Field> of adjacent fields
 	private List<Integer> left = Arrays.asList(1, 6, 11, 16, 21);
 	private List<Integer> right = Arrays.asList(5, 10, 15, 20, 25);
 
+	// @returns List<Field> of adjacent fields
+	// @requires this.isField(field);
+	/* @pure */
 	public List<Field> adjacentFields(int field) {
 		List<Field> result = new ArrayList<>();
 		if (this.isField(field + DIM)) {
 			try {
-				result.add((this.getField(field + DIM)));
+				result.add(this.getField(field + DIM));
 			} catch (RinggzException e) {
-				/* do nothing */}
+				/* do nothing */
+			}
 		}
-		;
+		
 		if (this.isField(field - DIM)) {
 			try {
-				result.add((this.getField(field - DIM)));
+				result.add(this.getField(field - DIM));
 			} catch (RinggzException f) {
-				/* do nothing */}
+				/* do nothing */
+			}
 		}
-		;
+
 		if (!left.contains(field)) {
 			try {
-				result.add(this.getField((field - 1)));
+				result.add(this.getField(field - 1));
 			} catch (RinggzException g) {
-				/* do nothing */}
+				/* do nothing */
+			}
 		}
-		;
+
 		if (!right.contains(field)) {
 			try {
-				result.add(this.getField((field + 1)));
+				result.add(this.getField(field + 1));
 			} catch (RinggzException h) {
-				/* do nothing */}
+				/* do nothing */
+			}
 		}
-		;
+
 		return result;
 	}
 
+	// @requires this.isField(f)
+	// @requires (c == Color.BLUE || c == Color.YELLOW || c == Color.RED || c ==
+	// Color.GREEN);
+	/* @pure */
 	public boolean proximityCheck(int f, Color c) {
 		for (Field field : this.adjacentFields(f)) {
 			for (Ring ring : field.getFieldState()) {
@@ -248,17 +263,24 @@ public class Board {
 		return false;
 	}
 
-	public boolean FieldHasColor(int field, Color color) throws RinggzException {
-		return getField(field).HasColor(color);
+	// @requires this.isField(field)
+	// @requires (c == Color.BLUE || c == Color.YELLOW || c == Color.RED || c ==
+	// Color.GREEN);
+	/* @pure */
+	public boolean fieldHasColor(int field, Color color) throws RinggzException {
+		return getField(field).hasColor(color);
 	}
 
 	// RETURNS TRUE WHEN THE GAME ENDS (I.E. WHEN THE BOARD IS FULL)
 	// @ ensures \result == this.isFull();
 	/* @pure */
 	public boolean gameOver() {
-		return (this.boardIsFull());
+		return this.boardIsFull();
 	}
 
+	// @ensures (/result == Color.BLUE || /result == Color.YELLOW || /result ==
+	// Color.RED || /result == Color.GREEN);
+	/* @pure */
 	public Color isWinner() {
 		Map<Color, Integer> result = new HashMap<>();
 		for (Color c : Color.values()) {
@@ -280,22 +302,8 @@ public class Board {
 		return null;
 	}
 
-	/**
-	 * Checks if a player has won.
-	 *
-	 * @param player
-	 *            the player of interest
-	 * @return true if the player has won
-	 */
-	// @requires TODO;
-	// @ ensures TODO;
-	/* @ pure */
-	// public boolean isWinner(Player player) {
-	// //TODO: conditions for winning
-	// }
-	
-	
 	// RESETS THE BOARD
+	// @ensures this.fields() != \old(this).fields();
 	public void reset() {
 		for (Field field : fields) {
 			field.clear();

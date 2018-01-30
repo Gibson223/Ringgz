@@ -8,16 +8,24 @@ public class Ring {
 		color = c;
 		tier = t;
 	}
-
+	
+	
+	//@requires color != null;
+	//@requires tier != null;
+	//@ensures color == this.getColor;
+	//@ensures tier == this.getTier();
 	public Ring() {
 		color = Color.INIT;
 		tier = Tier.INIT;
 	}
 
+	//@requires tier != null;
+	//@ensures tier == this.getTier;
 	public void setTier(Tier tier) {
 		this.tier = tier;
 	}
 
+	//@ensures 
 	public Tier getTier() {
 		return tier;
 	}

@@ -31,10 +31,10 @@ public class ClientHandler implements Runnable{
 	public void run(){
 		try {
 			while(true) {
-			String initmessage = this.dis.readLine();
-			if (initmessage != null) {
-			server.serverPrint(initmessage);
-			}
+				String initmessage = this.dis.readLine();
+				if (initmessage != null) {
+					server.serverPrint(initmessage);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

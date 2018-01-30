@@ -22,7 +22,7 @@ public class TUI implements View {
 
 	// Creates a TUI with the given Game
 	public TUI() {
-		setViewType(ViewType.STARTUP);
+		setViewType(ViewType.START);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class TUI implements View {
 	public void setViewType(ViewType type) {
 		this.type = type;
 		switch (this.type) {
-		case STARTUP:
+		case START:
 			Initial();
 			break;
 		case CONNECTING:
@@ -104,12 +104,12 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void onConnectionAccepted() {
+	public void accepted() {
 		setViewType(ViewType.CONNECTED);
 	}
 
 	@Override
-	public void onConnectionDeclined() {
+	public void denied() {
 		print("Server denied connection.");
 	}
 
@@ -164,7 +164,7 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void onGameStarted() {
+	public void startGame() {
 		print("The game has started!");
 	}
 
