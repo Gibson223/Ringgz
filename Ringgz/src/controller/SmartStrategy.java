@@ -19,6 +19,20 @@ public class SmartStrategy implements Strategy {
 
 	@Override
 	public Field determineField(Board board, Player p) {
+		try {
+			p.potentialFields.add(board.getField(7));
+			p.potentialFields.add(board.getField(8));
+			p.potentialFields.add(board.getField(9));
+			p.potentialFields.add(board.getField(12));
+			p.potentialFields.add(board.getField(13));
+			p.potentialFields.add(board.getField(14));
+			p.potentialFields.add(board.getField(17));
+			p.potentialFields.add(board.getField(18));
+			p.potentialFields.add(board.getField(19));
+		} catch (RinggzException e1) {
+			//do nothing
+			e1.printStackTrace();
+		}
 		Collections.shuffle(p.potentialFields);
 		Field smartField = p.potentialFields.get(0);
 		if (board.firstMove) {
