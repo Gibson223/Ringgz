@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import controller.GameController;
-import view.View.ViewType;
 import server.Server;
 
 //Creates a client

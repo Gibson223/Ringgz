@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.Arrays;
 
 import controller.GameController;
 import net.Protocol;
@@ -97,9 +98,10 @@ public class ClientHandler implements Runnable{
 			}
 		}
 		else if (Packets.MOVE.equals(packet) ) {
-		if(this.linkedgame != null && this.linkedgame.started) {
-			this.game.moveMade(this, data);
-		}
+			if(this.linkedgame != null && this.linkedgame.started) {
+				String[] movedata = Arrays.copyOfRange(fullpacket, 1, fullpacket.length);
+				this.linkedgame.moveMade(this.username, movedata);
+			} else { this.server.serverPrint("client sending move package when not playing a game...");}
 		}
 	}
 	public void sendmessage(String message) {

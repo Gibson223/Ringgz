@@ -25,7 +25,6 @@ public class Server implements Runnable {
 	private BufferedReader dis;
 	private BufferedWriter dos;
 	private boolean online;
-	private String playerType;//TODO necessary to keep in acount???
 	public final int WAIT = 10000;
 
 	public Server() throws IOException {

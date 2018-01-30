@@ -51,20 +51,20 @@ public class GameController implements Runnable {
 	}
 	private synchronized boolean startGame() throws InterruptedException {
 		Collections.shuffle(clients);
-//		for(ClientHandler client : this.clients) {
-//			usernames = usernames + Protocol.DELIMITER + handler.getClientUsername();
-//		}
-//		for(ClientHandler client : this.clients) {
-//			handler.sendMessage(Packets.ALL_PLAYERS_CONNECTED + usernames);
-//		}
-//		long start = System.currentTimeMillis();
-//		while(!allresponded()) {
-//			long current = System.currentTimeMillis();
-//			if(current - start < STATUS_WAIT) {
-//				wait(STATUS_WAIT);
-//			}
-//		}
-//	}
+		for(ClientHandler client : this.clients) {
+			usernames = usernames + Protocol.DELIMITER + handler.getClientUsername();
+		}
+		for(ClientHandler client : this.clients) {
+			handler.sendMessage(Packets.ALL_PLAYERS_CONNECTED + usernames);
+		}
+		long start = System.currentTimeMillis();
+		while(!allresponded()) {
+			long current = System.currentTimeMillis();
+			if(current - start < STATUS_WAIT) {
+				wait(STATUS_WAIT);
+			}
+		}
+	}
 		if(!allready()) {
 			for(ClientHandler client : this.clients) {
 				if(!client.getResponded() || !client.getReady()) {
@@ -102,10 +102,10 @@ public class GameController implements Runnable {
 	public void startgame() {
 		board = new Board(tui);
 		ringlist = new RingList();
-		tui = new TUI();
-		for (Field field : board.fields) {
-			field.addObserver(tui);
-		}
+//		tui = new TUI();
+//		for (Field field : board.fields) {
+//			field.addObserver(tui);
+//		}
 		this.playerSetter();
 		this.ringdivider();
 		tui.view();
