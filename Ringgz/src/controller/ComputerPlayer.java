@@ -23,18 +23,18 @@ public class ComputerPlayer extends Player {
 
 	@Override
 	public void makeMove(Board board) throws RinggzException {
+		int choiceField = strategy.determineField(board, this).FieldNumber;
+		//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
+		Color choiceColor = strategy.determineColor(board, this);
+		Tier choiceTier = strategy.determineTier(board.getField(choiceField));
+		Ring selectedRing = new Ring(choiceColor, choiceTier);
 		if (board.firstMove) {
-			int choiceField = strategy.determineField(board, this).FieldNumber;
-			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Color choiceColor = strategy.determineColor(board, this);
-			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
-			Ring selectedRing = new Ring(choiceColor, choiceTier);
 			try {
 			if ( (board.isAllowed(choiceField, selectedRing) && 
 					(board.proximityCheck(choiceField, getPrimaryColor()))
 					&& (choiceColor != null) 
 					&& this.ringList.availableRings.contains(selectedRing))) {
-				board.setRing(choiceField, selectedRing);
+				board.specialbase((choiceField));
 				this.ringList.availableRings.remove(selectedRing);
 				System.out.println("\nthe ring has been added to the field....");
 			} else {
@@ -51,13 +51,12 @@ public class ComputerPlayer extends Player {
 			this.makeMove(board);}
 			potentialFields.add(board.getField(choiceField));
 			potentialFields.addAll(board.adjacentFields(choiceField));
-
 		} else {
-			int choiceField = strategy.determineField(board, this).FieldNumber;
+			choiceField = strategy.determineField(board, this).FieldNumber;
 			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Color choiceColor = strategy.determineColor(board, this);
-			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
-			Ring selectedRing = new Ring(choiceColor, choiceTier);
+			choiceColor = strategy.determineColor(board, this);
+			choiceTier = strategy.determineTier(board.getField(choiceField));
+			selectedRing = new Ring(choiceColor, choiceTier);
 			try {
 			if ( (board.isAllowed(choiceField, selectedRing) && 
 					(board.proximityCheck(choiceField, getPrimaryColor()))
