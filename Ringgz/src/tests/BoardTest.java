@@ -1,5 +1,6 @@
 package tests;
 import model.*;
+import view.TUI;
 import controller.*;
 import java.util.Arrays;
 
@@ -10,10 +11,11 @@ import org.junit.jupiter.api.Test;
 
 class BoardTest {
 	Board board;
+	TUI tui;
 	
 	@BeforeEach
 	void setUp() {
-		board = new Board();
+		board = new Board(tui);
 	}
 
 	@Test
@@ -76,16 +78,8 @@ class BoardTest {
 	}
 	
 	@Test
-	void isEmptyFieldTest() throws RinggzException{
-		board.reset();
-		assertTrue(board.isEmptyField(1));
-		assertTrue(board.isEmptyField(25));
-		assertTrue(board.isEmptyField(1,1,Tier.LARGE));
-	}
-	
-	@Test
 	void resetTest() throws RinggzException {
-		Board b = new Board();
+		Board b = new Board(tui);
 		Ring ring = new Ring();
 		ring.setColor(Color.RED);
 		ring.setTier(Tier.BASE);
@@ -97,8 +91,16 @@ class BoardTest {
 	}
 	
 	@Test
+	void isEmptyFieldTest() throws RinggzException{
+		board.reset();
+		assertTrue(board.isEmptyField(1));
+		assertTrue(board.isEmptyField(25));
+		assertTrue(board.isEmptyField(1,1,Tier.LARGE));
+	}
+		
+	@Test
 	void specialBaseTest() throws RinggzException {
-		Board board = new Board();
+		Board board = new Board(tui);
 		board.specialBase(1);
 		System.out.println(board.getField(1).toString());
 		assertEquals(board.getField(1).toString(), "bgry");
@@ -154,16 +156,7 @@ class BoardTest {
 	}
 	
 	@Test
-	void deepCopyTest() throws RinggzException {
-		Board board = new Board();
-		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
-		board.setRing(1, ring1);
-		Board clone = board.deepCopy();
-		assertEquals(clone.fields, board.fields);
-	}
-	
-	@Test
-	void FieldHasColorTest() throws RinggzException {
+	void fieldHasColorTest() throws RinggzException {
 		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
 		board.setRing(1, ring1);
 		assertTrue(board.fieldHasColor(1,Color.BLUE));

@@ -22,6 +22,7 @@ public class FieldTest {
 
 	private Field field;
 	private Field field2;
+	private TUI tui;
 
 	@Before
 	public void setUp() throws Exception {
@@ -31,8 +32,6 @@ public class FieldTest {
 
 	@Test
 	public void testDefault() {
-//		assertTrue(field.FieldNumber == 1);
-//		assertTrue(field2.FieldNumber == 2);
 		assertTrue(field.getFieldState().size() == 4);
 		assertTrue(field.getFieldState().get(1).getColor() == Color.INIT && 
 				field.getFieldState().get(1).getTier() == Tier.MEDIUM);
@@ -136,7 +135,6 @@ public class FieldTest {
 	}
 	@Test
 	public void testgetFieldColors() {
-		Ring a = new Ring(Color.GREEN, Tier.MEDIUM);
 		field.setRing(new Ring(Color.GREEN, Tier.MEDIUM));
 		assertEquals(field.getFieldColors(), 
 				new ArrayList<>(Arrays.asList(field.getFieldState().get(0).getColor(),
@@ -146,7 +144,7 @@ public class FieldTest {
 	}
 	@Test
 	public void testtoString() throws RinggzException {
-		Board b = new Board();
+		Board b = new Board(tui);
 		assertEquals(field.toString(), new String("--0-"));
 		assertEquals(b.getField(20).toString(), new String("-20-"));	
 		field2.setRing(new Ring(Color.BLUE, Tier.BASE));
