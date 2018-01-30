@@ -28,7 +28,7 @@ public class ComputerPlayer extends Player {
 			int choiceField = strategy.determineField(board, this).FieldNumber;
 			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
 			Color choiceColor = strategy.determineColor(board, this);
-			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
+			Tier choiceTier = strategy.determineTier(board,board.getField(choiceField),this);
 			Ring selectedRing = new Ring(choiceColor, choiceTier);
 			if (board.firstMove) {
 				int  tempfield = choiceField;
@@ -48,7 +48,7 @@ public class ComputerPlayer extends Player {
 				choiceField = strategy.determineField(board, this).FieldNumber;
 				//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
 				choiceColor = strategy.determineColor(board, this);
-				choiceTier = strategy.determineTier(board.getField(choiceField));
+				choiceTier = strategy.determineTier(board,board.getField(choiceField),this);
 				selectedRing = new Ring(choiceColor, choiceTier);
 				if ( (board.isAllowed(choiceField, selectedRing) && 
 						(board.proximityCheck(choiceField, getPrimaryColor()))

@@ -57,7 +57,7 @@ public class SmartStrategy implements Strategy {
 	}
 
 	@Override
-	public Tier determineTier(Field f) {
+	public Tier determineTier(Board board, Field f, Player p) {
 		List<Tier> availableTiers = new ArrayList<>();
 		availableTiers.removeAll(availableTiers);
 		for (Ring ring : f.getFieldState()) {
@@ -65,8 +65,13 @@ public class SmartStrategy implements Strategy {
 				availableTiers.add(ring.getTier());
 			}
 		}
-		Collections.shuffle(availableTiers);
-		return availableTiers.get(0);
+		try {
+			Collections.shuffle(availableTiers);
+			return availableTiers.get(0);
+		} 
+		catch (IndexOutOfBoundsException e) {
+			return determineTier(board, this.determineField(board, p), p);
+		}
 	}
 
 	@Override

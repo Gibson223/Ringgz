@@ -6,6 +6,6 @@ public interface Strategy {
 	
 	public String getName();
 	public Field determineField(Board board, Player p);
-	public Tier determineTier(Field f);
+	public Tier determineTier(Board board, Field f, Player p);
 	public Color determineColor(Board board, Player p);
 }

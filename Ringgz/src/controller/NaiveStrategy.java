@@ -27,7 +27,7 @@ public class NaiveStrategy implements Strategy {
 	}
 
 	@Override
-	public Tier determineTier(Field f) {
+	public Tier determineTier(Board b, Field f, Player p) {
 		List<Tier> availableTiers = new ArrayList<>();
 		availableTiers.removeAll(availableTiers);
 		for (Ring ring : f.getFieldState()) {
