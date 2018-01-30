@@ -13,7 +13,6 @@ import java.net.Socket;
 
 import controller.GameController;
 import net.Protocol;
-import net.ProtocolViolatedException;
 import net.Protocol.Extensions;
 import net.Protocol.Packets;
 
@@ -47,15 +46,8 @@ public class ClientHandler implements Runnable{
 	public void run(){
 		try {
 			while(true) {
-<<<<<<< Upstream, based on origin/master
-				String initmessage = this.dis.readLine();
-				if (initmessage != null) {
-					server.serverPrint(initmessage);
-				}
-=======
 			String message = this.dis.readLine();
 			this.packetHandler(message.split(Protocol.DELIMITER));
->>>>>>> eb5b220 did my best but i just got to go to bed.
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -106,7 +98,7 @@ public class ClientHandler implements Runnable{
 		}
 		else if (Packets.MOVE.equals(packet) ) {
 		if(this.linkedgame != null && this.linkedgame.started) {
-			this.game.handleMessage(this, data);
+			this.game.moveMade(this, data);
 		}
 		}
 	}

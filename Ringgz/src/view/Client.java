@@ -27,7 +27,7 @@ public class Client {
 //			try {
 				startinggame = false;
 //				gc = new GameController(tui, username, ip, port);//TODO does need work to work
-				new Thread(gc).start();
+				new Thread(gc).start(); 
 //			} catch (IOException e) {
 				startinggame = true;
 			}

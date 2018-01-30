@@ -47,16 +47,6 @@ public class Board {
 	}
 
 	/**
-	 * Creates a deep copy of the board.
-	 */
-	// @ ensures \result != this;
-	public Board deepCopy() {
-		Board clone = new Board();
-		clone.fields = this.fields;
-		return clone;
-	}
-
-	/**
 	 * Calculates the index in the linear array of fields from a (row, col) pair.
 	 * 
 	 * @return the index belonging to the (row,col)-field
