@@ -11,8 +11,8 @@ import controller.RinggzException;
 public class Field extends Observable {
 	public int FieldNumber;
 
-	//@requires this != null;
-	//@ensures this.hasBase();
+	// @requires this != null;
+	// @ensures this.hasBase();
 	public void placeBase() {
 		this.fieldState.clear();
 		this.fieldState.add(new Ring(Color.BLUE, Tier.SMALLEST));
@@ -39,8 +39,8 @@ public class Field extends Observable {
 	// 4 = large;
 	private List<Ring> fieldState = new ArrayList<>();
 
-	//@requires this != null;
-	//@pure
+	// @requires this != null;
+	// @pure
 	public List<Ring> getFieldState() {
 		return fieldState;
 	}
@@ -49,12 +49,13 @@ public class Field extends Observable {
 	 * Checks whether or not a field has a certain color ring.
 	 *
 	 * @param color
-	 *             the color in question
+	 *            the color in question
 	 * @return true if the the field has that color in it, false otherwise.
 	 */
-	// @requires (color == Color.BLUE || color == Color.YELLOW || color == Color.RED ||
+	// @requires (color == Color.BLUE || color == Color.YELLOW || color == Color.RED
+	// ||
 	// color == Color.GREEN);
-	//@pure
+	// @pure
 	public boolean hasColor(Color color) {
 		for (Ring ring : fieldState) {
 			if (ring.getColor() == color) {
@@ -69,8 +70,8 @@ public class Field extends Observable {
 	 *
 	 * @return true if the field has a base in it, false otherwise.
 	 */
-	//@requires this != null;
-	//@pure
+	// @requires this != null;
+	// @pure
 	public boolean hasBase() {
 		for (Ring ring : fieldState)
 			if (ring.getTier() == Tier.BASE && ring.getColor() != Color.INIT) {
@@ -84,14 +85,14 @@ public class Field extends Observable {
 	 *
 	 * @return true if the field is full, false otherwise.
 	 */
-	//@requires this != null;
-	//@pure
+	// @requires this != null;
+	// @pure
 	public boolean isFull() {
 		if (this.hasBase()) {
 			return true;
 		}
 		for (Ring ring : fieldState) {
-			if (!ring.getTier().occupied() || ring.getColor() == Color.INIT)  {
+			if (!ring.getTier().occupied() || ring.getColor() == Color.INIT) {
 				return false;
 			}
 		}
@@ -102,11 +103,11 @@ public class Field extends Observable {
 	 * Checks whether or not a certain ring tier is already present in a field.
 	 *
 	 * @param r
-	 *          the ring whose tier we want to check
+	 *            the ring whose tier we want to check
 	 * @return true if the ring tier is allowed, false otherwise.
 	 */
-	//@requires this != null && r != null
-	//@pure
+	// @requires this != null && r != null
+	// @pure
 	public boolean isAllowed(Ring r) {
 		if (this.isFull()) {
 			return false;
@@ -118,7 +119,7 @@ public class Field extends Observable {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Sets a ring on the field.
 	 *
@@ -126,7 +127,7 @@ public class Field extends Observable {
 	 *            the ring we want to place
 	 * @return nothing (void)
 	 */
-	//@requires ring != null;
+	// @requires ring != null;
 	public void setRing(Ring ring) {
 		if (this.isAllowed(ring)) {
 			if (ring.getTier() == Tier.BASE) {
@@ -180,8 +181,8 @@ public class Field extends Observable {
 	 *
 	 * @return a list of the colors present in the field.
 	 */
-	//@requires this != null;
-	//@pure
+	// @requires this != null;
+	// @pure
 	public List<Color> getFieldColors() {
 		List<Color> result = new ArrayList<>();
 		for (Ring ring : this.getFieldState()) {
@@ -195,11 +196,10 @@ public class Field extends Observable {
 	 *
 	 * @return a string with the current situation of the field (ring distribution).
 	 */
-	//@requires this != null;
-	//@pure
+	// @requires this != null;
+	// @pure
 	public String toString() {
-		if (this.fieldState.stream().allMatch(a -> a.getColor() == Color.INIT &&
-				this.FieldNumber < 10)) {
+		if (this.fieldState.stream().allMatch(a -> a.getColor() == Color.INIT && this.FieldNumber < 10)) {
 			return "--" + this.FieldNumber + "-";
 		}
 		if (this.fieldState.stream().allMatch(a -> a.getColor() == Color.INIT)) {
@@ -215,14 +215,14 @@ public class Field extends Observable {
 
 		return result;
 	}
-	
+
 	/**
 	 * Clears the field.
 	 *
 	 * @return nothing (void)
 	 */
-	//@requires this != null;
-	//@ensures \old(this) != this;
+	// @requires this != null;
+	// @ensures \old(this) != this;
 	public void clear() {
 		this.fieldState.clear();
 		this.initfieldState();
