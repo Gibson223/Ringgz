@@ -82,7 +82,6 @@ public class TUI implements Observer, Runnable {
 		InetAddress ipAddress = null;
 =======
 	public Object[] initizializing() {
->>>>>>> eb5b220 did my best but i just got to go to bed.
 		String username = null;
 		InetAddress address = null;
 		boolean correct = false;
@@ -106,26 +105,22 @@ public class TUI implements Observer, Runnable {
 		}
 		return new Object[] { username, address };
 	}
-<<<<<<< Upstream, based on origin/master
 
 	@Override
 	public void accepted() {
 		setViewType(ViewType.CONNECTED);
 =======
-	//dont understand what it should do
 	public void onConnectionAccepted() {
 		this.Connected();
 >>>>>>> eb5b220 did my best but i just got to go to bed.
 	}
 
-<<<<<<< Upstream, based on origin/master
 	@Override
 	public void denied() {
 		print("Server denied connection.");
-=======
+		
 	public void onConnectionDeclined() {
 		clientPrint("Server denied connection.");
->>>>>>> eb5b220 did my best but i just got to go to bed.
 	}
 
 	public void inLobby() {
@@ -137,15 +132,12 @@ public class TUI implements Observer, Runnable {
 		return false;
 	}
 
-<<<<<<< Upstream, based on origin/master
 	@Override
 	public void startGame() {
 		print("The game has started!");
-=======
 	public void onGameStarted() {
 		clientPrint("The game has started!");
 		this.view();
->>>>>>> eb5b220 did my best but i just got to go to bed.
 	}
 
 	public void awaitingMoves() {
@@ -194,7 +186,6 @@ public class TUI implements Observer, Runnable {
 		}
 	}
 	public void run() {
-		board = new Board(this);
 		this.view();
 	}
 
