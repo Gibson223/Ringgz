@@ -15,12 +15,16 @@ public class NaiveStrategy implements Strategy {
 
 	@Override
 	public Field determineField(Board board, Player p) {
-		try {
-			p.potentialFields.addAll(Arrays.asList(board.getField(7), board.getField(8), board.getField(9),
-					board.getField(12), board.getField(13), board.getField(14), board.getField(17), board.getField(18),
-					board.getField(19)));
-		} catch (RinggzException e) {
-			e.printStackTrace();
+		if (board.firstMove) {
+			List<Integer> fields = new ArrayList<>(board.middle9);
+			
+			Collections.shuffle(fields);
+			try {
+				return board.getField(fields.get(0));
+			} catch (RinggzException e) {
+				determineField(board , p);
+				e.printStackTrace();
+			}
 		}
 		Collections.shuffle(p.potentialFields);
 		return p.potentialFields.get(0);
@@ -34,6 +38,9 @@ public class NaiveStrategy implements Strategy {
 			if (ring.getColor() == Color.INIT) {
 				availableTiers.add(ring.getTier());
 			}
+		}
+		if (availableTiers != null) {
+			
 		}
 		Collections.shuffle(availableTiers);
 		return availableTiers.get(0);

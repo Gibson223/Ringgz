@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import model.*;
@@ -16,44 +17,43 @@ public class ComputerPlayer extends Player {
     public ComputerPlayer(String name) {
     	super(name);
     	if (name == "SmartStrategy") {
-    			this.strategy = new SmartStrategy();    			
-    	} else {
-    		this.strategy = new NaiveStrategy();
+    		this.strategy = new SmartStrategy();
     	}
     }
 
 	@Override
 	public void makeMove(Board board) throws RinggzException {
 		try {
-			int choiceField = strategy.determineField(board, this).FieldNumber;
-			//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Color choiceColor = strategy.determineColor(board, this);
-			Tier choiceTier = strategy.determineTier(board,board.getField(choiceField),this);
+			int choiceField = (int) (Math.floor(Math.random() * 25) + 1);
+			List<Color> colors = new ArrayList<>();
+			colors.add(this.getPrimaryColor());
+			colors.add(this.getSecondaryColor());				
+			Collections.shuffle(colors);
+			Color choiceColor = colors.get(0);
+			List<Tier> tiers = new ArrayList<Tier>(Arrays.asList(Tier.values()));
+			Collections.shuffle(tiers);
+			Tier choiceTier = tiers.get(0);
 			Ring selectedRing = new Ring(choiceColor, choiceTier);
+			if (!this.ringList.availableRings.contains(new Ring(choiceColor, choiceTier))
+					&& !board.isAllowed(choiceField, selectedRing)) {
+				this.makeMove(board);
+			}
 			if (board.firstMove) {
 				int  tempfield = choiceField;
 				if (board.middle9.stream().anyMatch(a -> a == tempfield)) {
 					board.specialbase(choiceField);
 					board.firstMove = false;
 					System.out.println("the first move has been placed");
-					potentialFields.add(board.getField(choiceField));
-					potentialFields.addAll(board.adjacentFields(choiceField));
-					// ask how to show the view only once in the field if it is a firstmove
 				} else {
 					System.out.println(
 							"this is the first move and the criteria for this are not met...");
 					this.makeMove(board);
 				}
 			} else {
-				choiceField = strategy.determineField(board, this).FieldNumber;
-				//CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-				choiceColor = strategy.determineColor(board, this);
-				choiceTier = strategy.determineTier(board,board.getField(choiceField),this);
-				selectedRing = new Ring(choiceColor, choiceTier);
-				if ( (board.isAllowed(choiceField, selectedRing) && 
+				if (board.isAllowed(choiceField, selectedRing) && 
 						(board.proximityCheck(choiceField, getPrimaryColor()))
 						&& (choiceColor != null) 
-						&& this.ringList.availableRings.contains(selectedRing))) {
+						&& this.ringList.availableRings.contains(selectedRing)) {
 					board.setRing(choiceField, selectedRing);
 					this.ringList.availableRings.remove(selectedRing);
 					potentialFields.add(board.getField(choiceField));
@@ -64,13 +64,14 @@ public class ComputerPlayer extends Player {
 					this.makeMove(board);
 				}
 			}
-		}catch (RinggzException e) {
+		} catch (RinggzException e) {
 			this.makeMove(board);
 		} catch (NullPointerException e) {
 			System.out.println("invalid color, input your move again:\n");
 			this.makeMove(board);
 		} catch (NumberFormatException e) {
 			System.out.println("invalid input, try again:\n");
-			this.makeMove(board);}
+			this.makeMove(board); 
+		}
 	}
 }

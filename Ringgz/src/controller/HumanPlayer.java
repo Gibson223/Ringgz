@@ -42,7 +42,7 @@ public class HumanPlayer extends Player {
 	 * @throws RinggzException
 	 */
 
-	public void makeMove(Board board) {
+	public Move makeMove(Board board) {
 		String promptField = "\n> " + getName() + " (" + getPrimaryColor().toString() + ")"
 				+ ", where will you place your ring? (field number)";
 		String promptRing = "> " + getName() + " (" + getPrimaryColor().toString() + ")"
@@ -76,6 +76,7 @@ public class HumanPlayer extends Player {
 					&& (board.proximityCheck(choiceField, getPrimaryColor()))
 					&& (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null)
 					&& this.ringList.availableRings.contains(selectedRing)) {
+				return new Move();
 				board.setRing(choiceField, selectedRing);
 				this.ringList.availableRings.remove(selectedRing);
 				System.out.println("\nthe ring has been added to the field....");
@@ -92,6 +93,7 @@ public class HumanPlayer extends Player {
 			System.out.println("invalid input, try again:\n");
 			this.makeMove(board);
 		}
+		
 	}
 
 	/**

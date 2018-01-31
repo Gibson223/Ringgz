@@ -8,9 +8,16 @@ import java.util.Map;
 import controller.RinggzException;
 
 public class Board {
+	public static int[] xy(int field) {
+		int y = field % 5 - 1;
+		int x = field - y * 5;
+		int[] xy = {x, y};
+		return xy;
+	}
 	public static final int  DIM = 5;
 	public boolean firstMove = true;
-	public final List<Integer> middle9 = Arrays.asList(7,8,9,12,13,14,17,18,19); 
+	public final List<Integer> middle9 = new ArrayList<Integer>(
+			Arrays.asList(7, 8, 9, 12, 13, 14, 17, 18, 19));
 	public void specialbase(int i) throws RinggzException {
 		this.getField(i).placeBase();
 	}
@@ -197,16 +204,16 @@ public class Board {
     	List<Field> result = new ArrayList<>();
     	if (this.isField(field + DIM)) {try {
 			result.add((this.getField(field + DIM)));
-    	} catch (RinggzException e) {/*do nothing*/}};
+    	} catch (RinggzException e) {/*do nothing*/}}
     	if (this.isField(field - DIM)) {try {
 			result.add((this.getField(field - DIM)));
-    	} catch (RinggzException f) {/*do nothing*/}};
+    	} catch (RinggzException f) {/*do nothing*/}}
     	if (!left.contains(field)) {try {
 			result.add( this.getField((field - 1)));
-		} catch (RinggzException g) {/*do nothing*/}};
+		} catch (RinggzException g) {/*do nothing*/}}
     	if (!right.contains(field)) {try {
 			result.add( this.getField((field + 1)));
-		} catch (RinggzException h) {/*do nothing*/}};
+		} catch (RinggzException h) {/*do nothing*/}}
     return result;
     }
     

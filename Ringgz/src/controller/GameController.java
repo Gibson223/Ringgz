@@ -9,6 +9,7 @@ import model.Color;
 import model.Field;
 import model.Ring;
 import model.RingList;
+import model.Tier;
 import view.TUI;
 
 public class GameController implements Runnable {
@@ -17,7 +18,7 @@ public class GameController implements Runnable {
 	public TUI tui;
 	public RingList ringlist;
 	
-	public GameController( Player s0, Player s1, Player s2, Player s3) {
+	public GameController(Player s0, Player s1, Player s2, Player s3) {
 		List<Object> playerlist = new ArrayList<>();
 		playerlist.add(s0);
 		playerlist.add(s1);
@@ -47,7 +48,7 @@ public class GameController implements Runnable {
 			players.get(1).setPrimary(Color.GREEN);
 			players.get(1).setSecondary(Color.BLUE);
 		}
-		if(this.players.size() == 3) {
+		if (this.players.size() == 3) {
 			players.get(0).setPrimary(Color.RED);
 			players.get(1).setPrimary(Color.YELLOW);
 			players.get(2).setPrimary(Color.GREEN);
@@ -55,7 +56,7 @@ public class GameController implements Runnable {
 			players.get(1).setSecondary(Color.BLUE);
 			players.get(2).setSecondary(Color.BLUE);
 		}
-		if(this.players.size() == 4) {
+		if (this.players.size() == 4) {
 			players.get(0).setPrimary(Color.RED);
 			players.get(1).setPrimary(Color.YELLOW);
 			players.get(2).setPrimary(Color.GREEN);
@@ -63,28 +64,40 @@ public class GameController implements Runnable {
 		}
 	}
 	public void ringdivider() {
-		if (this.players.size() == 2){
-			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
-			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 60)));
+		if (this.players.size() == 2) {
+			RingList ringlistpart1 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
+			RingList ringlistpart2 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(30, 60)));
 			players.get(0).setRingList(ringlistpart1);
 			players.get(1).setRingList(ringlistpart2);
 		}
 		if (this.players.size() == 3) {
-			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
-			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
-			RingList ringlistpart3 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
-			ringlistpart1.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(45, 50)));
-			ringlistpart2.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(50, 55)));
-			ringlistpart3.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(55, 60)));
+			RingList ringlistpart1 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
+			RingList ringlistpart2 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
+			RingList ringlistpart3 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
+			ringlistpart1.availableRings.addAll(
+					new ArrayList<Ring>(ringlist.availableRings.subList(45, 50)));
+			ringlistpart2.availableRings.addAll(
+					new ArrayList<Ring>(ringlist.availableRings.subList(50, 55)));
+			ringlistpart3.availableRings.addAll(
+					new ArrayList<Ring>(ringlist.availableRings.subList(55, 60)));
 			players.get(0).setRingList(ringlistpart1);
 			players.get(1).setRingList(ringlistpart2);
 			players.get(2).setRingList(ringlistpart3);
 		}
-		if(this.players.size() == 4) {
-			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
-			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
-			RingList ringlistpart3 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
-			RingList ringlistpart4 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(45, 60)));
+		if (this.players.size() == 4) {
+			RingList ringlistpart1 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
+			RingList ringlistpart2 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
+			RingList ringlistpart3 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
+			RingList ringlistpart4 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(45, 60)));
 			players.get(0).setRingList(ringlistpart1);
 			players.get(1).setRingList(ringlistpart2);
 			players.get(2).setRingList(ringlistpart3);
@@ -93,18 +106,40 @@ public class GameController implements Runnable {
 		
 	}
 	public int currentplayer = 0;
-	public void play(){
+	public void play() {
 		boolean succes = false;
-		while(!board.boardIsFull()) {
-			while(!succes) {
-					try {
-						players.get(currentplayer).makeMove(board);
-						succes = true;
-					} catch (RinggzException e) {}
+		while (!board.boardIsFull()) {
+			while (!succes) {
+				try {
+					players.get(currentplayer).makeMove(board);
+					succes = true;
+				} catch (RinggzException e) {
+				}
+				currentplayer += 1;
+				currentplayer %= this.players.size();
+				succes = false;
 			}
-			currentplayer += 1;
-        	currentplayer %= this.players.size();
-        	succes = false;
-        }
+		}
+	}
+	public boolean validmove(Object[] move, Player player) {
+		int x = (int) move[0];
+		int y = (int) move[1];
+		int choiceRing = (int) move[2];
+		int color = 
+		Ring selectedRing = new Ring(choiceColor, Tier.toTier(choiceRing));
+		if (board.firstMove) {
+			if (board.middle9.stream().anyMatch(a -> a == choiceField)) {
+				board.specialbase(choiceField);
+				board.firstMove = false;
+				System.out.println("the first move has been placed");
+				// ask how to show the view only once in the field if it is a firstmove
+				return;
+			} else {
+				System.out.println(
+						"this is the first move and the criteria for this are not met...");
+				this.makeMove(board);
+				return;
+			}
+		}
 	}
 }
