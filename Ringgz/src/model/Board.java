@@ -10,9 +10,28 @@ import controller.RinggzException;
 import view.TUI;
 
 public class Board {
+	public static int[] xy(int field) {
+		field -= 1;
+		int[] result = new int[2];
+		if (field < 5) {
+			result[1] = 0;
+		} else if (field < 10) {
+			result[1] = 1;
+		} else if (field < 15) {
+			result[1] = 2;
+		} else if (field < 20) {
+			result[1] = 3;
+		} else if (field < 25) {
+			result[1] = 4;
+		}
+		result[0] = ((field % (result[1]*5)));
+		return result;
+	}
 	public static final int DIM = 5;
 	public boolean firstMove = true;
 	public final List<Integer> middle9 = Arrays.asList(7, 8, 9, 12, 13, 14, 17, 18, 19);
+	private final List<Integer> left = Arrays.asList(1, 6, 11, 16, 21);
+	private final List<Integer> right = Arrays.asList(5, 10, 15, 20, 25);
 
 	public void specialBase(int i) throws RinggzException {
 		this.getField(i).placeBase();
@@ -66,7 +85,7 @@ public class Board {
 		}
 	}
 
-	// @ requires 0 <= i & col < (DIM*DIM);
+	// @ requires 0 <= i & i < (DIM*DIM);
 	// this.isField(i) &&
 	// (allFields.containsKey(this.getField(i).FieldNumber == i
 	/* @pure */
@@ -106,7 +125,7 @@ public class Board {
 	 *
 	 * @param i
 	 *            the number of the field (see NUMBERING)
-	 * @return the mark on the field
+	 * @return the field
 	 * @throws RinggzException
 	 */
 	// @ requires this.isField(i);
@@ -126,7 +145,7 @@ public class Board {
 	 *            the row of the field
 	 * @param col
 	 *            the column of the field
-	 * @return the mark on the field
+	 * @return the field
 	 * @throws RinggzException
 	 */
 	// @ requires this.isField(row,col);
@@ -135,7 +154,15 @@ public class Board {
 		return getField(index(row, col));
 	}
 
-	// RETURNS TRUE IF AN ADJACENT FIELD HAS A BASE
+	/**
+	 * Returns if a field has another field with a base adjacent to it.
+	 *
+	 * @param field
+	 *            the field in question
+	 * @param ring
+	 *            the base
+	 * @return true if there is a base in an adjacent field, false otherwise.
+	 */
 	// @requires this.isField(i);
 	// @pure
 	public boolean adjacentHasBase(int field, Ring ring) {
@@ -152,13 +179,35 @@ public class Board {
 		return false;
 	}
 
-	// RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
+	/**
+	 * Returns if a certain ring can be placed in a certain field.
+	 *
+	 * @param field
+	 *            the field in question
+	 * @param ring
+	 *            the ring we want to test
+	 * @return true if the ring can be placed in the field, flase otherwise.
+	 * @throws RinggzException
+	 */
 	// @ requires this.isField(i);
 	/* @pure */
 	public boolean isAllowed(int field, Ring ring) throws RinggzException {
 		return getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring);
 	}
 
+
+	/**
+	 * Row and column adaptation of isAllowed(field,ring).
+	 *
+	 * @param row
+	 *            the row of the field in question
+	 * @param col
+	 * 			  the column of the field in question
+	 * @param ring
+	 *            the ring we want to test
+	 * @return true if the ring can be placed in the field, flase otherwise.
+	 * @throws RinggzException
+	 */
 	// RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
 	// @ requires this.isField(row,col);
 	/* @pure */
@@ -166,28 +215,59 @@ public class Board {
 		return this.isAllowed(index(row, col), ring);
 
 	}
-
+	/**
+	 * Returns if a certain ring can be placed in a certain field.
+	 *
+	 * @param i
+	 *            the field in question
+	 * @param ring
+	 *            the ring we want to place
+	 * @return nothing (void).
+	 * @throws RinggzException
+	 */
+	//@requires i.isField() && ring != null;
+	//@ensures \old(board) != board;
 	public void setRing(int i, Ring ring) throws RinggzException {
 		getField(i).setRing(ring);
 	}
 
-	// RETURNS TRUE IF A CERTAIN FIELD IS EMPTY - IMPORTANT TO CHECK IF A PLAYER CAN
-	// PLACE A BASE
+	/**
+	 * Returns if a certain field is empty.
+	 *
+	 * @param i
+	 *            the field in question
+	 * @return true if the field is empty, false otherwise.
+	 * @throws RinggzException
+	 */
 	// @ requires this.isField(i);
 	/* @pure */
 	public boolean isEmptyField(int i) throws RinggzException {
 		return !this.getField(i).isFull();
 	}
 
-	// RETURNS TRUE IF A CERTAIN FIELD IS EMPTY
+	/**
+	 * Row-column adaptation of isEmptyField(field).
+	 *
+	 * @param row
+	 *            the row of the field in question
+	 * @param col
+	 * 			  the column of the field in question
+	 * @param ring
+	 *            the tier we want to test for emptiness
+	 * @return true if the field is empty, false otherwise.
+	 * @throws RinggzException
+	 */
 	// @ requires this.isField(row,col);
 	/* @pure */
 	public boolean isEmptyField(int row, int col, Tier choice) throws RinggzException {
 		return isEmptyField(index(row, col));
 	}
-	// do while loop in player which makes it easy to register first move
 
-	// CHECKS IF BOARD IS FULL
+	/**
+	 * Returns whether the board is full.
+	 *
+	 * @return true if the board is full, false otherwise.
+	 */
 	/* @pure */
 	public boolean boardIsFull() {
 		for (Field field : fields) {
@@ -197,10 +277,14 @@ public class Board {
 		}
 		return true;
 	}
-
-	private List<Integer> left = Arrays.asList(1, 6, 11, 16, 21);
-	private List<Integer> right = Arrays.asList(5, 10, 15, 20, 25);
-
+	
+	/**
+	 * Returns a list of the adjacent fields of a certain field.
+	 *
+	 * @param field
+	 *            the field in question
+	 * @return a list of fields that are adjacent to the field in the arguments.
+	 */
 	// @returns List<Field> of adjacent fields
 	// @requires this.isField(field);
 	/* @pure */
@@ -241,13 +325,22 @@ public class Board {
 		return result;
 	}
 
+	/**
+	 * Returns whether there is a certain color in the adjacent fields of a certain field.
+	 *
+	 * @param field
+	 *            the field in question
+	 * @param c
+	 * 			  the color we are looking for
+	 * @return true if there is a ring with that color in the adjacent fields of the specified field.
+	 */
 	// @requires this.isField(f)
 	// @requires (c == Color.BLUE || c == Color.YELLOW || c == Color.RED || c ==
 	// Color.GREEN);
 	/* @pure */
-	public boolean proximityCheck(int f, Color c) {
-		for (Field field : this.adjacentFields(f)) {
-			for (Ring ring : field.getFieldState()) {
+	public boolean proximityCheck(int field, Color c) {
+		for (Field i : this.adjacentFields(field)) {
+			for (Ring ring : i.getFieldState()) {
 				if (ring.getColor() == c) {
 					return true;
 				}
@@ -256,6 +349,15 @@ public class Board {
 		return false;
 	}
 
+	/**
+	 * Returns whether there is a certain color in the adjacent fields of a certain field.
+	 *
+	 * @param field
+	 *            the field in question
+	 * @param c
+	 * 			  the color we are looking for
+	 * @return true if there is a ring with that color in the adjacent fields of the specified field.
+	 */
 	// @requires this.isField(field)
 	// @requires (c == Color.BLUE || c == Color.YELLOW || c == Color.RED || c ==
 	// Color.GREEN);

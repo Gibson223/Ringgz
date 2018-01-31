@@ -17,7 +17,7 @@ class BoardTest {
 	void setUp() {
 		board = new Board(tui);
 	}
-
+	
 	@Test
 	void indexTest() {
 		assertTrue(board.index(1,1) == 1);
