@@ -19,6 +19,15 @@ class BoardTest {
 	}
 	
 	@Test
+	void xyTest() {
+		int[] result = new int[2];
+		result[0] = 1;
+		result[1] = 2;
+		assertTrue(result[0] == (board.xy(12)[0]));
+		assertTrue(result[1] == (board.xy(12)[1]));
+	}
+	
+	@Test
 	void indexTest() {
 		assertTrue(board.index(1,1) == 1);
 		assertTrue(board.index(5,5) == 25);
