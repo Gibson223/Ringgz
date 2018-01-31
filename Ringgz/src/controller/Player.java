@@ -9,9 +9,12 @@ public abstract class Player {
     public  final String name;
     private Color  primary;
     private Color secondary;
+    private Board board;
     
     public Player(String name) {
     	this.name = name;
+    	this.potentialFields = new LinkedList<Field>();
+    	this.board = new Board();
     }
 	public void setPrimary(Color primary) {
 		this.primary = primary;
@@ -27,7 +30,7 @@ public abstract class Player {
 
 
 	public RingList ringList;
-	public List<Field> potentialFields = new LinkedList<>();
+	public final List<Field> potentialFields;
     // -- Constructors -----------------------------------------------
 
     /*@
@@ -40,11 +43,13 @@ public abstract class Player {
      * 
      */
 	
-//    public Player(String name, Color color, RingList ringList) { //TODO: make it possible to assign more than one color to a single player
+//    public Player(String name, Color color, RingList ringList)
+//	{ //TODO: make it possible to assign more than one color to a single player
 //        this.name = name;
 //        this.primary = color;
 //    }
-//    public Player(String name, Color primary, Color secondary, RingList ringList) { //TODO: make it possible to assign more than one color to a single player
+//    public Player(String name, Color primary, Color secondary, 
+//		RingList ringList) { //TODO: make it possible to assign more than one color to a single player
 //        this.name = name;
 //        this.primary = primary;
 //        this.secondary = secondary;
@@ -84,5 +89,26 @@ public abstract class Player {
      *            the current board
      * @throws RinggzException 
      */
+    //returns false if no move is available
+    public boolean playerCheck() {
+    	boolean validringmove = false;
+    	for (Ring ring: this.ringList.availableRings) {
+    		for (Field field: this.board.fields) {
+    			if (field.isAllowed(ring) && 
+    					this.board.proximityCheck(field.FieldNumber, this.getPrimaryColor())) {
+    				validringmove = true;
+    				break;
+    			}
+    		}
+    	}
+    	if (this.ringList.availableRings.isEmpty() && validringmove) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    public void makeMove() throws RinggzException {
+    	this.makeMove(this.board);
+    }
     public abstract void makeMove(Board board) throws RinggzException;
 }
