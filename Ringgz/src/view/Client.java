@@ -1,8 +1,8 @@
 package view;
 
-import controller.ComputerPlayer;
-import controller.GameController;
 import controller.HumanPlayer;
+import controller.GameController;
+import controller.ComputerPlayer;
 import controller.Player;
 
 public class Client {
@@ -10,11 +10,11 @@ public class Client {
 		localGame();
 	}
 	public static void localGame() {
-		Player gibson = new ComputerPlayer("SmartStrategy");
-		Player random = new ComputerPlayer("SmartStrategy");
-		Player geez = new ComputerPlayer("SmartStrategy");
-		Player nuller = new HumanPlayer("null");
-		GameController gc = new GameController(gibson, random, geez, null);
+		Player gibson = new ComputerPlayer("a");
+		Player random = new ComputerPlayer("b");
+		Player geez = new ComputerPlayer("c");
+		Player nuller = new ComputerPlayer("d");
+		GameController gc = new GameController(gibson, random, geez, nuller);
 		Thread game = new Thread(gc);
 		game.start();
 	}

@@ -14,12 +14,12 @@ public class ComputerPlayer extends Player {
     
     public ComputerPlayer(String name) {
     	super(name);
+    	potentialFields = new ArrayList<>();	
     	if (name == "SmartStrategy") {
     			this.strategy = new SmartStrategy();    			
     	} else {
     		this.strategy = new NaiveStrategy();
     	}
-    	List<Field> potentialFields = new ArrayList<>();	
     }
 
 	@Override
@@ -64,10 +64,11 @@ public class ComputerPlayer extends Player {
 				}
 			}
 		}catch (RinggzException e) {
+			potentialFields.add(board.getField(13));
 			this.makeMove(board);
 		} catch (NullPointerException e) {
 			System.out.println("invalid color, input your move again:\n");
-			this.makeMove(board);
+			strategy.determineColor(board,this);
 		} catch (NumberFormatException e) {
 			System.out.println("invalid input, try again:\n");
 			this.makeMove(board);}
