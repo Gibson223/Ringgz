@@ -34,13 +34,13 @@ public class FieldTest {
 	public void testDefault() {
 		assertTrue(field.getFieldState().size() == 4);
 		assertTrue(field.getFieldState().get(1).getColor() == Color.INIT && 
-				field.getFieldState().get(1).getTier() == Tier.MEDIUM);
+				field.getFieldState().get(1).getTier() == Tier.SMALL);
 		assertTrue(field.getFieldState().get(2).getColor() == Color.INIT && 
-				field.getFieldState().get(2).getTier() == Tier.LARGE);
+				field.getFieldState().get(2).getTier() == Tier.MEDIUM);
 		assertTrue(field.getFieldState().get(3).getColor() == Color.INIT && 
-				field.getFieldState().get(3).getTier() == Tier.LARGEST);
+				field.getFieldState().get(3).getTier() == Tier.LARGE);
 		assertTrue(field.getFieldState().get(0).getColor() == Color.INIT && 
-				field.getFieldState().get(0).getTier() == Tier.SMALL);
+				field.getFieldState().get(0).getTier() == Tier.SMALLEST);
 	}
 	@Test
 	public void testColor() {
@@ -59,10 +59,10 @@ public class FieldTest {
 		assertEquals(field.getFieldState().get(1).getColor(), Color.GREEN);
 		assertEquals(field.getFieldState().get(2).getColor(), Color.RED);
 		assertEquals(field.getFieldState().get(3).getColor(), Color.YELLOW);
-		assertEquals(field.getFieldState().get(0).getTier(), Tier.SMALL);
-		assertEquals(field.getFieldState().get(1).getTier(), Tier.MEDIUM);
-		assertEquals(field.getFieldState().get(2).getTier(), Tier.LARGE);
-		assertEquals(field.getFieldState().get(3).getTier(), Tier.LARGEST);
+		assertEquals(field.getFieldState().get(0).getTier(), Tier.SMALLEST);
+		assertEquals(field.getFieldState().get(1).getTier(), Tier.SMALL);
+		assertEquals(field.getFieldState().get(2).getTier(), Tier.MEDIUM);
+		assertEquals(field.getFieldState().get(3).getTier(), Tier.LARGE);
 	}
 
 	@Test
@@ -72,10 +72,10 @@ public class FieldTest {
 		assertEquals(field.getFieldState().get(1).getColor(), Color.INIT);
 		assertEquals(field.getFieldState().get(2).getColor(), Color.INIT);
 		assertEquals(field.getFieldState().get(3).getColor(), Color.INIT);
-		assertEquals(field.getFieldState().get(0).getTier(), Tier.SMALL);
-		assertEquals(field.getFieldState().get(1).getTier(), Tier.MEDIUM);
-		assertEquals(field.getFieldState().get(2).getTier(), Tier.LARGE);
-		assertEquals(field.getFieldState().get(3).getTier(), Tier.LARGEST);
+		assertEquals(field.getFieldState().get(0).getTier(), Tier.SMALLEST);
+		assertEquals(field.getFieldState().get(1).getTier(), Tier.SMALL);
+		assertEquals(field.getFieldState().get(2).getTier(), Tier.MEDIUM);
+		assertEquals(field.getFieldState().get(3).getTier(), Tier.LARGE);
 	}
 	@Test
 	public void testHasBase() {
@@ -92,50 +92,50 @@ public class FieldTest {
 	assertEquals(field.hasBase(),true);
 	field.getFieldState().set(0, (new Ring(Color.INIT, Tier.BASE)));
 	assertEquals(field.isFull(), false); 
-	field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALL)));
-	field.getFieldState().set(1, (new Ring(Color.INIT, Tier.MEDIUM)));
+	field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALLEST)));
+	field.getFieldState().set(1, (new Ring(Color.INIT, Tier.SMALL)));
 	assertEquals(field.isFull(), false);
-	field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALL)));
-	field.getFieldState().set(1, (new Ring(Color.GREEN, Tier.MEDIUM)));
-	field.getFieldState().set(2, (new Ring(Color.GREEN, Tier.LARGE)));
-	field.getFieldState().set(3, (new Ring(Color.GREEN, Tier.LARGEST)));
+	field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALLEST)));
+	field.getFieldState().set(1, (new Ring(Color.GREEN, Tier.SMALL)));
+	field.getFieldState().set(2, (new Ring(Color.GREEN, Tier.MEDIUM)));
+	field.getFieldState().set(3, (new Ring(Color.GREEN, Tier.LARGE)));
 	assertEquals(field.isFull(), true);
 	}
 	@Test
 	public void testisAllowed() {
-		field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALL)));
-		field.getFieldState().set(1, (new Ring(Color.GREEN, Tier.MEDIUM)));
-		field.getFieldState().set(2, (new Ring(Color.GREEN, Tier.LARGE)));
-		field.getFieldState().set(3, (new Ring(Color.GREEN, Tier.LARGEST)));
-		assertFalse(field.isAllowed(new Ring(Color.BLUE, Tier.SMALL)));
-		field.getFieldState().set(0, (new Ring(Color.INIT, Tier.SMALL)));
-		assertTrue(field.isAllowed(new Ring(Color.BLUE, Tier.SMALL))); 
-		assertFalse(field.isAllowed(new Ring(Color.GREEN, Tier.MEDIUM)));		
+		field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALLEST)));
+		field.getFieldState().set(1, (new Ring(Color.GREEN, Tier.SMALL)));
+		field.getFieldState().set(2, (new Ring(Color.GREEN, Tier.MEDIUM)));
+		field.getFieldState().set(3, (new Ring(Color.GREEN, Tier.LARGE)));
+		assertFalse(field.isAllowed(new Ring(Color.BLUE, Tier.SMALLEST)));
+		field.getFieldState().set(0, (new Ring(Color.INIT, Tier.SMALLEST)));
+		assertTrue(field.isAllowed(new Ring(Color.BLUE, Tier.SMALLEST))); 
+		assertFalse(field.isAllowed(new Ring(Color.GREEN, Tier.SMALL)));		
 	}
 	@Test
 	public void testsetRing() {
-		field.setRing(new Ring(Color.GREEN, Tier.MEDIUM));
+		field.setRing(new Ring(Color.GREEN, Tier.SMALL));
 		assertEquals(field.getFieldState().get(1).getColor(), Color.GREEN);
-		assertEquals(field.getFieldState().get(1).getTier(),Tier.MEDIUM); 
+		assertEquals(field.getFieldState().get(1).getTier(),Tier.SMALL); 
 		field.setRing(new Ring(Color.GREEN, Tier.BASE));
 		assertEquals(field.getFieldState().get(3).getColor(), Color.GREEN);
 		assertEquals(field.getFieldState().get(3).getTier(),Tier.BASE); 
-		field.setRing(new Ring(Color.BLUE, Tier.MEDIUM));
+		field.setRing(new Ring(Color.BLUE, Tier.SMALL));
 		assertEquals(field.getFieldState().get(3).getColor(), Color.GREEN);
 	}
 	@Test
 	public void testisWinner() {
 		assertNull(field.isWinner());
-		field.setRing(new Ring(Color.GREEN, Tier.MEDIUM));
+		field.setRing(new Ring(Color.GREEN, Tier.SMALL));
 		assertEquals(field.isWinner(), Color.GREEN);
-		field.setRing(new Ring(Color.YELLOW, Tier.SMALL));
+		field.setRing(new Ring(Color.YELLOW, Tier.SMALLEST));
 		assertNull(field.isWinner());
-		field.setRing(new Ring(Color.YELLOW, Tier.LARGE));
+		field.setRing(new Ring(Color.YELLOW, Tier.MEDIUM));
 		assertEquals(field.isWinner(),Color.YELLOW);
 	}
 	@Test
 	public void testgetFieldColors() {
-		field.setRing(new Ring(Color.GREEN, Tier.MEDIUM));
+		field.setRing(new Ring(Color.GREEN, Tier.SMALL));
 		assertEquals(field.getFieldColors(), 
 				new ArrayList<>(Arrays.asList(field.getFieldState().get(0).getColor(),
 						field.getFieldState().get(1).getColor(),
@@ -149,10 +149,10 @@ public class FieldTest {
 		assertEquals(b.getField(20).toString(), new String("-20-"));	
 		field2.setRing(new Ring(Color.BLUE, Tier.BASE));
 		assertEquals(field2.toString(), new String("bBAS"));
-		field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALL)));
-		field.getFieldState().set(1, (new Ring(Color.GREEN, Tier.MEDIUM)));
-		field.getFieldState().set(2, (new Ring(Color.GREEN, Tier.LARGE)));
-		field.getFieldState().set(3, (new Ring(Color.GREEN, Tier.LARGEST)));
+		field.getFieldState().set(0, (new Ring(Color.BLUE, Tier.SMALLEST)));
+		field.getFieldState().set(1, (new Ring(Color.GREEN, Tier.SMALL)));
+		field.getFieldState().set(2, (new Ring(Color.GREEN, Tier.MEDIUM)));
+		field.getFieldState().set(3, (new Ring(Color.GREEN, Tier.LARGE)));
 		assertEquals(field.toString(), new String("bggg"));
 		}
 }

@@ -13,10 +13,10 @@ public class Field extends Observable {
 	//@ensures this.hasBase();
 	public void placeBase() {
 		this.fieldState.clear();
-		this.fieldState.add(new Ring(Color.BLUE, Tier.SMALL));
-		this.fieldState.add(new Ring(Color.GREEN, Tier.MEDIUM));
-		this.fieldState.add(new Ring(Color.RED, Tier.LARGE));
-		this.fieldState.add(new Ring(Color.YELLOW, Tier.LARGEST));
+		this.fieldState.add(new Ring(Color.BLUE, Tier.SMALLEST));
+		this.fieldState.add(new Ring(Color.GREEN, Tier.SMALL));
+		this.fieldState.add(new Ring(Color.RED, Tier.MEDIUM));
+		this.fieldState.add(new Ring(Color.YELLOW, Tier.LARGE));
 		setChanged();
 		notifyObservers("ring placed");
 	}
@@ -26,10 +26,10 @@ public class Field extends Observable {
 	}
 
 	public void initfieldState() {
+		fieldState.add(new Ring(Color.INIT, Tier.SMALLEST));
 		fieldState.add(new Ring(Color.INIT, Tier.SMALL));
 		fieldState.add(new Ring(Color.INIT, Tier.MEDIUM));
 		fieldState.add(new Ring(Color.INIT, Tier.LARGE));
-		fieldState.add(new Ring(Color.INIT, Tier.LARGEST));
 	}
 
 	// small to large;

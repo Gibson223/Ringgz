@@ -54,7 +54,7 @@ class BoardTest {
 	
 	@Test
 	void proximityCheckTest() throws RinggzException {
-		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALLEST);
 		board.setRing(1, ring1);
 		assertTrue(board.proximityCheck(6,Color.BLUE));
 		assertTrue(board.proximityCheck(2,Color.BLUE));
@@ -62,7 +62,7 @@ class BoardTest {
 	
 	@Test
 	void isAllowedTest() throws RinggzException {
-		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALLEST);
 		board.setRing(1, ring1);
 		assertFalse(board.isAllowed(1,1,ring1));
 		assertFalse(board.isAllowed(1,ring1));
@@ -95,7 +95,7 @@ class BoardTest {
 		board.reset();
 		assertTrue(board.isEmptyField(1));
 		assertTrue(board.isEmptyField(25));
-		assertTrue(board.isEmptyField(1,1,Tier.LARGE));
+		assertTrue(board.isEmptyField(1,1,Tier.MEDIUM));
 	}
 		
 	@Test
@@ -110,10 +110,10 @@ class BoardTest {
 	//Fills all fields with blue rings and checks who has the majority of won fields
 	void isWinnerTest() throws RinggzException{
 		board.reset();
-		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
-		Ring ring2 = new Ring(Color.BLUE, Tier.MEDIUM);
-		Ring ring3 = new Ring(Color.BLUE, Tier.LARGE);
-		Ring ring4 = new Ring(Color.BLUE, Tier.LARGEST);
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALLEST);
+		Ring ring2 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring3 = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring4 = new Ring(Color.BLUE, Tier.LARGE);
 		for (Field field : board.fields) {
 			board.setRing(field.FieldNumber, ring1);	
 			board.setRing(field.FieldNumber, ring2);
@@ -126,10 +126,10 @@ class BoardTest {
 	@Test
 	void boardIsFullTest() throws RinggzException {
 		board.reset();
-		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
-		Ring ring2 = new Ring(Color.BLUE, Tier.MEDIUM);
-		Ring ring3 = new Ring(Color.BLUE, Tier.LARGE);
-		Ring ring4 = new Ring(Color.BLUE, Tier.LARGEST);
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALLEST);
+		Ring ring2 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring3 = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring4 = new Ring(Color.BLUE, Tier.LARGE);
 		for (Field field : board.fields) {
 			board.setRing(field.FieldNumber, ring1);	
 			board.setRing(field.FieldNumber, ring2);
@@ -142,10 +142,10 @@ class BoardTest {
 	@Test
 	void gameOverTest() throws RinggzException {
 		board.reset();
-		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
-		Ring ring2 = new Ring(Color.BLUE, Tier.MEDIUM);
-		Ring ring3 = new Ring(Color.BLUE, Tier.LARGE);
-		Ring ring4 = new Ring(Color.BLUE, Tier.LARGEST);
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALLEST);
+		Ring ring2 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring3 = new Ring(Color.BLUE, Tier.MEDIUM);
+		Ring ring4 = new Ring(Color.BLUE, Tier.LARGE);
 		for (Field field : board.fields) {
 			board.setRing(field.FieldNumber, ring1);	
 			board.setRing(field.FieldNumber, ring2);
@@ -157,7 +157,7 @@ class BoardTest {
 	
 	@Test
 	void fieldHasColorTest() throws RinggzException {
-		Ring ring1 = new Ring(Color.BLUE, Tier.SMALL);
+		Ring ring1 = new Ring(Color.BLUE, Tier.SMALLEST);
 		board.setRing(1, ring1);
 		assertTrue(board.fieldHasColor(1,Color.BLUE));
 	}

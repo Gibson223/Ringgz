@@ -2,21 +2,13 @@ package serverclient;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
 import controller.GameController;
-import model.*;
-import net.Protocol;
-import server.Server;
-import view.*;
 
 public class Server implements Runnable {
 	public static int PORT = 23197;
