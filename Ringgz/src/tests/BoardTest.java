@@ -15,7 +15,7 @@ class BoardTest {
 	
 	@BeforeEach
 	void setUp() {
-		board = new Board(tui);
+		board = new Board();
 	}
 	
 	@Test
@@ -88,7 +88,7 @@ class BoardTest {
 	
 	@Test
 	void resetTest() throws RinggzException {
-		Board b = new Board(tui);
+		Board b = new Board();
 		Ring ring = new Ring();
 		ring.setColor(Color.RED);
 		ring.setTier(Tier.BASE);
@@ -109,7 +109,7 @@ class BoardTest {
 		
 	@Test
 	void specialBaseTest() throws RinggzException {
-		Board board = new Board(tui);
+		Board board = new Board();
 		board.specialBase(1);
 		System.out.println(board.getField(1).toString());
 		assertEquals(board.getField(1).toString(), "bgry");

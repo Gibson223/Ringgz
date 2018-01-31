@@ -144,7 +144,7 @@ public class FieldTest {
 	}
 	@Test
 	public void testtoString() throws RinggzException {
-		Board b = new Board(tui);
+		Board b = new Board();
 		assertEquals(field.toString(), new String("--0-"));
 		assertEquals(b.getField(20).toString(), new String("-20-"));	
 		field2.setRing(new Ring(Color.BLUE, Tier.BASE));
