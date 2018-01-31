@@ -90,18 +90,23 @@ public abstract class Player {
      * @throws RinggzException 
      */
     //returns false if no move is available
-    public boolean playerCheck() {
+    public boolean playerCheck() throws RinggzException {
     	boolean validringmove = false;
+    	if (this.board.firstMove) {
+    		return true;
+    	}
     	for (Ring ring: this.ringList.availableRings) {
     		for (Field field: this.board.fields) {
-    			if (field.isAllowed(ring) && 
-    					this.board.proximityCheck(field.FieldNumber, this.getPrimaryColor())) {
+    			if (this.board.isAllowed(field.FieldNumber, ring) && 
+    					(this.board.proximityCheck(field.FieldNumber, this.getPrimaryColor()) || 
+    							this.board.FieldHasColor(field.FieldNumber, 
+    									this.getPrimaryColor()))) {
     				validringmove = true;
     				break;
     			}
     		}
     	}
-    	if (this.ringList.availableRings.isEmpty() && validringmove) {
+    	if (!this.ringList.availableRings.isEmpty() && validringmove) {
     		return true;
     	} else {
     		return false;

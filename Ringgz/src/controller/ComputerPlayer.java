@@ -34,20 +34,12 @@ public class ComputerPlayer extends Player {
 			Collections.shuffle(tiers);
 			Tier choiceTier = tiers.get(0);
 			Ring selectedRing = new Ring(choiceColor, choiceTier);
-			if (!this.ringList.availableRings.contains(new Ring(choiceColor, choiceTier))
-					&& !board.isAllowed(choiceField, selectedRing)) {
-				this.makeMove(board);
-			}
 			if (board.firstMove) {
 				int  tempfield = choiceField;
 				if (board.middle9.stream().anyMatch(a -> a == tempfield)) {
 					board.specialbase(choiceField);
 					board.firstMove = false;
-					System.out.println("the first move has been placed");
-				} else {
-					System.out.println(
-							"this is the first move and the criteria for this are not met...");
-					this.makeMove(board);
+					System.out.println("\nthe first move has been placed");
 				}
 			} else {
 				if (board.isAllowed(choiceField, selectedRing) && 
@@ -59,9 +51,6 @@ public class ComputerPlayer extends Player {
 					potentialFields.add(board.getField(choiceField));
 					potentialFields.addAll(board.adjacentFields(choiceField));
 					System.out.println("\nthe ring has been added to the field....");
-				} else {
-					System.out.println("Invalid move, try another one.");
-					this.makeMove(board);
 				}
 			}
 		} catch (RinggzException e) {

@@ -71,7 +71,7 @@ public class Field  extends Observable{
 		if (this.isFull()) {
 			return false;
 		}
-		for (Ring ring : fieldState){
+		for (Ring ring : fieldState) {
 			if (ring.getTier() == r.getTier() && !(ring.getColor() == Color.INIT)) {
 				return false;
 			}

@@ -35,6 +35,7 @@ public class TUI implements Observer, Runnable {
 	}
 	public void run() {
 		this.view();
+		System.out.println("\n");
 //		boolean exit = false;
 //		while(!exit) {
 //			Scanner in = new Scanner(System.in);

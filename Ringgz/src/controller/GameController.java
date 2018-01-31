@@ -17,14 +17,21 @@ public class GameController implements Runnable {
 	public Board board;
 	public TUI tui;
 	public RingList ringlist;
+	private Map<Player, Boolean> canmove;
+	public int currentplayer = 0;
 	
-	public GameController( Player s0, Player s1, Player s2, Player s3) {
-		List<Object> playerlist = new ArrayList<>();
+	public GameController(Player s0, Player s1, Player s2, Player s3) {
+		List<Player> playerlist = new ArrayList<>();
+		canmove = new HashMap<Player, Boolean>();
 		playerlist.add(s0);
 		playerlist.add(s1);
 		playerlist.add(s2);
 		playerlist.add(s3);
 		playerlist.stream().filter(a -> a != null).forEach(a -> players.add((Player) a)); 
+		canmove.put(s0, true);
+		canmove.put(s0, true);
+		canmove.put(s0, true);
+		canmove.put(s0, true);
 		this.run();
 	}
 	@Override
@@ -38,7 +45,8 @@ public class GameController implements Runnable {
 		this.playerSetter();
 		this.ringdivider();
 		Thread tuithread = new Thread(tui);
-		tuithread.start();
+		tui.run();
+//		tuithread.start();
 		this.play();
 
 	}
@@ -49,7 +57,7 @@ public class GameController implements Runnable {
 			players.get(1).setPrimary(Color.GREEN);
 			players.get(1).setSecondary(Color.BLUE);
 		}
-		if(this.players.size() == 3) {
+		if (this.players.size() == 3) {
 			players.get(0).setPrimary(Color.RED);
 			players.get(1).setPrimary(Color.YELLOW);
 			players.get(2).setPrimary(Color.GREEN);
@@ -57,7 +65,7 @@ public class GameController implements Runnable {
 			players.get(1).setSecondary(Color.BLUE);
 			players.get(2).setSecondary(Color.BLUE);
 		}
-		if(this.players.size() == 4) {
+		if (this.players.size() == 4) {
 			players.get(0).setPrimary(Color.RED);
 			players.get(1).setPrimary(Color.YELLOW);
 			players.get(2).setPrimary(Color.GREEN);
@@ -65,7 +73,7 @@ public class GameController implements Runnable {
 		}
 	}
 	public void ringdivider() {
-		if (this.players.size() == 2){
+		if (this.players.size() == 2) {
 			RingList ringlistpart1 = new RingList(
 					new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
 			RingList ringlistpart2 = new RingList(
@@ -107,13 +115,11 @@ public class GameController implements Runnable {
 		
 	}
 	public boolean handleMove(Move move) {
-		
+		return true;
 	}
-	private Map<Player, Boolean> canmove = new HashMap<Player, Boolean>();
-	public int currentplayer = 0;
 	public void play() {
 		boolean succes = false;
-		while (!board.boardIsFull() && canmove.values().
+		while (!this.board.boardIsFull() || !canmove.values().
 				stream().allMatch(a -> a.booleanValue() == false)) {
 			while (!succes) {
 				try {
@@ -123,26 +129,28 @@ public class GameController implements Runnable {
 						succes = true;
 					} else {
 						canmove.put(players.get(currentplayer), false);
+						succes = true;
 					}
 				} catch (RinggzException e) {
-					currentplayer += 1;
-					currentplayer %= this.players.size();
-					succes = false;
+					succes = false; 
 				}
 			}
-			Player winner = null;
-			Color colorwin = this.board.isWinner();
-			if (colorwin == null) {
-				System.out.println("It is a tie....");
-			} else {
-				for (Player possiblewinner: this.players) {
-					if (possiblewinner.getPrimaryColor() == colorwin) {
-						winner = possiblewinner;
-						break;
-					}
+			currentplayer += 1;
+			currentplayer %= this.players.size();
+			succes = false;
+		}
+		Player winner = null;
+		Color colorwin = this.board.isWinner();
+		if (colorwin == null) {
+			System.out.println("It is a tie....");
+		} else {
+			for (Player possiblewinner: this.players) {
+				if (possiblewinner.getPrimaryColor() == colorwin) {
+					winner = possiblewinner;
+					break;
 				}
-				System.out.println("The winner of the match is " + winner.getName());
 			}
+			System.out.println("The winner of the match is " + winner.getName());
 		}
 	}
 }

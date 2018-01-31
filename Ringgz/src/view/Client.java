@@ -12,9 +12,9 @@ public class Client {
 	public static void localGame() {
 		Player gibson = new ComputerPlayer("a");
 		Player random = new ComputerPlayer("b");
-		Player geez = new ComputerPlayer("c");
-		Player nuller = new ComputerPlayer("d");
-		GameController gc = new GameController(gibson, random, geez, nuller);
+		Player geez = new HumanPlayer("c");
+		Player nuller = new HumanPlayer("d");
+		GameController gc = new GameController(gibson, random, null, null);
 		Thread game = new Thread(gc);
 		game.start();
 	}

@@ -146,7 +146,7 @@ public class Board {
     	return false;
     }
     public boolean isAllowed(int field, Ring ring) throws RinggzException {
-		return (getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring));
+		return getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring);
     }
 
     //RETURNS TRUE IF A CERTAIN RING CAN BE PLACED IN A CERTAIN FIELD
