@@ -19,40 +19,36 @@ public class SmartStrategy implements Strategy {
 
 	@Override
 	public Field determineField(Board board, Player p) {
-		try {
-			p.potentialFields.add(board.getField(7));
-			p.potentialFields.add(board.getField(8));
-			p.potentialFields.add(board.getField(9));
-			p.potentialFields.add(board.getField(12));
-			p.potentialFields.add(board.getField(13));
-			p.potentialFields.add(board.getField(14));
-			p.potentialFields.add(board.getField(17));
-			p.potentialFields.add(board.getField(18));
-			p.potentialFields.add(board.getField(19));
-		} catch (RinggzException e1) {
-			//do nothing
-			e1.printStackTrace();
-		}
-		Collections.shuffle(p.potentialFields);
-		Field smartField = p.potentialFields.get(0);
+		
 		if (board.firstMove) {
 			try {
-				p.potentialFields.addAll(Arrays.asList(board.getField(7), board.getField(8), board.getField(9),
-						board.getField(12), board.getField(13), board.getField(14), board.getField(17),
-						board.getField(18), board.getField(19)));
+				p.potentialFields.add(board.getField(7));
+				p.potentialFields.add(board.getField(8));
+				p.potentialFields.add(board.getField(9));
+				p.potentialFields.add(board.getField(12));
+				p.potentialFields.add(board.getField(13));
+				p.potentialFields.add(board.getField(14));
+				p.potentialFields.add(board.getField(17));
+				p.potentialFields.add(board.getField(18));
+				p.potentialFields.add(board.getField(19));
+				board.firstMove = false;
 			} catch (RinggzException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		Collections.shuffle(p.potentialFields);
+		Field smartField = p.potentialFields.get(0);
 		boolean fieldFound = false;
 		while (!fieldFound) {
 			int frec = Collections.frequency(smartField.getFieldColors(), p.getPrimaryColor());
-			if (frec > 2) {
+			if (frec >= 2) {
 				determineField(board, p);
 			} else {
 				fieldFound = true;
 			}
 		}
+		p.potentialFields.addAll(board.adjacentFields(smartField.FieldNumber));
 		return smartField;
 	}
 

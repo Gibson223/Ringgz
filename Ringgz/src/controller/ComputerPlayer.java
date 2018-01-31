@@ -9,9 +9,8 @@ import model.*;
 public class ComputerPlayer extends Player {
 	
     private Strategy strategy;
-    
-	public List<Field> potentialFields = new ArrayList<>();
 
+    public List<Field> potentialFields;
     
     public ComputerPlayer(String name) {
     	super(name);
@@ -20,6 +19,7 @@ public class ComputerPlayer extends Player {
     	} else {
     		this.strategy = new NaiveStrategy();
     	}
+    	List<Field> potentialFields = new ArrayList<>();	
     }
 
 	@Override
@@ -60,7 +60,6 @@ public class ComputerPlayer extends Player {
 					potentialFields.addAll(board.adjacentFields(choiceField));
 					System.out.println("\nthe ring has been added to the field....");
 				} else {
-					System.out.println("Invalid move, try another one.");
 					this.makeMove(board);
 				}
 			}
