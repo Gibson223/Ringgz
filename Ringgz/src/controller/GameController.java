@@ -98,13 +98,28 @@ public class GameController implements Runnable {
 		while(!board.boardIsFull()) {
 			while(!succes) {
 					try {
-						players.get(currentplayer).makeMove(board);
+						if (players.get(currentplayer)) {
+							players.get(currentplayer).makeMove(board);
 						succes = true;
+						}
 					} catch (RinggzException e) {}
 			}
 			currentplayer += 1;
         	currentplayer %= this.players.size();
         	succes = false;
         }
+		Player winner = null;
+		Color colorwin = this.board.isWinner();
+		if (colorwin == null) {
+			System.out.println("It is a tie....");
+		} else {
+			for (Player possiblewinner: this.players) {
+				if (possiblewinner.getPrimaryColor() == colorwin) {
+					winner = possiblewinner;
+					break;
+				}
+			}
+			System.out.println("The winner of the match is " + winner.getName());
+		}
 	}
 }
