@@ -19,7 +19,8 @@ public class Client {
 		game.start();
 	}
 //	public static void main(String[] args) {
-//		System.out.println("please type in a name, inetaddress and portnumber.....\n(separated by a space)");
+//		System.out.println("please type in a name, 
+//	inetaddress and portnumber.....\n(separated by a space)");
 //		Scanner in = new Scanner(System.in);
 //		String name = in.nextLine().split(" ")[0];
 //        try {

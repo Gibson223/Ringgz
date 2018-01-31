@@ -17,12 +17,12 @@ public class TUI implements Observer {
 	public TUI(Board board) {
 		this.board = board;
 	}
-	public void view () { 
+	public void view() { 
 		for (Field field: board.fields) {
-			if (((field.FieldNumber-1) % 5) == 0) {
-					System.out.print("\n\n" + "|");				
-				}
-			System.out.print( field.toString() + "|");
+			if (((field.FieldNumber - 1) % 5) == 0) {
+				System.out.print("\n \n" + "|");				
+			}
+			System.out.print(field.toString() + "|");
 		}
 	}
 	public static void main(String[] args) {
@@ -30,7 +30,7 @@ public class TUI implements Observer {
 		TUI tui = new TUI(b);
 		Ring ring = new Ring(Color.BLUE, Tier.BASE);
 		Ring ring1 = new Ring(Color.GREEN, Tier.BASE);
-		Ring ring2= new Ring(Color.BLUE, Tier.BASE);
+		Ring ring2 = new Ring(Color.BLUE, Tier.BASE);
 		Ring ring3 = new Ring(Color.BLUE, Tier.BASE);
 		try {
 			b.setRing(2, ring);
