@@ -125,7 +125,7 @@ public class Field extends Observable {
 	 *
 	 * @param ring
 	 *            the ring we want to place
-	 * @return nothing (void)
+	 * 
 	 */
 	// @requires ring != null;
 	public void setRing(Ring ring) {
@@ -219,7 +219,7 @@ public class Field extends Observable {
 	/**
 	 * Clears the field.
 	 *
-	 * @return nothing (void)
+	 * 
 	 */
 	// @requires this != null;
 	// @ensures \old(this) != this;
