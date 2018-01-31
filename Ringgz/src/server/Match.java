@@ -6,9 +6,9 @@ import java.util.List;
 
 import controller.Player;
 import model.Board;
-import net.Protocol;
-import net.Protocol.Packets;
-import net.ProtocolException;
+import serverclient.Protocol;
+import serverclient.ProtocolException;
+import serverclient.Protocol.Packets;
 
 /**
  * The purpose of this class is to manage a certain game.

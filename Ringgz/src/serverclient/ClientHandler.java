@@ -13,9 +13,8 @@ import java.net.Socket;
 import java.util.Arrays;
 
 import controller.GameController;
-import net.Protocol;
-import net.Protocol.Extensions;
-import net.Protocol.Packets;
+import serverclient.Protocol.Extensions;
+import serverclient.Protocol.Packets;
 
 public class ClientHandler implements Runnable{
 	private BufferedReader dis;

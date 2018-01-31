@@ -11,10 +11,10 @@ import model.Field;
 import model.Ring;
 import model.RingList;
 import model.Tier;
-import net.Protocol;
-import net.Protocol.Packets;
 import serverclient.ClientHandler;
+import serverclient.Protocol;
 import serverclient.Server;
+import serverclient.Protocol.Packets;
 import view.TUI;
 
 public class GameController implements Runnable {

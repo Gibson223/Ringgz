@@ -1,4 +1,4 @@
-package net;
+package serverclient;
 
 /**
  * Protocol class. This class contains string representations of everything that

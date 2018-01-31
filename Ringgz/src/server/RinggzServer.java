@@ -6,9 +6,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import serverclient.Protocol;
+import serverclient.Protocol.Extensions;
 import view.*;
-import net.Protocol;
-import net.Protocol.Extensions;
 
 public class RinggzServer implements Runnable {
 	

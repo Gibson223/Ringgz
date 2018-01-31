@@ -10,10 +10,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import view.*;
-import net.Protocol;
-import net.Protocol.Extensions;
-import net.Protocol.Packets;
-import net.ProtocolException;
+import serverclient.Protocol;
+import serverclient.ProtocolException;
+import serverclient.Protocol.Extensions;
+import serverclient.Protocol.Packets;
 
 //  The job of this class is to keep a certain client's connection with the server
 

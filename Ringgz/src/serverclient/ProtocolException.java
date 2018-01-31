@@ -1,4 +1,4 @@
-package net;
+package serverclient;
 
 /**
  * This exception is thrown whenever the protocol (made in project session 1) is

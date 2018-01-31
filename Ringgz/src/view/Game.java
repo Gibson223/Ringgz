@@ -8,10 +8,10 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import net.Protocol;
-import net.Protocol.Extensions;
-import net.Protocol.Packets;
-import net.ProtocolException;
+import serverclient.Protocol;
+import serverclient.ProtocolException;
+import serverclient.Protocol.Extensions;
+import serverclient.Protocol.Packets;
 
 /**
  * The <code>Game</code> class, which is responsible for making the game

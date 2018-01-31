@@ -9,9 +9,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.*;
+import serverclient.Protocol;
 import controller.*;
-
-import net.Protocol;
 
 //TUI for Ringgz
 public class TUI implements Observer, Runnable {
