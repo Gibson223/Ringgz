@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
+import controller.RinggzException;
+
 public class Field extends Observable {
 	public int FieldNumber;
 
@@ -43,10 +45,13 @@ public class Field extends Observable {
 		return fieldState;
 	}
 
-	// ROW-COLUMN ADAPTATION FOR getFieldState ABOVE
-
-	// RETURNS WHETHER OR NOT A FIELD HAS A CERTAIN COLOR RING
-	// for proximity check
+	/**
+	 * Checks whether or not a field has a certain color ring.
+	 *
+	 * @param color
+	 *             the color in question
+	 * @return true if the the field has that color in it, false otherwise.
+	 */
 	// @requires (color == Color.BLUE || color == Color.YELLOW || color == Color.RED ||
 	// color == Color.GREEN);
 	//@pure
@@ -59,6 +64,11 @@ public class Field extends Observable {
 		return false;
 	}
 
+	/**
+	 * Checks whether or not a field has a base.
+	 *
+	 * @return true if the field has a base in it, false otherwise.
+	 */
 	//@requires this != null;
 	//@pure
 	public boolean hasBase() {
@@ -69,6 +79,11 @@ public class Field extends Observable {
 		return false;
 	}
 
+	/**
+	 * Checks whether or not a field is full.
+	 *
+	 * @return true if the field is full, false otherwise.
+	 */
 	//@requires this != null;
 	//@pure
 	public boolean isFull() {
@@ -83,6 +98,13 @@ public class Field extends Observable {
 		return true;
 	}
 
+	/**
+	 * Checks whether or not a certain ring tier is already present in a field.
+	 *
+	 * @param r
+	 *          the ring whose tier we want to check
+	 * @return true if the ring tier is allowed, false otherwise.
+	 */
 	//@requires this != null && r != null
 	//@pure
 	public boolean isAllowed(Ring r) {
@@ -96,7 +118,14 @@ public class Field extends Observable {
 		}
 		return true;
 	}
-
+	
+	/**
+	 * Sets a ring on the field.
+	 *
+	 * @param ring
+	 *            the ring we want to place
+	 * @return nothing (void)
+	 */
 	//@requires ring != null;
 	public void setRing(Ring ring) {
 		if (this.isAllowed(ring)) {
@@ -114,6 +143,11 @@ public class Field extends Observable {
 		}
 	}
 
+	/**
+	 * Checks who the winner of the field is.
+	 *
+	 * @return the color with the majority of rings in the field.
+	 */
 	// @ensures (/result == Color.BLUE || /result == Color.YELLOW || /result ==
 	// Color.RED || /result == Color.GREEN);
 	/* @pure */
@@ -141,6 +175,11 @@ public class Field extends Observable {
 		return null;
 	}
 
+	/**
+	 * Checks what colors the field has.
+	 *
+	 * @return a list of the colors present in the field.
+	 */
 	//@requires this != null;
 	//@pure
 	public List<Color> getFieldColors() {
@@ -151,6 +190,11 @@ public class Field extends Observable {
 		return result;
 	}
 
+	/**
+	 * Transforms the state of the field into a string readable by a human.
+	 *
+	 * @return a string with the current situation of the field (ring distribution).
+	 */
 	//@requires this != null;
 	//@pure
 	public String toString() {
@@ -172,6 +216,11 @@ public class Field extends Observable {
 		return result;
 	}
 	
+	/**
+	 * Clears the field.
+	 *
+	 * @return nothing (void)
+	 */
 	//@requires this != null;
 	//@ensures \old(this) != this;
 	public void clear() {

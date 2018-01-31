@@ -24,9 +24,10 @@ public class Board {
 		} else if (field < 25) {
 			result[1] = 4;
 		}
-		result[0] = ((field % (result[1]*5)));
+		result[0] = ((field % (result[1] * 5)));
 		return result;
 	}
+
 	public static final int DIM = 5;
 	public boolean firstMove = true;
 	public final List<Integer> middle9 = Arrays.asList(7, 8, 9, 12, 13, 14, 17, 18, 19);
@@ -85,6 +86,14 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Checks that the inputed field number is a valid field.
+	 *
+	 * @param i
+	 *            the field in question
+	 * 
+	 * @return i if the field is valid, -1 otherwise.
+	 */
 	// @ requires 0 <= i & i < (DIM*DIM);
 	// this.isField(i) &&
 	// (allFields.containsKey(this.getField(i).FieldNumber == i
@@ -169,9 +178,7 @@ public class Board {
 		if (ring.getTier() == Tier.BASE) {
 			for (Field fieldforbase : this.adjacentFields(field)) {
 				if (fieldforbase.hasBase()
-						&&
-						(fieldforbase.getFieldState().
-								stream().anyMatch(a -> a.getColor() == ring.getColor()))) {
+						&& (fieldforbase.getFieldState().stream().anyMatch(a -> a.getColor() == ring.getColor()))) {
 					return true;
 				}
 			}
@@ -195,14 +202,13 @@ public class Board {
 		return getField(field).isAllowed(ring) && !this.adjacentHasBase(field, ring);
 	}
 
-
 	/**
 	 * Row and column adaptation of isAllowed(field,ring).
 	 *
 	 * @param row
 	 *            the row of the field in question
 	 * @param col
-	 * 			  the column of the field in question
+	 *            the column of the field in question
 	 * @param ring
 	 *            the ring we want to test
 	 * @return true if the ring can be placed in the field, flase otherwise.
@@ -215,6 +221,7 @@ public class Board {
 		return this.isAllowed(index(row, col), ring);
 
 	}
+
 	/**
 	 * Returns if a certain ring can be placed in a certain field.
 	 *
@@ -225,8 +232,8 @@ public class Board {
 	 * @return nothing (void).
 	 * @throws RinggzException
 	 */
-	//@requires i.isField() && ring != null;
-	//@ensures \old(board) != board;
+	// @requires i.isField() && ring != null;
+	// @ensures \old(board) != board;
 	public void setRing(int i, Ring ring) throws RinggzException {
 		getField(i).setRing(ring);
 	}
@@ -251,7 +258,7 @@ public class Board {
 	 * @param row
 	 *            the row of the field in question
 	 * @param col
-	 * 			  the column of the field in question
+	 *            the column of the field in question
 	 * @param ring
 	 *            the tier we want to test for emptiness
 	 * @return true if the field is empty, false otherwise.
@@ -277,7 +284,7 @@ public class Board {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Returns a list of the adjacent fields of a certain field.
 	 *
@@ -297,7 +304,7 @@ public class Board {
 				/* do nothing */
 			}
 		}
-		
+
 		if (this.isField(field - DIM)) {
 			try {
 				result.add(this.getField(field - DIM));
@@ -326,13 +333,15 @@ public class Board {
 	}
 
 	/**
-	 * Returns whether there is a certain color in the adjacent fields of a certain field.
+	 * Returns whether there is a certain color in the adjacent fields of a certain
+	 * field.
 	 *
 	 * @param field
 	 *            the field in question
 	 * @param c
-	 * 			  the color we are looking for
-	 * @return true if there is a ring with that color in the adjacent fields of the specified field.
+	 *            the color we are looking for
+	 * @return true if there is a ring with that color in the adjacent fields of the
+	 *         specified field.
 	 */
 	// @requires this.isField(f)
 	// @requires (c == Color.BLUE || c == Color.YELLOW || c == Color.RED || c ==
@@ -350,13 +359,15 @@ public class Board {
 	}
 
 	/**
-	 * Returns whether there is a certain color in the adjacent fields of a certain field.
+	 * Returns whether there is a certain color in the adjacent fields of a certain
+	 * field.
 	 *
 	 * @param field
 	 *            the field in question
 	 * @param c
-	 * 			  the color we are looking for
-	 * @return true if there is a ring with that color in the adjacent fields of the specified field.
+	 *            the color we are looking for
+	 * @return true if there is a ring with that color in the adjacent fields of the
+	 *         specified field.
 	 */
 	// @requires this.isField(field)
 	// @requires (c == Color.BLUE || c == Color.YELLOW || c == Color.RED || c ==
@@ -366,13 +377,23 @@ public class Board {
 		return getField(field).hasColor(color);
 	}
 
-	// RETURNS TRUE WHEN THE GAME ENDS (I.E. WHEN THE BOARD IS FULL)
-	// @ ensures \result == this.isFull();
+	/**
+	 * Returns whether the game is over or not.
+	 * 
+	 * @return true if the game is over, false otherwise.
+	 */
+	// @ ensures \result == this.boardIsFull();
 	/* @pure */
 	public boolean gameOver() {
 		return this.boardIsFull();
 	}
 
+	/**
+	 * Returns the color who has won.
+	 *
+	 * @return the color with the most won fields.
+	 * 
+	 */
 	// @ensures (/result == Color.BLUE || /result == Color.YELLOW || /result ==
 	// Color.RED || /result == Color.GREEN);
 	/* @pure */
@@ -397,7 +418,9 @@ public class Board {
 		return null;
 	}
 
-	// RESETS THE BOARD
+	/**
+	 * Resets the board.
+	 */
 	// @ensures this.fields() != \old(this).fields();
 	public void reset() {
 		for (Field field : fields) {
