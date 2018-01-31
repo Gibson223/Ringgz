@@ -37,7 +37,8 @@ public class GameController implements Runnable {
 		}
 		this.playerSetter();
 		this.ringdivider();
-        tui.start();
+		Thread tuithread = new Thread(tui);
+		tuithread.start();
 		this.play();
 
 	}
@@ -65,32 +66,47 @@ public class GameController implements Runnable {
 	}
 	public void ringdivider() {
 		if (this.players.size() == 2){
-			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
-			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 60)));
+			RingList ringlistpart1 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
+			RingList ringlistpart2 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(30, 60)));
 			players.get(0).setRingList(ringlistpart1);
 			players.get(1).setRingList(ringlistpart2);
 		}
 		if (this.players.size() == 3) {
-			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
-			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
-			RingList ringlistpart3 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
-			ringlistpart1.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(45, 50)));
-			ringlistpart2.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(50, 55)));
-			ringlistpart3.availableRings.addAll(new ArrayList<Ring>(ringlist.availableRings.subList(55, 60)));
+			RingList ringlistpart1 = new RingList(new ArrayList<Ring
+					>(ringlist.availableRings.subList(0, 15)));
+			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(
+				ringlist.availableRings.subList(15, 30)));
+			RingList ringlistpart3 = new RingList(new ArrayList<Ring>(
+				ringlist.availableRings.subList(30, 45)));
+			ringlistpart1.availableRings.addAll(new ArrayList<Ring>(
+				ringlist.availableRings.subList(45, 50)));
+			ringlistpart2.availableRings.addAll(new ArrayList<Ring>(
+				ringlist.availableRings.subList(50, 55)));
+			ringlistpart3.availableRings.addAll(new ArrayList<Ring>(
+				ringlist.availableRings.subList(55, 60)));
 			players.get(0).setRingList(ringlistpart1);
 			players.get(1).setRingList(ringlistpart2);
 			players.get(2).setRingList(ringlistpart3);
 		}
-		if(this.players.size() == 4) {
-			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
-			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
-			RingList ringlistpart3 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
-			RingList ringlistpart4 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(45, 60)));
+		if (this.players.size() == 4) {
+			RingList ringlistpart1 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(0, 15)));
+			RingList ringlistpart2 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(15, 30)));
+			RingList ringlistpart3 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(30, 45)));
+			RingList ringlistpart4 = new RingList(
+					new ArrayList<Ring>(ringlist.availableRings.subList(45, 60)));
 			players.get(0).setRingList(ringlistpart1);
 			players.get(1).setRingList(ringlistpart2);
 			players.get(2).setRingList(ringlistpart3);
 			players.get(3).setRingList(ringlistpart4);
 		}
+		
+	}
+	public boolean handleMove(Move move) {
 		
 	}
 	private Map<Player, Boolean> canmove = new HashMap<Player, Boolean>();
@@ -113,19 +129,19 @@ public class GameController implements Runnable {
 					currentplayer %= this.players.size();
 					succes = false;
 				}
-				Player winner = null;
-				Color colorwin = this.board.isWinner();
-				if (colorwin == null) {
-					System.out.println("It is a tie....");
-				} else {
-					for (Player possiblewinner: this.players) {
-						if (possiblewinner.getPrimaryColor() == colorwin) {
-							winner = possiblewinner;
-							break;
-						}
+			}
+			Player winner = null;
+			Color colorwin = this.board.isWinner();
+			if (colorwin == null) {
+				System.out.println("It is a tie....");
+			} else {
+				for (Player possiblewinner: this.players) {
+					if (possiblewinner.getPrimaryColor() == colorwin) {
+						winner = possiblewinner;
+						break;
 					}
-					System.out.println("The winner of the match is " + winner.getName());
 				}
+				System.out.println("The winner of the match is " + winner.getName());
 			}
 		}
 	}

@@ -10,7 +10,7 @@ import model.Field;
 import model.Ring;
 import model.Tier;
 
-public class TUI implements Observer {
+public class TUI implements Observer, Runnable {
 	
 	private Board board;
 	
@@ -25,29 +25,15 @@ public class TUI implements Observer {
 			System.out.print(field.toString() + "|");
 		}
 	}
-	public static void main(String[] args) {
-		Board b = new Board();
-		TUI tui = new TUI(b);
-		Ring ring = new Ring(Color.BLUE, Tier.BASE);
-		Ring ring1 = new Ring(Color.GREEN, Tier.BASE);
-		Ring ring2 = new Ring(Color.BLUE, Tier.BASE);
-		Ring ring3 = new Ring(Color.BLUE, Tier.BASE);
-		try {
-			b.setRing(2, ring);
-			b.setRing(4, ring1);
-			b.setRing(6, ring2);
-			b.setRing(8, ring3);
-		} catch (RinggzException e) {
-		}
-//		tui.view();
-	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg0 instanceof Field && arg1 instanceof String && ("ring placed".equals(((String)arg1)))) {
+		if (arg0 instanceof Field && arg1 instanceof String && 
+				("ring placed".equals((String) arg1))) {
 			this.view();
 		}
 	}
-	public void start() {
+	public void run() {
 		this.view();
 //		boolean exit = false;
 //		while(!exit) {
