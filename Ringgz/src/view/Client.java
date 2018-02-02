@@ -14,7 +14,7 @@ public class Client {
 		Player random = new ComputerPlayer("b");
 		Player geez = new HumanPlayer("c");
 		Player nuller = new HumanPlayer("d");
-		GameController gc = new GameController(gibson, random, null, null);
+		GameController gc = new GameController(gibson, random, gibson, random);
 		Thread game = new Thread(gc);
 		game.start();
 	}
@@ -35,3 +35,4 @@ public class Client {
 //	}
 
 }
+

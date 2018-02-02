@@ -1,39 +1,49 @@
-package controller;
+package view;
 
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import controller.GameController;
+import controller.Move;
+import controller.Player;
+import controller.RinggzException;
 import model.Board;
 import model.Color;
 import model.Field;
 import model.Ring;
 import model.RingList;
-import view.TUI;
 
-public class GameController implements Runnable {
+public class LocalGameController {
+	private InetAddress adress;
+	private String username;
+	private int port;
+	private TUI tui;
+	private Socket clientsocket;
+	private boolean gamestarted;
+	public LocalGameController(TUI tui, String username, InetAddress adress, int port) implements Runnable {
+		this.adress = adress;
+		this.tui = tui;
+		this.username = username;
+		this.port = port;
+		this.clientsocket = new Socket(adress, port);
+		this.run();
+	}
+	private 
+	private boolean establishConnection() {
+		while() {
+			
+	}
+	
 	public List<Player> players = new ArrayList<Player>();
 	public Board board;
-	public TUI tui;
 	public RingList ringlist;
 	private Map<Player, Boolean> canmove;
 	public int currentplayer = 0;
 	
-	public GameController(Player s0, Player s1, Player s2, Player s3) {
-		List<Player> playerlist = new ArrayList<>();
-		canmove = new HashMap<Player, Boolean>();
-		playerlist.add(s0);
-		playerlist.add(s1);
-		playerlist.add(s2);
-		playerlist.add(s3);
-		playerlist.stream().filter(a -> a != null).forEach(a -> players.add((Player) a)); 
-		canmove.put(s0, true);
-		canmove.put(s1, true);
-		canmove.put(s2, true);
-		canmove.put(s3, true);
-		this.run();
-	}
 	@Override
 	public void run() {
 		board = new Board();
@@ -46,7 +56,6 @@ public class GameController implements Runnable {
 		this.ringdivider();
 		Thread tuithread = new Thread(tui);
 		tui.run();
-//		tuithread.start();
 		this.play();
 
 	}
@@ -153,4 +162,5 @@ public class GameController implements Runnable {
 			System.out.println("The winner of the match is " + winner.getName());
 		}
 	}
+}
 }
