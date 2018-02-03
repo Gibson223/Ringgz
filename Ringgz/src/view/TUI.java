@@ -21,7 +21,7 @@ public class TUI implements Observer, Runnable {
 		this.INIT();
 	}
 
-	public void INIT() {
+	public void INIT () {
 		this.output(("Insert username and IP separated by a space"));
 	}
 
@@ -38,10 +38,11 @@ public class TUI implements Observer, Runnable {
 				this.output(("Two arguments are needed. Please try again."));
 			}
 			username = (String) splitInput[0];
-				address = (String) splitInput[1];
+			address = (String) splitInput[1];
 		}
 		return new Object[] { username, address };
 	}
+
 	public String TUIInput(String string) {
 		String response = null;
 		System.out.println(string);
@@ -56,7 +57,8 @@ public class TUI implements Observer, Runnable {
 			return response;
 		}
 	}
-	public void output (String message) {
+
+	public void output(String message) {
 		System.out.println(message);
 	}
 
