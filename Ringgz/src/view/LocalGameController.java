@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import controller.Player;
 import controller.ServerPlayer;
+import model.Board;
 import controller.GameController;
 import controller.HumanPlayer;
 import serverclient.ProtocolException;
@@ -23,35 +24,38 @@ import serverclient.Protocol.Packets;
 public class LocalGameController implements Runnable {
 	private final BufferedReader dis;
 	private final BufferedWriter dos;
-	private final String username;
-	private final Socket socket;
+	private InetAddress address;
+	private Socket socket = null;
 	private boolean gamerunning;
 	private boolean connected;
 	private final TUI tui;
-	private final InetAddress ip;
 	private final int port;
 	private int playerAmount;
 	private String playerType;
 	private boolean leftLobby;
 	private ArrayList<Player> players;
-	private int self;
+	private Board board;
+	private String username;
 
-	public LocalGameController(TUI tui, String username, InetAddress ip, int port) throws IOException {
+	public LocalGameController(TUI tui, String username, InetAddress address, int port) throws IOException {
 		this.players = new ArrayList<Player>();
+		this.board = new Board();
 		this.username = username;
 		this.port = port;
-		this.ip = ip;
+		this.address = address;
 		this.gamerunning = false;
 		this.connected = false;
 		this.tui = tui;
-		this.socket = new Socket(ip, port);
+		this.socket = new Socket(address, port);
 		this.dis = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		this.dos = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
+		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);getClass();
+		new Thread(this).start();
 	}
 
 	private void handleMessage(String message) {
 		String[] messageparts = message.split(Protocol.DELIMITER);
+		System.out.println(message);
 		String feedback = null;
 		String packetHeader = messageparts[0];
 		if (Packets.CONNECT.equals(packetHeader)) {
@@ -80,7 +84,7 @@ public class LocalGameController implements Runnable {
 				if (Integer.parseInt(feedback) == 1) {
 					while (true) {
 						try {
-							new LocalGameController(this.tui, this.username, this.ip, this.port);
+							new LocalGameController(this.tui, this.username, this.address, this.port);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -126,6 +130,8 @@ public class LocalGameController implements Runnable {
 			tui.output("All players connected!!!");
 		} else if (Protocol.Packets.GAME_STARTED.equals(packetHeader)) {
 			this.startGame();
+		} else if (Protocol.Packets.MOVE.equals(packetHeader)) {
+			
 		}
 
 	}
@@ -149,6 +155,7 @@ public class LocalGameController implements Runnable {
 	private void sendMessage(String message) {
 		try {
 			this.dos.write(message);
+			this.dos.flush();
 		} catch (IOException e) {
 			this.tui.output("Unable to send message:" + message);
 			e.printStackTrace();
@@ -158,7 +165,7 @@ public class LocalGameController implements Runnable {
 	@Override
 	public void run() {
 		this.sendMessage(this.username);
-		while (!gamerunning) {
+		while (true) {
 			String message;
 			try {
 				message = this.dis.readLine();

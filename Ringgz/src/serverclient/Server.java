@@ -11,7 +11,7 @@ import java.util.List;
 import controller.GameController;
 
 public class Server implements Runnable {
-	public static int PORT = 23197;
+	public static int PORT = 1150;
 	private ServerSocket server;
 	private List<GameController> games;
 	private List<ClientHandler> clients;
@@ -30,11 +30,11 @@ public class Server implements Runnable {
 	// Starts the Server 
 	public static void main(String[] args) {
 		try {
-			if (args.length > 0) {
-				PORT = Integer.parseInt(args[0]);
-			}
-			new Thread(new Server()).start();
+			Server s = new Server();
+			Thread sthread = new Thread(s);
+			sthread.start();
 			System.out.println("The server has been started.");
+			System.out.println("the port is " + s.PORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -92,7 +92,7 @@ public class Server implements Runnable {
 	}
 
 	// requires packet matches extension chatting
-	public void serverMessage(String message) {
+	public void serverMessage(String message) throws IOException {
 		for (ClientHandler clienthandler : this.getClients()) {
 			clienthandler.sendmessage(message);
 		}

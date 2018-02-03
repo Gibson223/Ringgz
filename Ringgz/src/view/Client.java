@@ -1,27 +1,24 @@
 package view;
 
-import java.io.BufferedReader;
+import serverclient.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
 
-import controller.GameController;
 import server.Server;
-import serverclient.Protocol.Packets;
-import serverclient.ProtocolException;
 
 //Creates a client
 public class Client {
-
 	// Creates a client for the game
+	public static final int PORT = Server.PORT;
 	public static void main(String[] args) throws IOException {
 		TUI tui = new TUI();
 		Object[] input = tui.initizializing();
 		String username = (String) input[0];
-		InetAddress ip = (InetAddress) input[1];
-		int port = Server.PORT;
-		LocalGameController gc = new LocalGameController(tui, username, ip, port);//TODO does need work to work
-		new Thread(gc).start(); 
+		InetAddress address = (InetAddress.getByName((String) input[1]));
+		LocalGameController gc = new LocalGameController(tui, username, address, 1150);//TODO does need work to work
+		new Thread(gc).run();
+		System.out.println("gc started");
 	}
 	}
 

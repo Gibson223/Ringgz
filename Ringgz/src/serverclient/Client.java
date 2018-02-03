@@ -14,7 +14,7 @@ import java.net.Socket;
 import sun.applet.Main;
 
 public class Client implements Runnable{
-	public static final int PORT = 23197;
+	public static final int PORT = Server.PORT;
 	public static InetAddress ip;
 	private Socket socket;
 	private BufferedReader dis;

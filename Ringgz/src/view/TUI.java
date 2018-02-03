@@ -30,7 +30,7 @@ public class TUI implements Observer, Runnable {
 
 	public Object[] initizializing() {
 		String username = null;
-		InetAddress address = null;
+		String address = null;
 		boolean correct = false;
 		while (!correct) {
 			Object input = this.TUIInput("-");
@@ -42,13 +42,14 @@ public class TUI implements Observer, Runnable {
 				continue;// why not a break??
 			}
 			username = (String) splitInput[0];
-			try {
-				address = InetAddress.getByName((String) splitInput[1]);
-			} catch (UnknownHostException e) {
-				correct = false;
-				this.output(("Unable to connect.....\nTry again"));
-				continue;
-			}
+//			try {
+				address = (String) splitInput[1];
+//			} catch (UnknownHostException e) {
+//				e.printStackTrace();
+//				correct = false;
+//				this.output(("Unable to connect.....\nTry again"));
+//				continue;
+//			}
 		}
 		return new Object[] { username, address };
 	}

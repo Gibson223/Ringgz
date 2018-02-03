@@ -100,7 +100,7 @@ public class GameController implements Runnable {
 		}
 	}
 	public void startgame() {
-		board = new Board(tui);
+		board = new Board();
 		ringlist = new RingList();
 //		tui = new TUI();
 //		for (Field field : board.fields) {
@@ -173,7 +173,7 @@ public class GameController implements Runnable {
 		Tier choiceRing = Tier.toTier( (Integer) move[2]);
 		if (board.firstMove) {
 			if (board.middle9.stream().anyMatch(a -> a == choiceField)) {
-				board.specialBase(choiceField);
+				board.specialbase(choiceField);
 				board.firstMove = false;
 				System.out.println("the first move has been placed");
 				// ask how to show the view only once in the field if it is a firstmove
