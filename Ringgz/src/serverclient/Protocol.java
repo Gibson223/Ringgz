@@ -104,6 +104,20 @@ public interface Protocol {
 	public static final String RING_LARGE	= "5";
 	
 	/*
+	 * =========== COLORS ===========
+	 */
+	
+	/**
+	 * String representation of the primary color of any player.
+	 */
+	public static final String PRIMARY	= "0";
+	
+	/**
+	 * String representation of the secondary color of any player.
+	 */
+	public static final String SECONDARY	= "1";
+	
+	/*
 	 * =========== EXTENSION: CHATTING ===========
 	 */
 	
@@ -116,14 +130,24 @@ public interface Protocol {
 	/** Messages sent to a given player. */
 	public static final String PRIVATE	= "2";
 	
+	/*
+	 * =========== EXTENSION: SECURITY ===========
+	 */
+	
+	/** String to represent a client wants to log into the server. */
+	public static final String LOGIN	= "0";
+	
+	/** String to represent a client wants to register an account on the server. */
+	public static final String REGISTER	= "1";
+	
 	/**
 	 * This class contains all string representations of all the game extensions.
 	 * There are four extensions:
 	 * <ul>
-	 * <li>Chatting</li>
-	 * <li>Challenging</li>
-	 * <li>Leaderboard</li>
-	 * <li>Security</li>
+	 * 	 <li>Chatting</li>
+	 * 	 <li>Challenging</li>
+	 * 	 <li>Leaderboard</li>
+	 * 	 <li>Security</li>
 	 * </ul>
 	 */
 	public static interface Extensions {
@@ -219,13 +243,6 @@ public interface Protocol {
 		/*
 		 * =========== PLAYING A GAME ===========
 		 */
-		
-		/**
-		 * This packet is sent at the very start of the game, so all players know who
-		 * is the first player to move. Otherwise, clients would be unable to track
-		 * whose turn it is for a couple turns.
-		 */
-		public static final String STARTING_PLAYER = "sp";
 		
 		/**
 		 * This packet is sent by the server to the client that has to make a move. The

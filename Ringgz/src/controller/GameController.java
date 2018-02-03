@@ -49,7 +49,7 @@ public class GameController implements Runnable {
 		playerlist.stream().filter(a -> a != null).forEach(a -> players.add((Player) a));
 		this.run();
 	}
-	private synchronized boolean startGame() throws InterruptedException {
+	private synchronized boolean startGame() throws InterruptedException, IOException {
 		Collections.shuffle(clients);
 		String usernames = "";
 		for(ClientHandler client : this.clients) {
@@ -63,7 +63,7 @@ public class GameController implements Runnable {
 			long current = System.currentTimeMillis();
 			if(current - start < ALLOWEDDELAY) {
 				wait();
-			}
+			} 
 		}
 		if(!allready()) {
 			for(ClientHandler client : this.clients) {
@@ -106,9 +106,9 @@ public class GameController implements Runnable {
 //		for (Field field : board.fields) {
 //			field.addObserver(tui);
 //		}
+		//		tui.view();
 		this.playerSetter();
 		this.ringdivider();
-		tui.view();
 		this.play();
 
 	}
@@ -167,27 +167,27 @@ public class GameController implements Runnable {
 
 	}
 
-	public int currentplayer = 0;
-	public boolean checkMove(Object[] move) {
-		int choiceField = board.index( (Integer) move[0] + 1, (Integer)move[1] + 1);
-		Tier choiceRing = Tier.toTier( (Integer) move[2]);
+	private int currentplayer = 0;
+	public boolean checkMove(Move move) {
+		int choiceField = board.index( move.getX() + 1, move.getY() + 1);
+		Tier choiceRing = move.getMoveType();
+		Color choiceColor;
+		if (Protocol.SECONDARY.equals(move.getColor())) {
+			choiceColor = this.players.get(currentplayer).getSecondaryColor();
+		} else {
+			choiceColor = this.players.get(currentplayer).getPrimaryColor();
+		}
 		if (board.firstMove) {
 			if (board.middle9.stream().anyMatch(a -> a == choiceField)) {
-				board.specialbase(choiceField);
-				board.firstMove = false;
-				System.out.println("the first move has been placed");
-				// ask how to show the view only once in the field if it is a firstmove
-				return;
+				this.board.getField(choiceField).placeBase();
+				this.board.firstMove = false;
+				return true;
+//				System.out.println("the first move has been placed");
 			} else {
 				System.out.println("this is the first move and the criteria for this are not met....");
-				this.makeMove(board);
-				return;
+				return false;
 			}
-		}
-		System.out.println(promptRing);
-		int choiceRing = Integer.parseInt(INPUT.nextLine());
-		System.out.println(promptColor);
-		Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
+		} else if ()
 		Ring selectedRing = new Ring(choiceColor, Tier.toTier(choiceRing));
 
 		if ((board.isAllowed(choiceField, selectedRing) && (board.proximityCheck(choiceField, players.get(currentplayer).getPrimaryColor()))
@@ -200,15 +200,6 @@ public class GameController implements Runnable {
 			System.out.println("Invalid move, try another one.");
 			this.makeMove(board);
 		}
-	} catch (RinggzException e) {
-		this.MakeMove(board);
-	} catch (NullPointerException e) {
-		System.out.println("invalid color, input your move again:\n");
-		this.makeMove(board);
-	} catch (NumberFormatException e) {
-		System.out.println("invalid input, try again:\n");
-		this.makeMove(board);
-	}
 	}
 	public void play() {
 		boolean succes = false;
