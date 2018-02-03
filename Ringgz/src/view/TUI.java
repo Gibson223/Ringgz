@@ -36,17 +36,9 @@ public class TUI implements Observer, Runnable {
 			if (splitInput.length != 2) {
 				correct = false;
 				this.output(("Two arguments are needed. Please try again."));
-				continue;// why not a break??
 			}
 			username = (String) splitInput[0];
-//			try {
 				address = (String) splitInput[1];
-//			} catch (UnknownHostException e) {
-//				e.printStackTrace();
-//				correct = false;
-//				this.output(("Unable to connect.....\nTry again"));
-//				continue;
-//			}
 		}
 		return new Object[] { username, address };
 	}
