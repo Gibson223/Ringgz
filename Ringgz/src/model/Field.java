@@ -192,7 +192,7 @@ public class Field extends Observable {
 	}
 
 	/**
-	 * Transforms the state of the field into a string readable by a human.
+	 * Transforms the state of the field into a string readable by a human
 	 *
 	 * @return a string with the current situation of the field (ring distribution).
 	 */
