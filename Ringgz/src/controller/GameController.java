@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -179,42 +180,80 @@ public class GameController implements Runnable {
 		}
 		if (board.firstMove) {
 			if (board.middle9.stream().anyMatch(a -> a == choiceField)) {
-				this.board.getField(choiceField).placeBase();
+				try {
+					this.board.getField(choiceField).placeBase();
+				} catch (RinggzException e) {
+					return false;
+				}
 				this.board.firstMove = false;
 				return true;
-//				System.out.println("the first move has been placed");
 			} else {
-				System.out.println("this is the first move and the criteria for this are not met....");
 				return false;
 			}
-		} else if ()
-		Ring selectedRing = new Ring(choiceColor, Tier.toTier(choiceRing));
-
-		if ((board.isAllowed(choiceField, selectedRing) && (board.proximityCheck(choiceField, players.get(currentplayer).getPrimaryColor()))
-				&& (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null)
-				&& this.players.get(currentplayer).ringList.availableRings.contains(selectedRing))) {
-			board.setRing(choiceField, selectedRing);
-			this.players.get(currentplayer).ringList.availableRings.remove(selectedRing);
-			System.out.println("\nthe ring has been added to the field....");
 		} else {
-			System.out.println("Invalid move, try another one.");
-			this.makeMove(board);
+		Ring selectedRing = new Ring(choiceColor, choiceRing);
+		try {
+			if ((board.isAllowed(choiceField, selectedRing) && 
+					board.proximityCheck(choiceField, players.get(currentplayer).getPrimaryColor()) 
+							|| board.fieldHasColor(choiceField, players.get(currentplayer).getPrimaryColor())
+					&& this.players.get(currentplayer).ringList.availableRings.contains(selectedRing))) {
+				board.setRing(choiceField, selectedRing);
+				this.players.get(currentplayer).ringList.availableRings.remove(selectedRing);
+//			System.out.println("\nthe ring has been added to the field....");
+				return true;
+			} else {
+//			System.out.println("Invalid move, try another one.");
+				return false;
+			}
+		} catch (RinggzException e) {
+			return false;
+		}
 		}
 	}
+	public void invalidMove() {
+		
+	}
 	public void play() {
+		Boolean[] canmove = new Boolean[this.players.size()];
 		boolean succes = false;
-		while (!board.boardIsFull())  
+		while (!this.board.boardIsFull() || 
+				!Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
 			while (!succes) {
 				try {
-					players.get(currentplayer).makeMove(board);
-					succes = true;
+					if (players.get(currentplayer).playerCheck(this.board)) {
+						players.get(currentplayer).makeMove(this.board);
+						canmove[currentplayer] = false;
+						succes = true;
+					} else {
+						canmove[currentplayer]  = false;
+						succes = true;
+					}
 				} catch (RinggzException e) {
+					succes = false; 
 				}
 			}
 			currentplayer += 1;
 			currentplayer %= this.players.size();
 			succes = false;
 		}
+		Player winner = null;
+		Color colorwin = this.board.isWinner();
+		if (this.players.size() == 2) {
+			//winner// TODO needs to be implemented with 2 people
+		}
+		else if (colorwin == null) {
+			System.out.println("It is a tie....");
+		} else {
+			for (Player possiblewinner: this.players) {
+				if (possiblewinner.getPrimaryColor() == colorwin) {
+					winner = possiblewinner;
+					break;
+				}
+			}
+			System.out.println("The winner of the match is " + winner.getName());
+		}
+	}
+
 	public synchronized boolean addClient(ClientHandler ch) {
 		if (this.players.size() < this.maxplayers && this.started == false) {
 			this.clients.add(ch);

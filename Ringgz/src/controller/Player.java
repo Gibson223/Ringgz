@@ -6,13 +6,45 @@ import java.util.*;
 
 public abstract class Player {
 	// -- Instance variables -----------------------------------------
-
+	public Board board;
 	public final String name;
 	private Color primary;
 	private Color secondary;
-
+	
+    public boolean playerCheck(Board board) throws RinggzException {
+    	boolean validringmove = false;
+    	if (this.board.firstMove) {
+    		return true;
+    	}
+    	for (Ring ring: this.ringList.availableRings) {
+    		for (Field field: board.fields) {
+    			if (board.isAllowed(field.FieldNumber, ring) && 
+    					(board.proximityCheck(field.FieldNumber, this.getPrimaryColor()) || 
+    							board.fieldHasColor(field.FieldNumber, 
+    									this.getPrimaryColor()))) {
+    				this.suggestedMove = "" + this.getPrimaryColor().toString() 
+    						+ ring.getTier().toString() + field.FieldNumber;
+    				validringmove = true;
+    				break;
+    			}
+    		}
+    		if (validringmove) {
+    			break;
+    		}
+    	}
+    	if (!this.ringList.availableRings.isEmpty() && validringmove) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    private String suggestedMove;
+    public String suggestedMove() {
+    	return this.suggestedMove;
+    }
 	public Player(String name) {
 		this.name = name;
+		this.board = new Board();
 	}
 
 	public void setPrimary(Color primary) {
@@ -84,5 +116,5 @@ public abstract class Player {
 	 *            the current board
 	 * @throws RinggzException
 	 */
-	public abstract void makeMove(Board board) throws RinggzException;
+	public abstract Move makeMove(Board board) throws RinggzException;
 }

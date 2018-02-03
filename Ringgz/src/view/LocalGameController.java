@@ -1,23 +1,17 @@
 package view;
 
-import java.awt.List;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
+
+import controller.HumanPlayer;
 import controller.Player;
 import controller.ServerPlayer;
 import model.Board;
-import controller.GameController;
-import controller.HumanPlayer;
-import serverclient.ProtocolException;
-import serverclient.Server;
 import serverclient.Protocol;
 import serverclient.Protocol.Packets;
 
