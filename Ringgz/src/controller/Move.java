@@ -6,8 +6,8 @@ public class Move {
 	public final int x;
 	public final int y; 
 	public final int moveType;
-	public final int color;
-	public Move(int x, int y, int moveType, int color) {
+	public final String color;
+	public Move(int x, int y, int moveType, String color) {
 		this.x = x;
 		this.y = y;
 		this.moveType = moveType;
@@ -22,7 +22,7 @@ public class Move {
 	public Tier getMoveType() {
 		return Tier.toTier(moveType);
 	}
-	public int getColor() {
+	public String getColor() {
 		return color;
 	}
 }
