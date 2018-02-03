@@ -10,7 +10,7 @@ public abstract class Player {
 	public final String name;
 	private Color primary;
 	private Color secondary;
-	
+	public int playerScore;
 	
     public boolean playerCheck(Board board) throws RinggzException {
     	boolean validringmove = false;
