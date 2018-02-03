@@ -116,7 +116,8 @@ public class ClientHandler implements Runnable {
 
 	public void sendmessage(String message) throws IOException {
 		this.dos.write(message);
-		this.dos.newLine();
+		this.dos.flush();
+		this.server.serverPrint(message);
 	}
 
 }
