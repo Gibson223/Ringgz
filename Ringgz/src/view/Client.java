@@ -17,7 +17,7 @@ public class Client {
 		String username = (String) input[0];
 		InetAddress address = (InetAddress.getByName((String) input[1]));
 		LocalGameController gc = new LocalGameController(tui, username, address, 1150);//TODO does need work to work
-		new Thread(gc).run();
+		new Thread(gc).start();
 		System.out.println("gc started");
 	}
 	}

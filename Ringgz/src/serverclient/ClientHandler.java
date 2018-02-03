@@ -18,7 +18,7 @@ import serverclient.Protocol.Packets;
 
 public class ClientHandler implements Runnable {
 	private BufferedReader dis;
-	private BufferedWriter dos;
+	private PrintWriter dos;
 	private Server server;
 	private final Socket clientSocket;
 	public String username;
@@ -39,7 +39,7 @@ public class ClientHandler implements Runnable {
 		this.server = server;
 		this.clientSocket = clientSocket;
 		this.dis = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
-		this.dos = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
+		this.dos = new PrintWriter(clientSocket.getOutputStream(), true);
 		ready = false;
 		responded = false;
 	}
@@ -49,6 +49,7 @@ public class ClientHandler implements Runnable {
 		try {
 			while (true) {
 				String message = this.dis.readLine();
+				this.server.serverPrint(message);
 				String[] splitmessage = message.split(Protocol.DELIMITER);
 				this.packetHandler(splitmessage);
 			}
@@ -62,25 +63,24 @@ public class ClientHandler implements Runnable {
 	private void packetHandler(String[] fullpacket) throws IOException {
 		String packet = fullpacket[0];
 		if (packet == Packets.CONNECT) {
-			this.server.serverPrint(packet);
+			this.server.serverPrint(fullpacket.toString());
 			// dont understand why Connection already established so look for other data
 			if (packet.equals(Packets.CONNECT) && this.username == null) {
 				this.username = fullpacket[1];
-				if (fullpacket.length > 2) {
-					for (int i = 2; i < fullpacket.length;) {
-						if (fullpacket[i].equals(Extensions.EXTENSION_CHATTING)) {
-							this.dos.write((Packets.CONNECT + Protocol.DELIMITER
-									+ Protocol.ACCEPT /* + Protocol.DELIMITER + Extensions.EXTENSION_CHATTING */));
-							break;
-						}
-					}
-				} else {
+//				if (fullpacket.length > 2) {
+//					for (int i = 2; i < fullpacket.length;) {
+//						if (fullpacket[i].equals(Extensions.EXTENSION_CHATTING)) {
+//							this.dos.write((Packets.CONNECT + Protocol.DELIMITER
+//									+ Protocol.ACCEPT /* + Protocol.DELIMITER + Extensions.EXTENSION_CHATTING */));
+//							break;
+//						}
+//					}
+//				} else {
 					this.dos.write((Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT + Protocol.DELIMITER));
 					this.server.serverPrint("connect packet received");
-				}
+//				}
 			}
-		}
-		if (Packets.GAME_REQUEST.equals(packet)) {
+		} else if (Packets.GAME_REQUEST.equals(packet)) {
 			try {
 				int preferredplayers = Integer.parseInt(fullpacket[1]);
 				this.linkedgame = this.server.getGame(this, preferredplayers);
@@ -116,6 +116,7 @@ public class ClientHandler implements Runnable {
 
 	public void sendmessage(String message) throws IOException {
 		this.dos.write(message);
+		this.dos.println(message);
 		this.dos.flush();
 		this.server.serverPrint(message);
 	}

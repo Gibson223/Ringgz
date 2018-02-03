@@ -23,7 +23,7 @@ import serverclient.Protocol.Packets;
 
 public class LocalGameController implements Runnable {
 	private final BufferedReader dis;
-	private final BufferedWriter dos;
+	private final PrintWriter dos;
 	private InetAddress address;
 	private Socket socket = null;
 	private boolean gamerunning;
@@ -48,8 +48,8 @@ public class LocalGameController implements Runnable {
 		this.tui = tui;
 		this.socket = new Socket(address, port);
 		this.dis = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-		this.dos = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);getClass();
+		this.dos = new PrintWriter(socket.getOutputStream(), true);
+		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
 		new Thread(this).start();
 	}
 
@@ -153,18 +153,13 @@ public class LocalGameController implements Runnable {
 	}
 
 	private void sendMessage(String message) {
-		try {
-			this.dos.write(message);
-			this.dos.flush();
-		} catch (IOException e) {
-			this.tui.output("Unable to send message:" + message);
-			e.printStackTrace();
-		}
+		this.dos.println(message);
+		this.dos.flush();
 	}
 
 	@Override
 	public void run() {
-		this.sendMessage(this.username);
+		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
 		while (true) {
 			String message;
 			try {
@@ -172,6 +167,7 @@ public class LocalGameController implements Runnable {
 				this.handleMessage(message);
 			} catch (IOException e) {
 				this.tui.output("error during connection");
+				this.shutDown();
 				e.printStackTrace();
 			}
 
