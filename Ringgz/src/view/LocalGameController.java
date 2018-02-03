@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,14 +18,14 @@ import model.Field;
 import model.Ring;
 import model.RingList;
 
-public class LocalGameController {
+public class LocalGameController implements Runnable{
 	private InetAddress adress;
 	private String username;
 	private int port;
 	private TUI tui;
 	private Socket clientsocket;
 	private boolean gamestarted;
-	public LocalGameController(TUI tui, String username, InetAddress adress, int port) implements Runnable {
+	public LocalGameController(TUI tui, String username, InetAddress adress, int port) throws IOException {
 		this.adress = adress;
 		this.tui = tui;
 		this.username = username;
@@ -32,11 +33,11 @@ public class LocalGameController {
 		this.clientsocket = new Socket(adress, port);
 		this.run();
 	}
-	private 
-	private boolean establishConnection() {
-		while() {
-			
-	}
+//	private 
+//	private boolean establishConnection() {
+//		while() {
+//			
+//	}
 	
 	public List<Player> players = new ArrayList<Player>();
 	public Board board;
@@ -162,5 +163,4 @@ public class LocalGameController {
 			System.out.println("The winner of the match is " + winner.getName());
 		}
 	}
-}
 }

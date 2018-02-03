@@ -101,9 +101,14 @@ public abstract class Player {
     					(this.board.proximityCheck(field.FieldNumber, this.getPrimaryColor()) || 
     							this.board.FieldHasColor(field.FieldNumber, 
     									this.getPrimaryColor()))) {
+    				this.suggestedMove = "" + this.getPrimaryColor().toString() 
+    						+ ring.getTier().toString() + field.FieldNumber;
     				validringmove = true;
     				break;
     			}
+    		}
+    		if (validringmove) {
+    			break;
     		}
     	}
     	if (!this.ringList.availableRings.isEmpty() && validringmove) {
@@ -111,6 +116,10 @@ public abstract class Player {
     	} else {
     		return false;
     	}
+    }
+    private String suggestedMove;
+    public String suggestedMove() {
+    	return this.suggestedMove;
     }
     public void makeMove() throws RinggzException {
     	this.makeMove(this.board);
