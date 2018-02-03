@@ -239,7 +239,11 @@ public class GameController implements Runnable {
 		Player winner = null;
 		Color colorwin = this.board.isWinner();
 		if (this.players.size() == 2) {
-			//winner// TODO needs to be implemented with 2 people
+			for (Player possiblewinner: this.players) {
+				if (possiblewinner.getPrimaryColor().equals(colorwin) || possiblewinner.getSecondaryColor().equals(colorwin)) {
+					winner = possiblewinner;
+				}
+			}
 		}
 		else if (colorwin == null) {
 			System.out.println("It is a tie....");
