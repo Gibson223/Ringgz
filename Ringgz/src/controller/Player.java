@@ -11,6 +11,7 @@ public abstract class Player {
 	private Color primary;
 	private Color secondary;
 	
+	
     public boolean playerCheck(Board board) throws RinggzException {
     	boolean validringmove = false;
     	if (this.board.firstMove) {

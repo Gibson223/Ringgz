@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+
+import com.sun.javafx.collections.MappingChange.Map;
 
 import model.Board;
 import model.Color;
@@ -28,6 +31,13 @@ public class GameController implements Runnable {
 	private Server server;
 	public boolean started;
 	public final int ALLOWEDDELAY = 20000;
+	int wonG = 0;
+	int wonB = 0;
+	int wonY = 0;
+	int wonR = 0;
+	int player1score = 0;
+	int player2score = 0;
+	public HashMap<Player,Integer> wonFields;
 	
 	public GameController(Server server,int maxplayers) {
 		this.server = server;
@@ -239,24 +249,30 @@ public class GameController implements Runnable {
 		Player winner = null;
 		Color colorwin = this.board.isWinner();
 		if (this.players.size() == 2) {
-			for (Player possiblewinner: this.players) {
-				if (possiblewinner.getPrimaryColor().equals(colorwin) || possiblewinner.getSecondaryColor().equals(colorwin)) {
-					winner = possiblewinner;
-					//AAAAAAAAAAAAAA
+			for (Field field : this.board.fields) {
+				if (field.isWinner() == Color.BLUE) {
+					Color.BLUE.colorWonFields += 1;
+				} else if (field.isWinner() == Color.RED) {
+					Color.RED.colorWonFields += 1;
+				} else if (field.isWinner() == Color.YELLOW) {
+					Color.YELLOW.colorWonFields += 1;
+				} else {
+					Color.GREEN.colorWonFields += 1;
 				}
 			}
+			
 		}
-		else if (colorwin == null) {
-			System.out.println("It is a tie....");
-		} else {
-			for (Player possiblewinner: this.players) {
-				if (possiblewinner.getPrimaryColor() == colorwin) {
-					winner = possiblewinner;
-					break;
-				}
-			}
-			System.out.println("The winner of the match is " + winner.getName());
-		}
+//		else if (colorwin == null) {
+//			System.out.println("It is a tie....");
+//		} else {
+//			for (Player possiblewinner: this.players) {
+//				if (possiblewinner.getPrimaryColor() == colorwin) {
+//					winner = possiblewinner;
+//					break;
+//				}
+//			}
+//			System.out.println("The winner of the match is " + winner.getName());
+//		}
 	}
 
 	public synchronized boolean addClient(ClientHandler ch) {

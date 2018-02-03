@@ -15,6 +15,9 @@ package model;
  */
 public enum Color {
 	RED, YELLOW, GREEN, BLUE, INIT;
+	
+	public int colorWonFields;
+	
 	// from char to colors
 	public static Color toColor(char a) {
 		if (a == 'y') {
