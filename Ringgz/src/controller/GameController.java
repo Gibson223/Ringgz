@@ -272,7 +272,7 @@ public class GameController implements Runnable {
 			} else if (two.playerScore > one.playerScore) {
 				winner = two;
 			} else if (one.playerScore == two.playerScore) {
-				System.out.println("It's a tie!"); //aaaaa
+				System.out.println("It's a tie!"); //aaaa
 			}
 			System.out.println("The winner of the match is " + winner.getName());
 		} else if (colorwin == null) {
