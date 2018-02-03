@@ -50,7 +50,7 @@ public class LocalGameController implements Runnable {
 		this.dis = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		this.dos = new PrintWriter(socket.getOutputStream(), true);
 		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
-		new Thread(this).start();
+//		new Thread(this).start();
 	}
 
 	private void handleMessage(String message) {
@@ -159,7 +159,7 @@ public class LocalGameController implements Runnable {
 
 	@Override
 	public void run() {
-		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
+//		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
 		while (true) {
 			String message;
 			try {

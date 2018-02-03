@@ -36,6 +36,7 @@ public class ClientHandler implements Runnable {
 
 	// Constructor
 	public ClientHandler(Server server, Socket clientSocket) throws IOException {
+		this.username = null;
 		this.server = server;
 		this.clientSocket = clientSocket;
 		this.dis = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
@@ -62,23 +63,13 @@ public class ClientHandler implements Runnable {
 
 	private void packetHandler(String[] fullpacket) throws IOException {
 		String packet = fullpacket[0];
-		if (packet == Packets.CONNECT) {
+		if (Packets.CONNECT.equals(packet)) {
 			this.server.serverPrint(fullpacket.toString());
 			// dont understand why Connection already established so look for other data
 			if (packet.equals(Packets.CONNECT) && this.username == null) {
 				this.username = fullpacket[1];
-//				if (fullpacket.length > 2) {
-//					for (int i = 2; i < fullpacket.length;) {
-//						if (fullpacket[i].equals(Extensions.EXTENSION_CHATTING)) {
-//							this.dos.write((Packets.CONNECT + Protocol.DELIMITER
-//									+ Protocol.ACCEPT /* + Protocol.DELIMITER + Extensions.EXTENSION_CHATTING */));
-//							break;
-//						}
-//					}
-//				} else {
-					this.dos.write((Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT + Protocol.DELIMITER));
-					this.server.serverPrint("connect packet received");
-//				}
+				this.dos.println((Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT + Protocol.DELIMITER));
+				this.server.serverPrint("connect packet received");
 			}
 		} else if (Packets.GAME_REQUEST.equals(packet)) {
 			try {
@@ -115,7 +106,6 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void sendmessage(String message) throws IOException {
-		this.dos.write(message);
 		this.dos.println(message);
 		this.dos.flush();
 		this.server.serverPrint(message);

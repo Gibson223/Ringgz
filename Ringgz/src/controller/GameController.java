@@ -190,7 +190,7 @@ public class GameController implements Runnable {
 		Color choiceColor = Color.toColor(INPUT.nextLine().charAt(0));
 		Ring selectedRing = new Ring(choiceColor, Tier.toTier(choiceRing));
 
-		if ((board.isAllowed(choiceField, selectedRing) && (board.proximityCheck(choiceField, getPrimaryColor()))
+		if ((board.isAllowed(choiceField, selectedRing) && (board.proximityCheck(choiceField, players.get(currentplayer).getPrimaryColor()))
 				&& (choiceRing < 6) && (choiceRing > 0) && (choiceColor != null)
 				&& this.players.get(currentplayer).ringList.availableRings.contains(selectedRing))) {
 			board.setRing(choiceField, selectedRing);
