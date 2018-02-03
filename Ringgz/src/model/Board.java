@@ -363,7 +363,7 @@ public class Board {
 	 * field.
 	 *
 	 * @param field
-	 *            the field in question
+	 *            the field in question.
 	 * @param c
 	 *            the color we are looking for
 	 * @return true if there is a ring with that color in the adjacent fields of the

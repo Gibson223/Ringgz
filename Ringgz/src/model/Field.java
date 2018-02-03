@@ -218,8 +218,6 @@ public class Field extends Observable {
 
 	/**
 	 * Clears the field.
-	 *
-	 * 
 	 */
 	// @requires this != null;
 	// @ensures \old(this) != this;
