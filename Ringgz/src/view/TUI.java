@@ -3,14 +3,11 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
-import model.*;
-import serverclient.Protocol;
-import controller.*;
+import model.Board;
+import model.Field;
 
 //TUI for Ringgz
 public class TUI implements Observer, Runnable {
