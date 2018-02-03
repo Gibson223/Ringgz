@@ -1,9 +1,12 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import model.*;
+import serverclient.Protocol;
 
 public class ComputerPlayer extends Player {
 
@@ -21,63 +24,63 @@ public class ComputerPlayer extends Player {
 	}
 
 	@Override
-	public void makeMove(Board board) throws RinggzException {
-		if (board.firstMove) {
-			int choiceField = strategy.determineField(board, this).FieldNumber;
-			// CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Color choiceColor = strategy.determineColor(board, this);
-			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
+	public Move makeMove(Board board) throws RinggzException {
+		boolean succes = false;
+		int choiceField = 0;
+		Color choiceColor;
+		int choiceRing = 0;
+		String colorProtocol = null;
+		while (!succes) {
+		try {
+			choiceField = (int) (Math.floor(Math.random() * 25) + 1);
+			List<Color> colors = new ArrayList<>();
+			colors.add(this.getPrimaryColor());
+			colors.add(this.getSecondaryColor());				
+			Collections.shuffle(colors);
+			choiceColor = colors.get(0);
+			if (choiceColor == this.getPrimaryColor()) {
+				colorProtocol = Protocol.PRIMARY;
+			} else {
+				colorProtocol = Protocol.SECONDARY;
+			}
+			choiceRing = (int) (Math.floor(Math.random() * 5) + 1);
+			Tier choiceTier = Tier.toTier(choiceRing);
 			Ring selectedRing = new Ring(choiceColor, choiceTier);
-			try {
-				if (board.isAllowed(choiceField, selectedRing)
-						&& (board.proximityCheck(choiceField, getPrimaryColor()))
-						&& (choiceColor != null)
+			if (!this.ringList.availableRings.contains(new Ring(choiceColor, choiceTier))
+					&& !board.isAllowed(choiceField, selectedRing)) {
+				succes = true;
+			}
+			if (board.firstMove) {
+				int  tempfield = choiceField;
+				if (board.middle9.stream().anyMatch(a -> a == tempfield)) {
+					board.specialBase(choiceField);
+					board.firstMove = false;
+					System.out.println("the first move has been placed");
+					succes = true;
+				} else {
+					System.out.println(
+							"this is the first move and the criteria for this are not met...");
+				}
+			} else {
+				if (board.isAllowed(choiceField, selectedRing) && 
+						(board.proximityCheck(choiceField, getPrimaryColor()))
+						&& (choiceColor != null) 
 						&& this.ringList.availableRings.contains(selectedRing)) {
 					board.setRing(choiceField, selectedRing);
 					this.ringList.availableRings.remove(selectedRing);
+					potentialFields.add(board.getField(choiceField));
+					potentialFields.addAll(board.adjacentFields(choiceField));
 					System.out.println("\nthe ring has been added to the field....");
+					succes = true;
 				} else {
-					this.makeMove(board);
+					System.out.println("Invalid move, try another one.");
 				}
-			} catch (RinggzException e) {
-				this.makeMove(board);
-			} catch (NullPointerException e) {
-				System.out.println("invalid color, input your move again:\n");
-				this.makeMove(board);
-			} catch (NumberFormatException e) {
-				System.out.println("invalid input, try again:\n");
-				this.makeMove(board);
 			}
-			potentialFields.add(board.getField(choiceField));
-			potentialFields.addAll(board.adjacentFields(choiceField));
-
-		} else {
-			int choiceField = strategy.determineField(board, this).FieldNumber;
-			// CONSTRUCT NEW RING WITH CHOSEN COLOR AND TIER
-			Color choiceColor = strategy.determineColor(board, this);
-			Tier choiceTier = strategy.determineTier(board.getField(choiceField));
-			Ring selectedRing = new Ring(choiceColor, choiceTier);
-			try {
-				if (board.isAllowed(choiceField, selectedRing)
-						&& (board.proximityCheck(choiceField, getPrimaryColor()))
-						&& (choiceColor != null)
-						&& this.ringList.availableRings.contains(selectedRing)) {
-					board.setRing(choiceField, selectedRing);
-					this.ringList.availableRings.remove(selectedRing);
-					System.out.println("\n \n the Computer has added a ring to the field....");
-				} else {
-					this.makeMove(board);
-				}
-			} catch (RinggzException e) {
-				this.makeMove(board);
-			} catch (NullPointerException e) {
-				this.makeMove(board);
-			} catch (NumberFormatException e) {
-				this.makeMove(board);
-			}
-
-			potentialFields.add(board.getField(choiceField));
-			potentialFields.addAll(board.adjacentFields(choiceField));
+		} catch (RinggzException e) {
+		} catch (NullPointerException e) {
+		} catch (NumberFormatException e) {
 		}
+		}
+	return new Move(Board.xy(choiceField)[0], Board.xy(choiceField)[1], choiceRing ,colorProtocol);
 	}
 }
