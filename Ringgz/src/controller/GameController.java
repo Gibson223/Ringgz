@@ -242,6 +242,7 @@ public class GameController implements Runnable {
 			for (Player possiblewinner: this.players) {
 				if (possiblewinner.getPrimaryColor().equals(colorwin) || possiblewinner.getSecondaryColor().equals(colorwin)) {
 					winner = possiblewinner;
+					//AAAAAAAAAAAAAA
 				}
 			}
 		}
