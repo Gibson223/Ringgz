@@ -55,6 +55,7 @@ public class LocalGameController implements Runnable {
 		canmove = new Boolean[this.players.size()];
 		// new Thread(this).start();
 	}
+
 	public boolean checkMove(Move move) {
 		if (move == null) {
 			return false;
@@ -99,6 +100,7 @@ public class LocalGameController implements Runnable {
 			}
 		}
 	}
+
 	private void handleMessage(String message) {
 		String[] messageparts = message.split(Protocol.DELIMITER);
 		this.tui.output(message);
@@ -182,37 +184,45 @@ public class LocalGameController implements Runnable {
 						Integer.parseInt(messageparts[2]), Integer.parseInt(messageparts[3]), messageparts[5]));
 			} catch (NumberFormatException | IndexOutOfBoundsException e) {
 			}
-		} else if(Protocol.Packets.GAME_ENDED.equals(packetHeader)) {
+		} else if (Protocol.Packets.GAME_ENDED.equals(packetHeader)) {
 			gameEnded = true;
 			this.tui.output(message);
 		} else {
 			tui.output("unknown packet received");
 		}
 	}
+
 	private void sendMove(Move move) {
-		String message = Protocol.Packets.MOVE + Protocol.DELIMITER + move.getX() + Protocol.DELIMITER
-				+ move.getY() + Protocol.DELIMITER + move.getMoveType() + Protocol.DELIMITER + move.getColor();
+		String message = Protocol.Packets.MOVE + Protocol.DELIMITER + move.getX() + Protocol.DELIMITER + move.getY()
+				+ Protocol.DELIMITER + move.getMoveType() + Protocol.DELIMITER + move.getColor();
 		this.sendMessage(message);
 	}
+
 	private boolean gameEnded;
 	private int currentplayer = 0;
 	Boolean[] canmove;
+
 	public void play() {
 		Move currentMove;
 		this.tui.setBoard(this.board);
-		tui.run();
+		new Thread(tui).start();
 		boolean succes = false;
-		while ( !this.gameEnded || !this.board.boardIsFull() || !Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
+		while (!this.gameEnded || !this.board.boardIsFull()
+				|| !Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
 			while (!succes) {
 				try {
 					if (players.get(currentplayer).playerCheck(this.board)) {
 						currentMove = players.get(currentplayer).makeMove(this.board);
-						players.get(currentplayer).makeMove(this.board);
-						canmove[currentplayer] = false;
-						if (players.get(currentplayer) instanceof HumanPlayer || players.get(currentplayer) instanceof ComputerPlayer) {
-							this.sendMove(currentMove);
+						if (this.checkMove(currentMove)) {
+							if (players.get(currentplayer) instanceof HumanPlayer
+									|| players.get(currentplayer) instanceof ComputerPlayer) {
+								this.sendMove(currentMove);
+							}
+							canmove[currentplayer] = false;
+							succes = true;
+						} else {
+							currentplayer -= 1;
 						}
-						succes = true;
 					} else {
 						canmove[currentplayer] = false;
 						succes = true;
@@ -248,7 +258,7 @@ public class LocalGameController implements Runnable {
 			} else if (two.playerScore > one.playerScore) {
 				winner = two;
 			} else if (one.playerScore == two.playerScore) {
-				this.tui.output("It's a tie!"); 
+				this.tui.output("It's a tie!");
 			}
 			this.tui.output("The winner of the match is " + winner.getName());
 		} else if (colorwin == null) {
