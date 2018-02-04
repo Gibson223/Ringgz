@@ -111,7 +111,7 @@ public class LocalGameController implements Runnable {
 				if (amount < 5 || amount > 1) {
 					this.playerAmount = amount;
 				} else {
-					tui.output("Windows will now update");
+					tui.output("the number is ");
 					this.shutDown();
 				}
 				if (Protocol.HUMAN_PLAYER.equals(playerType)) {

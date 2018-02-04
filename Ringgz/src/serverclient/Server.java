@@ -65,12 +65,14 @@ public class Server implements Runnable {
 	}
 
 	public GameController getGame(ClientHandler ch, int preferredplayers) {
-		for (GameController gc : this.games) {
-			if (gc.players.size() < gc.maxplayers && gc.addClient(ch)) {
-				gc.addPlayer(ch);
-				return gc;
+		if (this.games.size() != 0) {
+			for (GameController gc : this.games) {
+				if (gc.players.size() < gc.maxplayers && gc.addClient(ch)) {
+					gc.addPlayer(ch);
+					return gc;
+				}
 			}
-		}
+		} 
 		GameController newgame = new GameController(this, preferredplayers);
 		newgame.addClient(ch);
 		newgame.addPlayer(ch);
