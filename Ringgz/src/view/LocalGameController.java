@@ -49,6 +49,7 @@ public class LocalGameController implements Runnable {
 		this.dis = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		this.dos = new PrintWriter(socket.getOutputStream(), true);
 		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
+		canmove = new Boolean[this.players.size()];
 		// new Thread(this).start();
 	}
 
@@ -139,7 +140,7 @@ public class LocalGameController implements Runnable {
 	}
 
 	private int currentplayer = 0;
-	Boolean[] canmove = new Boolean[this.players.size()];
+	Boolean[] canmove;
 	public void play() {
 		boolean succes = false;
 		while (!this.board.boardIsFull() || !Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
