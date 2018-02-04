@@ -16,8 +16,8 @@ public class ClientHandler implements Runnable {
     private Server server;
     private final Socket clientSocket;
     public String username;
-    private boolean ready; // == ready
-    private boolean responded; // == responded
+    private boolean ready; 
+    private boolean responded; 
     public GameController linkedgame;
 
     public boolean getReady() {
@@ -52,7 +52,6 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // todo splitter init message contains packettype, username
 
     }
 
