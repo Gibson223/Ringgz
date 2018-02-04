@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import controller.ComputerPlayer;
 import controller.HumanPlayer;
 import controller.Move;
 import controller.Player;
@@ -55,6 +56,9 @@ public class LocalGameController implements Runnable {
 		// new Thread(this).start();
 	}
 	public boolean checkMove(Move move) {
+		if (move == null) {
+			return false;
+		}
 		int choiceField = board.index(move.getX() + 1, move.getY() + 1);
 		Tier choiceRing = move.getMoveType();
 		Color choiceColor;
@@ -185,17 +189,29 @@ public class LocalGameController implements Runnable {
 			tui.output("unknown packet received");
 		}
 	}
+	private void sendMove(Move move) {
+		String message = Protocol.Packets.MOVE + Protocol.DELIMITER + move.getX() + Protocol.DELIMITER
+				+ move.getY() + Protocol.DELIMITER + move.getMoveType() + Protocol.DELIMITER + move.getColor();
+		this.sendMessage(message);
+	}
 	private boolean gameEnded;
 	private int currentplayer = 0;
 	Boolean[] canmove;
 	public void play() {
+		Move currentMove;
+		this.tui.setBoard(this.board);
+		tui.run();
 		boolean succes = false;
 		while ( !this.gameEnded || !this.board.boardIsFull() || !Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
 			while (!succes) {
 				try {
 					if (players.get(currentplayer).playerCheck(this.board)) {
-						this.checkMove(players.get(currentplayer).makeMove(this.board));
+						currentMove = players.get(currentplayer).makeMove(this.board);
+						players.get(currentplayer).makeMove(this.board);
 						canmove[currentplayer] = false;
+						if (players.get(currentplayer) instanceof HumanPlayer || players.get(currentplayer) instanceof ComputerPlayer) {
+							this.sendMove(currentMove);
+						}
 						succes = true;
 					} else {
 						canmove[currentplayer] = false;

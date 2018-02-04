@@ -20,7 +20,7 @@ import serverclient.Protocol.Packets;
 import view.TUI;
 
 public class GameController implements Runnable {
-	public List<Player> players = new ArrayList<Player>();
+	public List<Player> players;
 	public Board board;
 	public TUI tui;
 	public RingList ringlist;
@@ -41,20 +41,22 @@ public class GameController implements Runnable {
 	 *            the server this gamecontroller will play in
 	 * @param maxplayers
 	 *            the maximum amount of players for the lobby
-	 *            
+	 * 
 	 */
 	public GameController(Server server, int maxplayers) {
 		this.server = server;
 		this.maxplayers = maxplayers;
+		this.clients = new ArrayList<>();
+		this.players = new ArrayList<>();
 
 	}
-	
+
 	/**
 	 * Starts the game.
 	 */
 	public void run() {
 		try {
-			while (!this.startGame()) { 
+			while (!this.startGame()) {
 				try {
 					this.startgame();
 				} catch (IOException e) {
@@ -102,7 +104,7 @@ public class GameController implements Runnable {
 	 * @param s2
 	 *            the third player
 	 * @param s3
-	 * 			  the fourth player
+	 *            the fourth player
 	 */
 	public GameController(Player s0, Player s1, Player s2, Player s3) {
 		List<Object> playerlist = new ArrayList<>();
@@ -120,7 +122,8 @@ public class GameController implements Runnable {
 	 *
 	 * @return true if the creation of the game is succesful, false otherwise.
 	 * 
-	 * @throws InterruptedException, IOException
+	 * @throws InterruptedException,
+	 *             IOException
 	 */
 	private synchronized boolean startGame() throws InterruptedException, IOException {
 		Collections.shuffle(clients);
@@ -174,7 +177,7 @@ public class GameController implements Runnable {
 	 * Adds a player to the client handler.
 	 *
 	 * @param handler
-	 * 				 The client handler in question
+	 *            The client handler in question
 	 * @return true if the adding of the player was succesful, false otherwise.
 	 */
 	public synchronized boolean addPlayer(ClientHandler handler) {
@@ -186,10 +189,11 @@ public class GameController implements Runnable {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Begins the game.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public void startgame() throws IOException {
 		board = new Board();
@@ -273,6 +277,9 @@ public class GameController implements Runnable {
 	 * @return true if the move is valid, false otherwise.
 	 */
 	public boolean checkMove(Move move) {
+		if (move == null) {
+			return false;
+		}
 		int choiceField = board.index(move.getX() + 1, move.getY() + 1);
 		Tier choiceRing = move.getMoveType();
 		Color choiceColor;
@@ -302,10 +309,8 @@ public class GameController implements Runnable {
 								&& this.players.get(currentplayer).ringList.availableRings.contains(selectedRing))) {
 					board.setRing(choiceField, selectedRing);
 					this.players.get(currentplayer).ringList.availableRings.remove(selectedRing);
-					// System.out.println("\nthe ring has been added to the field....");
 					return true;
 				} else {
-					// System.out.println("Invalid move, try another one.");
 					return false;
 				}
 			} catch (RinggzException e) {
@@ -316,7 +321,8 @@ public class GameController implements Runnable {
 
 	/**
 	 * Keeps track of the gameplay and the moves in particular.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	private void play() throws IOException {
 		Boolean[] canmove = new Boolean[this.players.size()];
@@ -325,9 +331,13 @@ public class GameController implements Runnable {
 			while (!succes) {
 				try {
 					if (players.get(currentplayer).playerCheck(this.board)) {
-						this.checkMove(players.get(currentplayer).makeMove(this.board));
-						canmove[currentplayer] = false;
-						succes = true;
+						Move currentMove = players.get(currentplayer).makeMove(this.board);
+						if (this.checkMove(currentMove)) {
+							canmove[currentplayer] = false;
+							succes = true;
+						} else {
+							currentplayer -= 1;
+						}
 					} else {
 						canmove[currentplayer] = false;
 						succes = true;
@@ -336,6 +346,7 @@ public class GameController implements Runnable {
 					succes = false;
 				}
 			}
+			this.clients.get(currentplayer).sendmessage(Protocol.Packets.MAKE_MOVE);
 			currentplayer += 1;
 			currentplayer %= this.players.size();
 			succes = false;
@@ -361,20 +372,19 @@ public class GameController implements Runnable {
 			Player two = this.players.get(1);
 			one.playerScore = one.getPrimaryColor().colorWonFields + one.getSecondaryColor().colorWonFields;
 			two.playerScore = two.getPrimaryColor().colorWonFields + two.getSecondaryColor().colorWonFields;
-			message = message + players.get(0).getName() + 
-					Protocol.DELIMITER + one.playerScore + Protocol.DELIMITER +
-					players.get(1).getName() + Protocol.DELIMITER + two.playerScore;
+			message = message + players.get(0).getName() + Protocol.DELIMITER + one.playerScore + Protocol.DELIMITER
+					+ players.get(1).getName() + Protocol.DELIMITER + two.playerScore;
 		} else {
-			message = message + players.get(0).getName() + 
-					Protocol.DELIMITER + ColorREDcolorWonFields + Protocol.DELIMITER +
-					players.get(1).getName() + Protocol.DELIMITER + ColorYELLOWcolorWonFields + Protocol.DELIMITER +
-					players.get(2).getName() + Protocol.DELIMITER + ColorGREENcolorWonFields +Protocol.DELIMITER;
-			if (players.size() == 4) {		
-			message = message + players.get(3).getName() + Protocol.DELIMITER + ColorBLUEcolorWonFields;
+			message = message + players.get(0).getName() + Protocol.DELIMITER + ColorREDcolorWonFields
+					+ Protocol.DELIMITER + players.get(1).getName() + Protocol.DELIMITER + ColorYELLOWcolorWonFields
+					+ Protocol.DELIMITER + players.get(2).getName() + Protocol.DELIMITER + ColorGREENcolorWonFields
+					+ Protocol.DELIMITER;
+			if (players.size() == 4) {
+				message = message + players.get(3).getName() + Protocol.DELIMITER + ColorBLUEcolorWonFields;
 			}
-			}
+		}
 		this.server.serverPrint(message);
-		for (ClientHandler ch: this.clients) {
+		for (ClientHandler ch : this.clients) {
 			ch.sendmessage(message);
 		}
 	}

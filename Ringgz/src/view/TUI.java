@@ -79,4 +79,10 @@ public class TUI implements Observer, Runnable {
 	public void update(Observable arg0, Object arg1) {
 		this.view();
 	}
+	public void setBoard(Board board) {
+		this.board = board;
+		for (Field field: this.board.fields) {
+			field.addObserver(this);
+		}
+	}
 }
