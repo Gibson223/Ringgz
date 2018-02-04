@@ -139,9 +139,8 @@ public class LocalGameController implements Runnable {
 	}
 
 	private int currentplayer = 0;
-
+	Boolean[] canmove = new Boolean[this.players.size()];
 	public void play() {
-		Boolean[] canmove = new Boolean[this.players.size()];
 		boolean succes = false;
 		while (!this.board.boardIsFull() || !Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
 			while (!succes) {
@@ -219,8 +218,6 @@ public class LocalGameController implements Runnable {
 
 	@Override
 	public void run() {
-		// this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER +
-		// this.username);
 		while (true) {
 			String message;
 			try {
