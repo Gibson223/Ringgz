@@ -115,7 +115,7 @@ public class LocalGameController implements Runnable {
 				if (amount < 5 || amount > 1) {
 					this.playerAmount = amount;
 				} else {
-					tui.output("the number is ");
+					tui.output("the number is invalid, please restart");
 					this.shutDown();
 				}
 				if (Protocol.HUMAN_PLAYER.equals(playerType)) {
