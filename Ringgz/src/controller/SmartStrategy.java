@@ -13,57 +13,56 @@ import model.Tier;
 
 public class SmartStrategy implements Strategy {
 
-	public String getName() {
-		return "Smart";
-	}
+    public String getName() {
+        return "Smart";
+    }
 
-	@Override
-	public Field determineField(Board board, Player p) {
-		Collections.shuffle(p.potentialFields);
-		Field smartField = p.potentialFields.get(0);
-		if (board.firstMove) {
-			try {
-				p.potentialFields.addAll(Arrays.asList(board.getField(7),
-						board.getField(8), board.getField(9),
-						board.getField(12), board.getField(13),
-						board.getField(14), board.getField(17),
-						board.getField(18), board.getField(19)));
-			} catch (RinggzException e) {
-				e.printStackTrace();
-			}
-		}
-		boolean fieldFound = false;
-		while (!fieldFound) {
-			int frec = Collections.frequency(smartField.getFieldColors(), p.getPrimaryColor());
-			if (frec > 2) {
-				determineField(board, p);
-			} else {
-				fieldFound = true;
-			}
-		}
-		return smartField;
-	}
+    @Override
+    public Field determineField(Board board, Player p) {
+        Collections.shuffle(p.potentialFields);
+        Field smartField = p.potentialFields.get(0);
+        if (board.firstMove) {
+            try {
+                p.potentialFields.addAll(
+                        Arrays.asList(board.getField(7), board.getField(8), board.getField(9),
+                                board.getField(12), board.getField(13), board.getField(14),
+                                board.getField(17), board.getField(18), board.getField(19)));
+            } catch (RinggzException e) {
+                e.printStackTrace();
+            }
+        }
+        boolean fieldFound = false;
+        while (!fieldFound) {
+            int frec = Collections.frequency(smartField.getFieldColors(), p.getPrimaryColor());
+            if (frec > 2) {
+                determineField(board, p);
+            } else {
+                fieldFound = true;
+            }
+        }
+        return smartField;
+    }
 
-	@Override
-	public Tier determineTier(Field f) {
-		List<Tier> availableTiers = new ArrayList<>();
-		availableTiers.removeAll(availableTiers);
-		for (Ring ring : f.getFieldState()) {
-			if (ring.getColor() == Color.INIT) {
-				availableTiers.add(ring.getTier());
-			}
-		}
-		Collections.shuffle(availableTiers);
-		return availableTiers.get(0);
-	}
+    @Override
+    public Tier determineTier(Field f) {
+        List<Tier> availableTiers = new ArrayList<>();
+        availableTiers.removeAll(availableTiers);
+        for (Ring ring : f.getFieldState()) {
+            if (ring.getColor() == Color.INIT) {
+                availableTiers.add(ring.getTier());
+            }
+        }
+        Collections.shuffle(availableTiers);
+        return availableTiers.get(0);
+    }
 
-	@Override
-	public Color determineColor(Board board, Player p) {
-		List<Color> colors = new ArrayList<>();
-		colors.add(p.getPrimaryColor());
-		colors.add(p.getSecondaryColor());
-		Collections.shuffle(colors);
-		return colors.get(0);
-	}
+    @Override
+    public Color determineColor(Board board, Player p) {
+        List<Color> colors = new ArrayList<>();
+        colors.add(p.getPrimaryColor());
+        colors.add(p.getSecondaryColor());
+        Collections.shuffle(colors);
+        return colors.get(0);
+    }
 
 }

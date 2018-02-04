@@ -2,7 +2,7 @@ package controller;
 
 //Multi-purpose exception
 public class RinggzException extends Exception {
-	public RinggzException(String a) {
-		super(a);
+	public RinggzException(String message) {
+		super(message);
 	}
 }
