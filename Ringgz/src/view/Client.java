@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import server.Server;
-
 //Creates a client
 public class Client {
 	// Creates a client for the game
