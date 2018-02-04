@@ -53,8 +53,16 @@ public class GameController implements Runnable {
 	 * Starts the game.
 	 */
 	public void run() {
-		while (!this.started) { // TODO: clean way to stop this loop when server shuts down.
-			this.startgame();
+		try {
+			while (!this.startGame()) { 
+				try {
+					this.startgame();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (InterruptedException | IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -181,8 +189,9 @@ public class GameController implements Runnable {
 	
 	/**
 	 * Begins the game.
+	 * @throws IOException 
 	 */
-	public void startgame() {
+	public void startgame() throws IOException {
 		board = new Board();
 		ringlist = new RingList();
 		// tui = new TUI();
@@ -199,7 +208,7 @@ public class GameController implements Runnable {
 	/**
 	 * Sets the primary and secondary colors depending on the number of players.
 	 */
-	public void playerSetter() {
+	private void playerSetter() {
 		if (this.players.size() == 2) {
 			players.get(0).setPrimary(Color.RED);
 			players.get(0).setSecondary(Color.YELLOW);
@@ -225,7 +234,7 @@ public class GameController implements Runnable {
 	/**
 	 * Divides the rings for the players depending on the total number of players.
 	 */
-	public void ringdivider() {
+	private void ringdivider() {
 		if (this.players.size() == 2) {
 			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
 			RingList ringlistpart2 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(30, 60)));
@@ -307,15 +316,16 @@ public class GameController implements Runnable {
 
 	/**
 	 * Keeps track of the gameplay and the moves in particular.
+	 * @throws IOException 
 	 */
-	public void play() {
+	private void play() throws IOException {
 		Boolean[] canmove = new Boolean[this.players.size()];
 		boolean succes = false;
 		while (!this.board.boardIsFull() || !Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
 			while (!succes) {
 				try {
 					if (players.get(currentplayer).playerCheck(this.board)) {
-						players.get(currentplayer).makeMove(this.board);
+						this.checkMove(players.get(currentplayer).makeMove(this.board));
 						canmove[currentplayer] = false;
 						succes = true;
 					} else {
@@ -330,42 +340,42 @@ public class GameController implements Runnable {
 			currentplayer %= this.players.size();
 			succes = false;
 		}
-		Player winner = null;
-		Color colorwin = this.board.isWinner();
+		int ColorBLUEcolorWonFields = 0;
+		int ColorREDcolorWonFields = 0;
+		int ColorYELLOWcolorWonFields = 0;
+		int ColorGREENcolorWonFields = 0;
+		for (Field field : this.board.fields) {
+			if (field.isWinner() == Color.BLUE) {
+				ColorBLUEcolorWonFields += 1;
+			} else if (field.isWinner() == Color.RED) {
+				ColorREDcolorWonFields += 1;
+			} else if (field.isWinner() == Color.YELLOW) {
+				ColorYELLOWcolorWonFields += 1;
+			} else {
+				ColorGREENcolorWonFields += 1;
+			}
+		}
+		String message = Protocol.Packets.GAME_ENDED + Protocol.DELIMITER;
 		if (this.players.size() == 2) {
 			Player one = this.players.get(0);
 			Player two = this.players.get(1);
-			for (Field field : this.board.fields) {
-				if (field.isWinner() == Color.BLUE) {
-					Color.BLUE.colorWonFields += 1;
-				} else if (field.isWinner() == Color.RED) {
-					Color.RED.colorWonFields += 1;
-				} else if (field.isWinner() == Color.YELLOW) {
-					Color.YELLOW.colorWonFields += 1;
-				} else {
-					Color.GREEN.colorWonFields += 1;
-				}
-			}
 			one.playerScore = one.getPrimaryColor().colorWonFields + one.getSecondaryColor().colorWonFields;
 			two.playerScore = two.getPrimaryColor().colorWonFields + two.getSecondaryColor().colorWonFields;
-			if (one.playerScore > two.playerScore) {
-				winner = one;
-			} else if (two.playerScore > one.playerScore) {
-				winner = two;
-			} else if (one.playerScore == two.playerScore) {
-				System.out.println("It's a tie!"); // aaaaa
-			}
-			System.out.println("The winner of the match is " + winner.getName());
-		} else if (colorwin == null) {
-			System.out.println("It is a tie....");
+			message = message + players.get(0).getName() + 
+					Protocol.DELIMITER + one.playerScore + Protocol.DELIMITER +
+					players.get(1).getName() + Protocol.DELIMITER + two.playerScore;
 		} else {
-			for (Player possiblewinner : this.players) {
-				if (possiblewinner.getPrimaryColor() == colorwin) {
-					winner = possiblewinner;
-					break;
-				}
+			message = message + players.get(0).getName() + 
+					Protocol.DELIMITER + ColorREDcolorWonFields + Protocol.DELIMITER +
+					players.get(1).getName() + Protocol.DELIMITER + ColorYELLOWcolorWonFields + Protocol.DELIMITER +
+					players.get(2).getName() + Protocol.DELIMITER + ColorGREENcolorWonFields +Protocol.DELIMITER;
+			if (players.size() == 4) {		
+			message = message + players.get(3).getName() + Protocol.DELIMITER + ColorBLUEcolorWonFields;
 			}
-			System.out.println("The winner of the match is " + winner.getName());
+			}
+		this.server.serverPrint(message);
+		for (ClientHandler ch: this.clients) {
+			ch.sendmessage(message);
 		}
 	}
 
