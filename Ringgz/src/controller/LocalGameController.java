@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,12 +9,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import controller.ComputerPlayer;
-import controller.HumanPlayer;
-import controller.Move;
-import controller.Player;
-import controller.RinggzException;
-import controller.ServerPlayer;
 import model.Board;
 import model.Color;
 import model.Field;
@@ -22,6 +16,7 @@ import model.Ring;
 import model.Tier;
 import serverclient.Protocol;
 import serverclient.Protocol.Packets;
+import view.TUI;
 
 public class LocalGameController implements Runnable {
     private final BufferedReader dis;
