@@ -74,6 +74,7 @@ public class Server implements Runnable {
         }
         GameController newgame = new GameController(this, preferredplayers);
         newgame.addClient(ch);
+        new Thread(newgame).start();
         return newgame;
     }
 

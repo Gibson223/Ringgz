@@ -25,7 +25,7 @@ public class ClientHandler implements Runnable {
     }
 
     public boolean getResponded() {
-        return this.getResponded();
+        return this.responded;
     }
 
     // Constructor
@@ -45,7 +45,6 @@ public class ClientHandler implements Runnable {
         try {
             while (true) {
                 String message = this.dis.readLine();
-                this.server.serverPrint(message);
                 String[] splitmessage = message.split(Protocol.DELIMITER);
                 this.packetHandler(splitmessage);
             }
@@ -58,8 +57,6 @@ public class ClientHandler implements Runnable {
     private void packetHandler(String[] fullpacket) throws IOException {
         String packet = fullpacket[0];
         if (Packets.CONNECT.equals(packet)) {
-            this.server.serverPrint(fullpacket.toString());
-            // dont understand why Connection already established so look for other data
             if (packet.equals(Packets.CONNECT) && this.username == null) {
                 this.username = fullpacket[1];
                 this.dos.println(Packets.CONNECT + Protocol.DELIMITER + Protocol.ACCEPT
@@ -68,14 +65,14 @@ public class ClientHandler implements Runnable {
             }
         } else if (Packets.GAME_REQUEST.equals(packet)) {
             try {
-                int preferredplayers = Integer.parseInt(fullpacket[1]);
+                int preferredplayers = Integer.parseInt(fullpacket[1].trim());
                 this.linkedgame = this.server.getGame(this, preferredplayers);
                 if (this.linkedgame != null) {
                     this.sendmessage(Protocol.Packets.JOINED_LOBBY);
                 }
             } catch (NumberFormatException e) {
+            	this.server.serverPrint("game request packet has numberformat error..");
             }
-            this.server.serverPrint("game request packet has numberformat error..");
         } else if (packet == Packets.PLAYER_STATUS) {
             if (this.linkedgame != null) {
                 if (fullpacket.length >= 2 && fullpacket[1].equals(Protocol.ACCEPT)) {
@@ -83,9 +80,6 @@ public class ClientHandler implements Runnable {
                     this.ready = true;
                 } else {
                     responded = false;
-                }
-                synchronized (this.linkedgame) {
-                    this.linkedgame.notify();
                 }
             }
         } else if (Packets.MOVE.equals(packet)) {

@@ -111,7 +111,7 @@ public class LocalGameController implements Runnable {
                 this.connected = true;
                 feedback = this.tui
                         .tuiInput("Please input the preffered amount of player and type of player "
-                                + "\n(" + Protocol.HUMAN_PLAYER + "for humanplayer"
+                                + "\n( " + Protocol.HUMAN_PLAYER + " for humanplayer"
                                 + ")\n(Separated by a space...)");
                 int amount = Integer.parseInt(feedback.split(" ")[0]);
                 String playerType = feedback.split(" ")[1];
