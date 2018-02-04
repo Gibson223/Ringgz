@@ -17,10 +17,5 @@ public class ServerPlayer extends Player {
 	public Move makeMove(Board board) throws RinggzException {
 		return this.clienthandler.getMove();
 	}
-	public boolean moveread;
-	private Move move;
-	public void setMove(Move move) {
-		this.move = move;
-	}
-	
+	public boolean moveread;	
 }
