@@ -115,7 +115,7 @@ public class LocalGameController implements Runnable {
                 // message in tui
                 this.connected = true;
                 feedback = this.tui
-                        .TUIInput("Please input the preffered amount of player and type of player "
+                        .tuiInput("Please input the preffered amount of player and type of player "
                                 + "\n(" + Protocol.HUMAN_PLAYER + "for humanplayer"
                                 + ")\n(Separated by a space...)");
                 int amount = Integer.parseInt(feedback.split(" ")[0]);
@@ -134,7 +134,7 @@ public class LocalGameController implements Runnable {
                 this.sendMessage(Packets.GAME_REQUEST + Protocol.DELIMITER + this.playerAmount
                         + Protocol.DELIMITER + this.playerType);
             } else {
-                feedback = this.tui.TUIInput(
+                feedback = this.tui.tuiInput(
                         "the server has denied your connection request\nPress 1 to reconnect");
                 if (Integer.parseInt(feedback) == 1) {
                     while (true) {

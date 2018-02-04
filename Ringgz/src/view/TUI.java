@@ -9,20 +9,20 @@ import java.util.Observer;
 import model.Board;
 import model.Field;
 
-//TUI for Ringgz
+//tui for Ringgz
 public class TUI implements Observer, Runnable {
 
 	private Board board;
 
 	public static final String EXIT = "exit";
 
-	// Creates a TUI with the given Game
+	// Creates a tui with the given Game
 	public TUI() {
-		this.INIT();
+		this.init();
 	}
 
-	public void INIT () {
-		this.output(("Insert username and IP separated by a space"));
+	public void init() {
+		this.output("Insert username and IP separated by a space");
 	}
 
 	public Object[] initizializing() {
@@ -30,20 +30,20 @@ public class TUI implements Observer, Runnable {
 		String address = null;
 		boolean correct = false;
 		while (!correct) {
-			Object input = this.TUIInput("-");
+			Object input = this.tuiInput("-");
 			Object[] splitInput = ((String) input).split(" ");
 			correct = true;
 			if (splitInput.length != 2) {
 				correct = false;
-				this.output(("Two arguments are needed. Please try again."));
+				this.output("Two arguments are needed. Please try again.");
 			}
 			username = (String) splitInput[0];
 			address = (String) splitInput[1];
 		}
-		return new Object[] { username, address };
+		return new Object[] {username, address };
 	}
 
-	public String TUIInput(String string) {
+	public String tuiInput(String string) {
 		String response = null;
 		System.out.println(string);
 		try {
@@ -52,7 +52,7 @@ public class TUI implements Observer, Runnable {
 		} catch (IOException e) {
 		}
 		if (response == null) {
-			return TUIInput(string);
+			return tuiInput(string);
 		} else {
 			return response;
 		}
@@ -79,9 +79,10 @@ public class TUI implements Observer, Runnable {
 	public void update(Observable arg0, Object arg1) {
 		this.view();
 	}
+
 	public void setBoard(Board board) {
 		this.board = board;
-		for (Field field: this.board.fields) {
+		for (Field field : this.board.fields) {
 			field.addObserver(this);
 		}
 	}
