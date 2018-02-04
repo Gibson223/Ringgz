@@ -7,11 +7,16 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import controller.HumanPlayer;
+import controller.Move;
 import controller.Player;
+import controller.RinggzException;
 import controller.ServerPlayer;
 import model.Board;
+import model.Color;
+import model.Field;
 import serverclient.Protocol;
 import serverclient.Protocol.Packets;
 
@@ -44,7 +49,7 @@ public class LocalGameController implements Runnable {
 		this.dis = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		this.dos = new PrintWriter(socket.getOutputStream(), true);
 		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
-//		new Thread(this).start();
+		// new Thread(this).start();
 	}
 
 	private void handleMessage(String message) {
@@ -56,8 +61,8 @@ public class LocalGameController implements Runnable {
 			if (messageparts.length == 2 && messageparts[1].equals(Protocol.ACCEPT)) {
 				// message in tui
 				this.connected = true;
-				feedback = this.tui.TUIInput(
-						"Please input the preffered amount of player and type of player \n ()\n(Separated by a space...)");
+				feedback = this.tui.TUIInput("Please input the preffered amount of player and type of player " + "\n("
+						+ Protocol.HUMAN_PLAYER + "for humanplayer" + ")\n(Separated by a space...)");
 				int amount = Integer.parseInt(feedback.split(" ")[0]);
 				String playerType = feedback.split(" ")[1];
 				if (amount < 5 || amount > 1) {
@@ -123,16 +128,77 @@ public class LocalGameController implements Runnable {
 			this.sendMessage(Protocol.Packets.PLAYER_STATUS + Protocol.DELIMITER + Protocol.ACCEPT);
 			tui.output("All players connected!!!");
 		} else if (Protocol.Packets.GAME_STARTED.equals(packetHeader)) {
-			this.startGame();
+			this.play();
 		} else if (Protocol.Packets.MOVE.equals(packetHeader)) {
-			
+			try {
+				((ServerPlayer) this.players.get(currentplayer)).setMove(new Move(Integer.parseInt(messageparts[1]),
+						Integer.parseInt(messageparts[2]), Integer.parseInt(messageparts[3]), messageparts[5]));
+			} catch (NumberFormatException | IndexOutOfBoundsException e) {
+			}
 		}
-
 	}
 
-	private void startGame() {
-		// TODO Auto-generated method stub
-		
+	private int currentplayer = 0;
+
+	public void play() {
+		Boolean[] canmove = new Boolean[this.players.size()];
+		boolean succes = false;
+		while (!this.board.boardIsFull() || !Arrays.asList(canmove).stream().noneMatch(a -> a.booleanValue() == true)) {
+			while (!succes) {
+				try {
+					if (players.get(currentplayer).playerCheck(this.board)) {
+						players.get(currentplayer).makeMove(this.board);
+						canmove[currentplayer] = false;
+						succes = true;
+					} else {
+						canmove[currentplayer] = false;
+						succes = true;
+					}
+				} catch (RinggzException e) {
+					succes = false;
+				}
+			}
+			currentplayer += 1;
+			currentplayer %= this.players.size();
+			succes = false;
+		}
+		Player winner = null;
+		Color colorwin = this.board.isWinner();
+		if (this.players.size() == 2) {
+			Player one = this.players.get(0);
+			Player two = this.players.get(1);
+			for (Field field : this.board.fields) {
+				if (field.isWinner() == Color.BLUE) {
+					Color.BLUE.colorWonFields += 1;
+				} else if (field.isWinner() == Color.RED) {
+					Color.RED.colorWonFields += 1;
+				} else if (field.isWinner() == Color.YELLOW) {
+					Color.YELLOW.colorWonFields += 1;
+				} else {
+					Color.GREEN.colorWonFields += 1;
+				}
+			}
+			one.playerScore = one.getPrimaryColor().colorWonFields + one.getSecondaryColor().colorWonFields;
+			two.playerScore = two.getPrimaryColor().colorWonFields + two.getSecondaryColor().colorWonFields;
+			if (one.playerScore > two.playerScore) {
+				winner = one;
+			} else if (two.playerScore > one.playerScore) {
+				winner = two;
+			} else if (one.playerScore == two.playerScore) {
+				System.out.println("It's a tie!"); // aaaaa
+			}
+			System.out.println("The winner of the match is " + winner.getName());
+		} else if (colorwin == null) {
+			System.out.println("It is a tie....");
+		} else {
+			for (Player possiblewinner : this.players) {
+				if (possiblewinner.getPrimaryColor() == colorwin) {
+					winner = possiblewinner;
+					break;
+				}
+			}
+			System.out.println("The winner of the match is " + winner.getName());
+		}
 	}
 
 	private void shutDown() {
@@ -153,7 +219,8 @@ public class LocalGameController implements Runnable {
 
 	@Override
 	public void run() {
-//		this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER + this.username);
+		// this.sendMessage(Protocol.Packets.CONNECT + Protocol.DELIMITER +
+		// this.username);
 		while (true) {
 			String message;
 			try {

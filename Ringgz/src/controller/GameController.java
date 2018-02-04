@@ -228,10 +228,6 @@ public class GameController implements Runnable {
 		}
 	}
 
-	public void invalidMove() {
-
-	}
-
 	public void play() {
 		Boolean[] canmove = new Boolean[this.players.size()];
 		boolean succes = false;
