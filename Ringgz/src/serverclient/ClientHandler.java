@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import controller.GameController;
+import controller.Move;
 import serverclient.Protocol.Packets;
 
 public class ClientHandler implements Runnable {
@@ -72,7 +73,7 @@ public class ClientHandler implements Runnable {
 					this.sendmessage(Protocol.Packets.JOINED_LOBBY);
 				}
 			} catch (NumberFormatException e) {
-			} // TODO what todo??!?!??!?!
+			} this.server.serverPrint("game request packet has numberformat error..");
 		} else if (packet == Packets.PLAYER_STATUS) {
 			if (this.linkedgame != null) {
 				if (fullpacket.length >= 2 && fullpacket[1].equals(Protocol.ACCEPT)) {
@@ -85,23 +86,29 @@ public class ClientHandler implements Runnable {
 					this.linkedgame.notify();
 				}
 			}
+		} else if (Packets.MOVE.equals(packet) ) {
+			try {
+			 if(this.linkedgame != null && this.linkedgame.started) {
+				 this.move = new Move(Integer.parseInt(fullpacket[1]), 
+						 Integer.parseInt(fullpacket[2]), Integer.parseInt(fullpacket[3]),
+						fullpacket[5]);
+			 } else { 
+				 this.server.serverPrint("client sending move package when not playing a game...");}
+		 } catch (NumberFormatException | IndexOutOfBoundsException e) {
+			this.server.serverPrint("incorrect move Package received by " + this.username);
 		}
-		// else if (Packets.MOVE.equals(packet) ) {
-		// if(this.linkedgame != null && this.linkedgame.started) {
-		// String[] movedata = Arrays.copyOfRange(fullpacket, 1, fullpacket.length);
-		// this.linkedgame.moveMade(this.username, movedata);
-		// } else { this.server.serverPrint("client sending move package when not
-		// playing a game...");}
-		// }
+		}
 		else {
 			this.server.serverPrint("unknown packet type received at clienthandler of " + this.username);
 		}
 	}
-
+	private Move move;
+	public Move makeMove() {
+		return this.makeMove();
+	}
 	public void sendmessage(String message) throws IOException {
 		this.dos.println(message);
 		this.dos.flush();
-		this.server.serverPrint(message);
 	}
 
 }

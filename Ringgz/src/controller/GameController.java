@@ -33,7 +33,7 @@ public class GameController implements Runnable {
 	int wonB = 0;
 	int wonY = 0;
 	int wonR = 0;
-	public HashMap<Player, Integer> wonFields;
+	private HashMap<Player, Integer> wonFields;
 
 	public GameController(Server server, int maxplayers) {
 		this.server = server;
@@ -46,7 +46,12 @@ public class GameController implements Runnable {
 			this.startgame();
 		}
 	}
-
+	public GameController(Player s0, Player s1, Player s2) {
+		this(s0 ,s1 ,s2 ,null);
+	}
+	public GameController(Player s0, Player s1) {
+		this(s0 ,s1 ,null ,null);
+	}
 	public GameController(Player s0, Player s1, Player s2, Player s3) {
 		List<Object> playerlist = new ArrayList<>();
 		List<ClientHandler> clients = new ArrayList<>();
