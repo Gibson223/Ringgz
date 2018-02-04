@@ -33,25 +33,69 @@ public class GameController implements Runnable {
 	int wonB = 0;
 	int wonY = 0;
 	int wonR = 0;
-	private HashMap<Player, Integer> wonFields;
 
+	/**
+	 * Starts the game controller.
+	 *
+	 * @param server
+	 *            the server this gamecontroller will play in
+	 * @param maxplayers
+	 *            the maximum amount of players for the lobby
+	 *            
+	 */
 	public GameController(Server server, int maxplayers) {
 		this.server = server;
 		this.maxplayers = maxplayers;
 
 	}
-
+	
+	/**
+	 * Starts the game.
+	 */
 	public void run() {
 		while (!this.started) { // TODO: clean way to stop this loop when server shuts down.
 			this.startgame();
 		}
 	}
+
+	/**
+	 * Creates a game controller for three players.
+	 *
+	 * @param s0
+	 *            the first player
+	 * @param s1
+	 *            the second player
+	 * @param s2
+	 *            the third player
+	 */
 	public GameController(Player s0, Player s1, Player s2) {
-		this(s0 ,s1 ,s2 ,null);
+		this(s0, s1, s2, null);
 	}
+
+	/**
+	 * Creates a game controller for two players.
+	 *
+	 * @param s0
+	 *            the first player
+	 * @param s1
+	 *            the second player
+	 */
 	public GameController(Player s0, Player s1) {
-		this(s0 ,s1 ,null ,null);
+		this(s0, s1, null, null);
 	}
+
+	/**
+	 * Creates a game controller for four players.
+	 *
+	 * @param s0
+	 *            the first player
+	 * @param s1
+	 *            the second player
+	 * @param s2
+	 *            the third player
+	 * @param s3
+	 * 			  the fourth player
+	 */
 	public GameController(Player s0, Player s1, Player s2, Player s3) {
 		List<Object> playerlist = new ArrayList<>();
 		List<ClientHandler> clients = new ArrayList<>();
@@ -63,6 +107,13 @@ public class GameController implements Runnable {
 		this.run();
 	}
 
+	/**
+	 * Starts a game for this GameController.
+	 *
+	 * @return true if the creation of the game is succesful, false otherwise.
+	 * 
+	 * @throws InterruptedException, IOException
+	 */
 	private synchronized boolean startGame() throws InterruptedException, IOException {
 		Collections.shuffle(clients);
 		String usernames = "";
@@ -79,7 +130,7 @@ public class GameController implements Runnable {
 				wait();
 			}
 		}
-		if (!allready()) {
+		if (!already()) {
 			for (ClientHandler client : this.clients) {
 				if (!client.getResponded() || !client.getReady()) {
 					removeClient(client);
@@ -97,7 +148,12 @@ public class GameController implements Runnable {
 		}
 	}
 
-	private boolean allready() {
+	/**
+	 * Returns whether the GameController already exists.
+	 *
+	 * @return true if the gc already exists, false otherwise.
+	 */
+	private boolean already() {
 		for (ClientHandler handler : this.clients) {
 			if (!handler.getResponded() || !handler.getReady()) {
 				return false;
@@ -106,6 +162,13 @@ public class GameController implements Runnable {
 		return true;
 	}
 
+	/**
+	 * Adds a player to the client handler.
+	 *
+	 * @param handler
+	 * 				 The client handler in question
+	 * @return true if the adding of the player was succesful, false otherwise.
+	 */
 	public synchronized boolean addPlayer(ClientHandler handler) {
 		if (!this.started && this.clients.size() < this.maxplayers) {
 			this.clients.add(handler);
@@ -115,7 +178,10 @@ public class GameController implements Runnable {
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Begins the game.
+	 */
 	public void startgame() {
 		board = new Board();
 		ringlist = new RingList();
@@ -130,6 +196,9 @@ public class GameController implements Runnable {
 
 	}
 
+	/**
+	 * Sets the primary and secondary colors depending on the number of players.
+	 */
 	public void playerSetter() {
 		if (this.players.size() == 2) {
 			players.get(0).setPrimary(Color.RED);
@@ -153,6 +222,9 @@ public class GameController implements Runnable {
 		}
 	}
 
+	/**
+	 * Divides the rings for the players depending on the total number of players.
+	 */
 	public void ringdivider() {
 		if (this.players.size() == 2) {
 			RingList ringlistpart1 = new RingList(new ArrayList<Ring>(ringlist.availableRings.subList(0, 30)));
@@ -186,6 +258,11 @@ public class GameController implements Runnable {
 
 	private int currentplayer = 0;
 
+	/**
+	 * Checks if a move is valid.
+	 *
+	 * @return true if the move is valid, false otherwise.
+	 */
 	public boolean checkMove(Move move) {
 		int choiceField = board.index(move.getX() + 1, move.getY() + 1);
 		Tier choiceRing = move.getMoveType();
@@ -228,6 +305,9 @@ public class GameController implements Runnable {
 		}
 	}
 
+	/**
+	 * Keeps track of the gameplay and the moves in particular.
+	 */
 	public void play() {
 		Boolean[] canmove = new Boolean[this.players.size()];
 		boolean succes = false;
@@ -273,7 +353,7 @@ public class GameController implements Runnable {
 			} else if (two.playerScore > one.playerScore) {
 				winner = two;
 			} else if (one.playerScore == two.playerScore) {
-				System.out.println("It's a tie!"); //aaaaa
+				System.out.println("It's a tie!"); // aaaaa
 			}
 			System.out.println("The winner of the match is " + winner.getName());
 		} else if (colorwin == null) {
@@ -289,6 +369,11 @@ public class GameController implements Runnable {
 		}
 	}
 
+	/**
+	 * Adds a client to the clientHandler.
+	 * 
+	 * @return true if successful, false otherwise.
+	 */
 	public synchronized boolean addClient(ClientHandler ch) {
 		if (this.players.size() < this.maxplayers && this.started == false) {
 			this.clients.add(ch);
@@ -299,6 +384,11 @@ public class GameController implements Runnable {
 		}
 	}
 
+	/**
+	 * Removes a client from the clientHandler.
+	 * 
+	 * @return true if successful, false otherwise.
+	 */
 	public synchronized void removeClient(ClientHandler ch) {
 		ch.linkedgame = null;
 		this.clients.remove(ch);
